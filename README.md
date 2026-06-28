@@ -21,10 +21,10 @@ The tools hosted here support field data collection and processing workflows, in
 
 Full documentation, including field procedures and step-by-step guides, is available at:
 
-👉 **[seastrong-field-tools.readthedocs.io](https://seastrong-field-tools.readthedocs.io)** *(link active once ReadTheDocs is configured)*
+👉 **[seastrong-field-tools.readthedocs.io](https://seastrong-field-tools.readthedocs.io)**
 
 ## Funding
 
 This project has received funding from the European Union's Horizon Europe research and innovation programme under grant agreement HORIZON-CL6-2025-01-BIODIV-07.
 
-![EU Flag](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/320px-Flag_of_Europe.svg.png)
+![EU Flag](_static/EU_flag.png)
