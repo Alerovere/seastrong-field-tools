@@ -26,5 +26,3 @@ Full documentation, including field procedures and step-by-step guides, is avail
 ## Funding
 
 This project has received funding from the European Union's Horizon Europe research and innovation programme under grant agreement HORIZON-CL6-2025-01-BIODIV-07.
-
-![EU Flag](_static/EU_flag.png)
