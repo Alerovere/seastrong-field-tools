@@ -16,6 +16,7 @@ The tools hosted here support field data collection and processing workflows, in
 |------|-------------|-----|
 | [echosounder_bathymetry](./echosounder_bathymetry/) | Process depth data from a Deeper Pro echosounder and apply tide corrections | WP1, WP4 |
 | [photo_geotagging](./photo_geotagging/) | Geotag time-lapse photos using a GPX track | WP1 |
+| [underwater_photogrammetry](./underwater_photogrammetry/) | Two-camera GoPro rig for SfM photogrammetry surveys | WP1, WP2, WP5 |
 
 ## Documentation
 

@@ -40,6 +40,7 @@ It hosts field data processing tools developed to support SEASTRONG fieldwork. E
 |------|-------------|-------------------|
 | [Echosounder bathymetry](echosounder_bathymetry.md) | Process depth data from a Deeper Pro echosounder and apply tide corrections | T1.2, T4.5 |
 | [Photo geotagging](photo_geotagging.md) | Geotag time-lapse bottom photos using a GPX track | T1.2, T1.3 |
+| [Underwater photogrammetry](underwater_photogrammetry.md) | Two-camera GoPro rig for SfM surveys on coral reefs and seagrass beds | T1.3, T2.2, T5.1 |
 
 ## Consortium
 

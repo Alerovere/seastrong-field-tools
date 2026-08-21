@@ -1,0 +1,242 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:EPSG::32632"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          441078.928,
+          4892151.328,
+          0.0
+        ]
+      },
+      "properties": {
+        "point_id": 0,
+        "tape_distance_m": 0.0,
+        "is_gnss_tie": true,
+        "label": "start"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          441079.92,
+          4892151.45,
+          0.006
+        ]
+      },
+      "properties": {
+        "point_id": 1,
+        "tape_distance_m": 1.0,
+        "is_gnss_tie": false,
+        "label": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          441080.911,
+          4892151.571,
+          0.058
+        ]
+      },
+      "properties": {
+        "point_id": 2,
+        "tape_distance_m": 2.0,
+        "is_gnss_tie": false,
+        "label": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          441081.904,
+          4892151.693,
+          0.052
+        ]
+      },
+      "properties": {
+        "point_id": 3,
+        "tape_distance_m": 3.0,
+        "is_gnss_tie": false,
+        "label": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          441082.301,
+          4892151.742,
+          0.065
+        ]
+      },
+      "properties": {
+        "point_id": 4,
+        "tape_distance_m": 3.4,
+        "is_gnss_tie": false,
+        "label": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          441082.58,
+          4892151.776,
+          0.169
+        ]
+      },
+      "properties": {
+        "point_id": 5,
+        "tape_distance_m": 3.7,
+        "is_gnss_tie": false,
+        "label": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          441082.877,
+          4892151.813,
+          0.19
+        ]
+      },
+      "properties": {
+        "point_id": 6,
+        "tape_distance_m": 4.0,
+        "is_gnss_tie": false,
+        "label": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          441083.869,
+          4892151.934,
+          0.222
+        ]
+      },
+      "properties": {
+        "point_id": 7,
+        "tape_distance_m": 5.0,
+        "is_gnss_tie": false,
+        "label": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          441084.858,
+          4892152.056,
+          0.311
+        ]
+      },
+      "properties": {
+        "point_id": 8,
+        "tape_distance_m": 6.0,
+        "is_gnss_tie": false,
+        "label": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          441085.744,
+          4892152.165,
+          0.426
+        ]
+      },
+      "properties": {
+        "point_id": 9,
+        "tape_distance_m": 6.9,
+        "is_gnss_tie": false,
+        "label": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            441078.928,
+            4892151.328,
+            0.0
+          ],
+          [
+            441079.92,
+            4892151.45,
+            0.006
+          ],
+          [
+            441080.911,
+            4892151.571,
+            0.058
+          ],
+          [
+            441081.904,
+            4892151.693,
+            0.052
+          ],
+          [
+            441082.301,
+            4892151.742,
+            0.065
+          ],
+          [
+            441082.58,
+            4892151.776,
+            0.169
+          ],
+          [
+            441082.877,
+            4892151.813,
+            0.19
+          ],
+          [
+            441083.869,
+            4892151.934,
+            0.222
+          ],
+          [
+            441084.858,
+            4892152.056,
+            0.311
+          ],
+          [
+            441085.744,
+            4892152.165,
+            0.426
+          ]
+        ]
+      },
+      "properties": {
+        "name": "transect_demo_transect_line"
+      }
+    }
+  ]
+}

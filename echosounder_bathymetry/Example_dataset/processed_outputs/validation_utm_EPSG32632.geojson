@@ -1,0 +1,6684 @@
+{
+  "type": "FeatureCollection",
+  "name": "validation_utm_EPSG32632",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:32632"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446836.3993594075,
+          4890048.9719644645
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335090000000001,
+        "depth": 1.301,
+        "temperature": 0.0,
+        "time": 1782050783000,
+        "timestamp": "2026-06-21T14:06:23",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.361,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446836.3993594075,
+        "utm_northing": 4890048.9719644645
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446938.90880398266,
+          4890085.170082971
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336368333333333,
+        "depth": 2.716,
+        "temperature": 0.0,
+        "time": 1782050514000,
+        "timestamp": "2026-06-21T14:01:54",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.7760000000000002,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446938.90880398266,
+        "utm_northing": 4890085.170082971
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446844.5207568188,
+          4890047.980651739
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335191666666667,
+        "depth": 1.592,
+        "temperature": 0.0,
+        "time": 1782050694000,
+        "timestamp": "2026-06-21T14:04:54",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.6520000000000001,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446844.5207568188,
+        "utm_northing": 4890047.980651739
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446961.72754934296,
+          4890088.873724144
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336653333333334,
+        "depth": 3.247,
+        "temperature": 0.0,
+        "time": 1782050452000,
+        "timestamp": "2026-06-21T14:00:52",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.307,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446961.72754934296,
+        "utm_northing": 4890088.873724144
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.51053529646,
+          4890053.704456048
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334928333333332,
+        "depth": 0.219,
+        "temperature": 0.0,
+        "time": 1782050110000,
+        "timestamp": "2026-06-21T13:55:10",
+        "water_level": 0.06728310502283105,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 0.28628310502283105,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.51053529646,
+        "utm_northing": 4890053.704456048
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.64379553054,
+          4890053.7033783365
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334930000000002,
+        "depth": 0.354,
+        "temperature": 0.0,
+        "time": 1782050109000,
+        "timestamp": "2026-06-21T13:55:09",
+        "water_level": 0.06730821917808219,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 0.42130821917808214,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.64379553054,
+        "utm_northing": 4890053.7033783365
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446879.63253549545,
+          4890055.6575203985
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33563,
+        "depth": 1.863,
+        "temperature": 0.0,
+        "time": 1782050629000,
+        "timestamp": "2026-06-21T14:03:49",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.923,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446879.63253549545,
+        "utm_northing": 4890055.6575203985
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446834.54568918084,
+          4890050.467998191
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335066666666668,
+        "depth": 1.093,
+        "temperature": 0.0,
+        "time": 1782050822000,
+        "timestamp": "2026-06-21T14:07:02",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.153,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446834.54568918084,
+        "utm_northing": 4890050.467998191
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446839.19034296914,
+          4890048.023745368
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335125,
+        "depth": 1.582,
+        "temperature": 0.0,
+        "time": 1782050703000,
+        "timestamp": "2026-06-21T14:05:03",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.6420000000000001,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446839.19034296914,
+        "utm_northing": 4890048.023745368
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446896.85788951314,
+          4890026.823122932
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335848333333333,
+        "depth": 3.736,
+        "temperature": 0.0,
+        "time": 1782050312000,
+        "timestamp": "2026-06-21T13:58:32",
+        "water_level": 0.062235159817351594,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.798235159817352,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446896.85788951314,
+        "utm_northing": 4890026.823122932
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446953.08693119755,
+          4890075.058625649
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336546666666667,
+        "depth": 3.237,
+        "temperature": 0.0,
+        "time": 1782050427000,
+        "timestamp": "2026-06-21T14:00:27",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.297,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446953.08693119755,
+        "utm_northing": 4890075.058625649
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446881.42805450095,
+          4890030.465236976
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335655000000001,
+        "depth": 3.289,
+        "temperature": 0.0,
+        "time": 1782050289000,
+        "timestamp": "2026-06-21T13:58:09",
+        "water_level": 0.06281278538812785,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.351812785388128,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446881.42805450095,
+        "utm_northing": 4890030.465236976
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.9539418847,
+          4890050.915821709
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334946666666667,
+        "depth": 0.885,
+        "temperature": 0.0,
+        "time": 1782050150000,
+        "timestamp": "2026-06-21T13:55:50",
+        "water_level": 0.06630365296803653,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 0.9513036529680365,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.9539418847,
+        "utm_northing": 4890050.915821709
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.70239203447,
+          4890052.769163516
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334943333333333,
+        "depth": 0.291,
+        "temperature": 0.0,
+        "time": 1782050086000,
+        "timestamp": "2026-06-21T13:54:46",
+        "water_level": 0.06788584474885845,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.35888584474885843,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.70239203447,
+        "utm_northing": 4890052.769163516
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446834.13094022725,
+          4890048.620044245
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335061666666666,
+        "depth": 1.603,
+        "temperature": 0.0,
+        "time": 1782050751000,
+        "timestamp": "2026-06-21T14:05:51",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.663,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446834.13094022725,
+        "utm_northing": 4890048.620044245
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446909.19065468124,
+          4890068.748205445
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335998333333333,
+        "depth": 2.487,
+        "temperature": 0.0,
+        "time": 1782050572000,
+        "timestamp": "2026-06-21T14:02:52",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.547,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446909.19065468124,
+        "utm_northing": 4890068.748205445
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.64080132364,
+          4890053.3331410475
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334930000000002,
+        "depth": 0.583,
+        "temperature": 0.0,
+        "time": 1782050106000,
+        "timestamp": "2026-06-21T13:55:06",
+        "water_level": 0.0673835616438356,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 0.6503835616438356,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.64080132364,
+        "utm_northing": 4890053.3331410475
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446827.7554019502,
+          4890051.263428234
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334981666666666,
+        "depth": 1.28,
+        "temperature": 0.0,
+        "time": 1782050849000,
+        "timestamp": "2026-06-21T14:07:29",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.34,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446827.7554019502,
+        "utm_northing": 4890051.263428234
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.9866867599,
+          4890046.665636778
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334935,
+        "depth": 1.124,
+        "temperature": 0.0,
+        "time": 1782050161000,
+        "timestamp": "2026-06-21T13:56:01",
+        "water_level": 0.06602739726027397,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.1900273972602742,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.9866867599,
+        "utm_northing": 4890046.665636778
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446908.6546255906,
+          4890068.38227209
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335991666666667,
+        "depth": 2.373,
+        "temperature": 0.0,
+        "time": 1782050573000,
+        "timestamp": "2026-06-21T14:02:53",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.4330000000000003,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446908.6546255906,
+        "utm_northing": 4890068.38227209
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446852.874355352,
+          4890026.252830171
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335298333333332,
+        "depth": 3.33,
+        "temperature": 0.0,
+        "time": 1782050243000,
+        "timestamp": "2026-06-21T13:57:23",
+        "water_level": 0.06396803652968036,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.3939680365296803,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446852.874355352,
+        "utm_northing": 4890026.252830171
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446862.50353983085,
+          4890030.433013628
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335418333333333,
+        "depth": 3.351,
+        "temperature": 0.0,
+        "time": 1782050257000,
+        "timestamp": "2026-06-21T13:57:37",
+        "water_level": 0.06361643835616437,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.4146164383561644,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446862.50353983085,
+        "utm_northing": 4890030.433013628
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446927.28589083103,
+          4890048.608008008
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336226666666667,
+        "depth": 3.549,
+        "temperature": 0.0,
+        "time": 1782050364000,
+        "timestamp": "2026-06-21T13:59:24",
+        "water_level": 0.06092922374429224,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.609929223744292,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446927.28589083103,
+        "utm_northing": 4890048.608008008
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.9719066714,
+          4890053.137245431
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334946666666667,
+        "depth": 0.281,
+        "temperature": 0.0,
+        "time": 1782050085000,
+        "timestamp": "2026-06-21T13:54:45",
+        "water_level": 0.06791095890410959,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.3489109589041096,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.9719066714,
+        "utm_northing": 4890053.137245431
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.6889183771,
+          4890051.103095724
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334943333333333,
+        "depth": 1.03,
+        "temperature": 0.0,
+        "time": 1782050147000,
+        "timestamp": "2026-06-21T13:55:47",
+        "water_level": 0.06637899543378994,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.09637899543379,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.6889183771,
+        "utm_northing": 4890051.103095724
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.1064733573,
+          4890044.998491302
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334936666666666,
+        "depth": 1.218,
+        "temperature": 0.0,
+        "time": 1782050166000,
+        "timestamp": "2026-06-21T13:56:06",
+        "water_level": 0.06590182648401827,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.2839018264840183,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.1064733573,
+        "utm_northing": 4890044.998491302
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446942.61648666166,
+          4890065.701439947
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336416666666667,
+        "depth": 3.289,
+        "temperature": 0.0,
+        "time": 1782050402000,
+        "timestamp": "2026-06-21T14:00:02",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.349,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446942.61648666166,
+        "utm_northing": 4890065.701439947
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446834.3241640097,
+          4890023.070439612
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335066666666668,
+        "depth": 3.112,
+        "temperature": 0.0,
+        "time": 1782050210000,
+        "timestamp": "2026-06-21T13:56:50",
+        "water_level": 0.06479680365296803,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.176796803652968,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446834.3241640097,
+        "utm_northing": 4890023.070439612
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446934.24829517305,
+          4890052.624690092
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336313333333333,
+        "depth": 3.674,
+        "temperature": 0.0,
+        "time": 1782050379000,
+        "timestamp": "2026-06-21T13:59:39",
+        "water_level": 0.06055251141552511,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.734552511415525,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446934.24829517305,
+        "utm_northing": 4890052.624690092
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446857.46346803784,
+          4890049.912472704
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335353333333334,
+        "depth": 2.31,
+        "temperature": 0.0,
+        "time": 1782050669000,
+        "timestamp": "2026-06-21T14:04:29",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.37,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446857.46346803784,
+        "utm_northing": 4890049.912472704
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446831.8864707104,
+          4890051.2300230935
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335033333333334,
+        "depth": 1.332,
+        "temperature": 0.0,
+        "time": 1782050834000,
+        "timestamp": "2026-06-21T14:07:14",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.3920000000000001,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446831.8864707104,
+        "utm_northing": 4890051.2300230935
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.0345936795,
+          4890052.5894333515
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334935,
+        "depth": 0.957,
+        "temperature": 0.0,
+        "time": 1782050092000,
+        "timestamp": "2026-06-21T13:54:52",
+        "water_level": 0.06773515981735159,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.0247351598173515,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.0345936795,
+        "utm_northing": 4890052.5894333515
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446895.8003749811,
+          4890060.895715116
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335831666666667,
+        "depth": 2.456,
+        "temperature": 0.0,
+        "time": 1782050601000,
+        "timestamp": "2026-06-21T14:03:21",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.516,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446895.8003749811,
+        "utm_northing": 4890060.895715116
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446928.0899352282,
+          4890049.156910325
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336236666666668,
+        "depth": 3.611,
+        "temperature": 0.0,
+        "time": 1782050366000,
+        "timestamp": "2026-06-21T13:59:26",
+        "water_level": 0.060878995433789954,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.67187899543379,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446928.0899352282,
+        "utm_northing": 4890049.156910325
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446847.8567547317,
+          4890048.509076344
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335233333333333,
+        "depth": 1.894,
+        "temperature": 0.0,
+        "time": 1782050687000,
+        "timestamp": "2026-06-21T14:04:47",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.954,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446847.8567547317,
+        "utm_northing": 4890048.509076344
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446854.7952694922,
+          4890049.563776452
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33532,
+        "depth": 1.873,
+        "temperature": 0.0,
+        "time": 1782050674000,
+        "timestamp": "2026-06-21T14:04:34",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.933,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446854.7952694922,
+        "utm_northing": 4890049.563776452
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446835.47402095736,
+          4890049.905099904
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335078333333334,
+        "depth": 1.509,
+        "temperature": 0.0,
+        "time": 1782050806000,
+        "timestamp": "2026-06-21T14:06:46",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.569,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446835.47402095736,
+        "utm_northing": 4890049.905099904
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446828.9622612148,
+          4890035.702686247
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334998333333335,
+        "depth": 2.831,
+        "temperature": 0.0,
+        "time": 1782050183000,
+        "timestamp": "2026-06-21T13:56:23",
+        "water_level": 0.06547488584474885,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.8964748858447487,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446828.9622612148,
+        "utm_northing": 4890035.702686247
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446893.2594626659,
+          4890059.805452477
+        ]
+      },
+      "properties": {
+        "longtitude": 8.3358,
+        "depth": 2.539,
+        "temperature": 0.0,
+        "time": 1782050605000,
+        "timestamp": "2026-06-21T14:03:25",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.599,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446893.2594626659,
+        "utm_northing": 4890059.805452477
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446835.47402095736,
+          4890049.905099904
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335078333333334,
+        "depth": 1.519,
+        "temperature": 0.0,
+        "time": 1782050808000,
+        "timestamp": "2026-06-21T14:06:48",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.579,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446835.47402095736,
+        "utm_northing": 4890049.905099904
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446865.0712728967,
+          4890051.3320358265
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335448333333334,
+        "depth": 2.185,
+        "temperature": 0.0,
+        "time": 1782050656000,
+        "timestamp": "2026-06-21T14:04:16",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.245,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446865.0712728967,
+        "utm_northing": 4890051.3320358265
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446835.3407606486,
+          4890049.906177376
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335076666666668,
+        "depth": 1.499,
+        "temperature": 0.0,
+        "time": 1782050811000,
+        "timestamp": "2026-06-21T14:06:51",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.5590000000000002,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446835.3407606486,
+        "utm_northing": 4890049.906177376
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446902.88408725953,
+          4890063.430338717
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33592,
+        "depth": 2.269,
+        "temperature": 0.0,
+        "time": 1782050588000,
+        "timestamp": "2026-06-21T14:03:08",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.329,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446902.88408725953,
+        "utm_northing": 4890063.430338717
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.19811788166,
+          4890048.627586792
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335049999999999,
+        "depth": 1.436,
+        "temperature": 0.0,
+        "time": 1782050738000,
+        "timestamp": "2026-06-21T14:05:38",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.496,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.19811788166,
+        "utm_northing": 4890048.627586792
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.72185399046,
+          4890055.175705891
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334943333333333,
+        "depth": 1.134,
+        "temperature": 0.0,
+        "time": 1782050883000,
+        "timestamp": "2026-06-21T14:08:03",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.194,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.72185399046,
+        "utm_northing": 4890055.175705891
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446919.4850611289,
+          4890039.784703166
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33613,
+        "depth": 3.538,
+        "temperature": 0.0,
+        "time": 1782050350000,
+        "timestamp": "2026-06-21T13:59:10",
+        "water_level": 0.06128082191780822,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.599280821917808,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446919.4850611289,
+        "utm_northing": 4890039.784703166
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446826.0364915965,
+          4890052.9435054045
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33496,
+        "depth": 1.28,
+        "temperature": 0.0,
+        "time": 1782050862000,
+        "timestamp": "2026-06-21T14:07:42",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.34,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446826.0364915965,
+        "utm_northing": 4890052.9435054045
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446962.7906389139,
+          4890088.494887577
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336666666666668,
+        "depth": 3.112,
+        "temperature": 0.0,
+        "time": 1782050473000,
+        "timestamp": "2026-06-21T14:01:13",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.172,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446962.7906389139,
+        "utm_northing": 4890088.494887577
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446845.3863112683,
+          4890023.166135965
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335205,
+        "depth": 3.549,
+        "temperature": 0.0,
+        "time": 1782050231000,
+        "timestamp": "2026-06-21T13:57:11",
+        "water_level": 0.06426940639269406,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.613269406392694,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446845.3863112683,
+        "utm_northing": 4890023.166135965
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.4646385519,
+          4890048.625431765
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335053333333333,
+        "depth": 1.582,
+        "temperature": 0.0,
+        "time": 1782050720000,
+        "timestamp": "2026-06-21T14:05:20",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.6420000000000001,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.4646385519,
+        "utm_northing": 4890048.625431765
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446944.4940759009,
+          4890067.167335158
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336440000000001,
+        "depth": 3.278,
+        "temperature": 0.0,
+        "time": 1782050405000,
+        "timestamp": "2026-06-21T14:00:05",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.338,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446944.4940759009,
+        "utm_northing": 4890067.167335158
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446963.3520475034,
+          4890092.007842417
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336673333333332,
+        "depth": 3.06,
+        "temperature": 0.0,
+        "time": 1782050460000,
+        "timestamp": "2026-06-21T14:01:00",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.12,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446963.3520475034,
+        "utm_northing": 4890092.007842417
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.44635109557,
+          4890054.067149406
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33494,
+        "depth": 0.375,
+        "temperature": 0.0,
+        "time": 1782050067000,
+        "timestamp": "2026-06-21T13:54:27",
+        "water_level": 0.068162100456621,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.44316210045662097,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.44635109557,
+        "utm_northing": 4890054.067149406
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446865.47254964564,
+          4890051.513923869
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335453333333334,
+        "depth": 2.175,
+        "temperature": 0.0,
+        "time": 1782050655000,
+        "timestamp": "2026-06-21T14:04:15",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.235,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446865.47254964564,
+        "utm_northing": 4890051.513923869
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446831.56909526564,
+          4890028.461507919
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335031666666668,
+        "depth": 3.049,
+        "temperature": 0.0,
+        "time": 1782050196000,
+        "timestamp": "2026-06-21T13:56:36",
+        "water_level": 0.06514840182648401,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.114148401826484,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446831.56909526564,
+        "utm_northing": 4890028.461507919
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446835.6027909716,
+          4890049.348666508
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33508,
+        "depth": 1.592,
+        "temperature": 0.0,
+        "time": 1782050767000,
+        "timestamp": "2026-06-21T14:06:07",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.6520000000000001,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446835.6027909716,
+        "utm_northing": 4890049.348666508
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446909.59342380543,
+          4890069.115214813
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336003333333334,
+        "depth": 2.331,
+        "temperature": 0.0,
+        "time": 1782050571000,
+        "timestamp": "2026-06-21T14:02:51",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.391,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446909.59342380543,
+        "utm_northing": 4890069.115214813
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446876.0210498496,
+          4890054.02052115
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335585,
+        "depth": 2.394,
+        "temperature": 0.0,
+        "time": 1782050635000,
+        "timestamp": "2026-06-21T14:03:55",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.454,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446876.0210498496,
+        "utm_northing": 4890054.02052115
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446912.9074700424,
+          4890033.913622521
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336048333333334,
+        "depth": 3.861,
+        "temperature": 0.0,
+        "time": 1782050337000,
+        "timestamp": "2026-06-21T13:58:57",
+        "water_level": 0.061607305936073053,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.922607305936073,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446912.9074700424,
+        "utm_northing": 4890033.913622521
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446826.3045091223,
+          4890053.126468726
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334963333333333,
+        "depth": 1.311,
+        "temperature": 0.0,
+        "time": 1782050871000,
+        "timestamp": "2026-06-21T14:07:51",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.371,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446826.3045091223,
+        "utm_northing": 4890053.126468726
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.4646385519,
+          4890048.625431765
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335053333333333,
+        "depth": 1.644,
+        "temperature": 0.0,
+        "time": 1782050742000,
+        "timestamp": "2026-06-21T14:05:42",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.704,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.4646385519,
+        "utm_northing": 4890048.625431765
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446831.6978654158,
+          4890027.905074465
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335033333333334,
+        "depth": 2.862,
+        "temperature": 0.0,
+        "time": 1782050197000,
+        "timestamp": "2026-06-21T13:56:37",
+        "water_level": 0.06512328767123288,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.927123287671233,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446831.6978654158,
+        "utm_northing": 4890027.905074465
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446836.3993594075,
+          4890048.9719644645
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335090000000001,
+        "depth": 1.54,
+        "temperature": 0.0,
+        "time": 1782050786000,
+        "timestamp": "2026-06-21T14:06:26",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.6,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446836.3993594075,
+        "utm_northing": 4890048.9719644645
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446873.21361101815,
+          4890052.932419522
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335550000000001,
+        "depth": 2.217,
+        "temperature": 0.0,
+        "time": 1782050640000,
+        "timestamp": "2026-06-21T14:04:00",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.277,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446873.21361101815,
+        "utm_northing": 4890052.932419522
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446876.5153560516,
+          4890032.726494287
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335593333333332,
+        "depth": 3.424,
+        "temperature": 0.0,
+        "time": 1782050281000,
+        "timestamp": "2026-06-21T13:58:01",
+        "water_level": 0.06301369863013698,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.487013698630137,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446876.5153560516,
+        "utm_northing": 4890032.726494287
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446890.0492584207,
+          4890058.350335316
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335759999999999,
+        "depth": 2.518,
+        "temperature": 0.0,
+        "time": 1782050612000,
+        "timestamp": "2026-06-21T14:03:32",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.578,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446890.0492584207,
+        "utm_northing": 4890058.350335316
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446931.9768949413,
+          4890051.902498887
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336285,
+        "depth": 3.528,
+        "temperature": 0.0,
+        "time": 1782050374000,
+        "timestamp": "2026-06-21T13:59:34",
+        "water_level": 0.06067808219178082,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.5886780821917807,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446931.9768949413,
+        "utm_northing": 4890051.902498887
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446836.134335502,
+          4890049.159238016
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335086666666665,
+        "depth": 1.395,
+        "temperature": 0.0,
+        "time": 1782050792000,
+        "timestamp": "2026-06-21T14:06:32",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.455,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446836.134335502,
+        "utm_northing": 4890049.159238016
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446855.32831074164,
+          4890049.559468159
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335326666666667,
+        "depth": 2.29,
+        "temperature": 0.0,
+        "time": 1782050673000,
+        "timestamp": "2026-06-21T14:04:33",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.35,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446855.32831074164,
+        "utm_northing": 4890049.559468159
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446904.0719087974,
+          4890028.986434497
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335938333333333,
+        "depth": 3.559,
+        "temperature": 0.0,
+        "time": 1782050322000,
+        "timestamp": "2026-06-21T13:58:42",
+        "water_level": 0.06198401826484018,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.6209840182648403,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446904.0719087974,
+        "utm_northing": 4890028.986434497
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446839.10509152804,
+          4890020.995346778
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335126666666667,
+        "depth": 3.601,
+        "temperature": 0.0,
+        "time": 1782050222000,
+        "timestamp": "2026-06-21T13:57:02",
+        "water_level": 0.06449543378995433,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.665495433789954,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446839.10509152804,
+        "utm_northing": 4890020.995346778
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446901.54700228595,
+          4890062.885743979
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335903333333333,
+        "depth": 2.227,
+        "temperature": 0.0,
+        "time": 1782050591000,
+        "timestamp": "2026-06-21T14:03:11",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.287,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446901.54700228595,
+        "utm_northing": 4890062.885743979
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446898.8728316644,
+          4890061.796555315
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33587,
+        "depth": 2.487,
+        "temperature": 0.0,
+        "time": 1782050596000,
+        "timestamp": "2026-06-21T14:03:16",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.547,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446898.8728316644,
+        "utm_northing": 4890061.796555315
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446855.0155051603,
+          4890027.346308516
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335325000000001,
+        "depth": 3.507,
+        "temperature": 0.0,
+        "time": 1782050246000,
+        "timestamp": "2026-06-21T13:57:26",
+        "water_level": 0.06389269406392693,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.570892694063927,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446855.0155051603,
+        "utm_northing": 4890027.346308516
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446914.24455986754,
+          4890034.458219586
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336065,
+        "depth": 3.882,
+        "temperature": 0.0,
+        "time": 1782050340000,
+        "timestamp": "2026-06-21T13:59:00",
+        "water_level": 0.06153196347031963,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.9435319634703196,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446914.24455986754,
+        "utm_northing": 4890034.458219586
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446918.40851613437,
+          4890038.49747891
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336116666666667,
+        "depth": 3.476,
+        "temperature": 0.0,
+        "time": 1782050348000,
+        "timestamp": "2026-06-21T13:59:08",
+        "water_level": 0.0613310502283105,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.5373310502283104,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446918.40851613437,
+        "utm_northing": 4890038.49747891
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446829.8711347009,
+          4890032.733244902
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33501,
+        "depth": 2.956,
+        "temperature": 0.0,
+        "time": 1782050188000,
+        "timestamp": "2026-06-21T13:56:28",
+        "water_level": 0.06534931506849315,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.021349315068493,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446829.8711347009,
+        "utm_northing": 4890032.733244902
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446830.4206076021,
+          4890051.241876232
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335015,
+        "depth": 1.27,
+        "temperature": 0.0,
+        "time": 1782050844000,
+        "timestamp": "2026-06-21T14:07:24",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.33,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446830.4206076021,
+        "utm_northing": 4890051.241876232
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.9961830827,
+          4890048.436003101
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33506,
+        "depth": 1.54,
+        "temperature": 0.0,
+        "time": 1782050715000,
+        "timestamp": "2026-06-21T14:05:15",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.6,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.9961830827,
+        "utm_northing": 4890048.436003101
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446956.04403390794,
+          4890078.181991332
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336583333333333,
+        "depth": 3.091,
+        "temperature": 0.0,
+        "time": 1782050436000,
+        "timestamp": "2026-06-21T14:00:36",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.1510000000000002,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446956.04403390794,
+        "utm_northing": 4890078.181991332
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446896.19158568355,
+          4890026.828504077
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33584,
+        "depth": 3.694,
+        "temperature": 0.0,
+        "time": 1782050311000,
+        "timestamp": "2026-06-21T13:58:31",
+        "water_level": 0.06226027397260274,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.7562602739726025,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446896.19158568355,
+        "utm_northing": 4890026.828504077
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446965.3330214193,
+          4890089.770295598
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336698333333334,
+        "depth": 3.049,
+        "temperature": 0.0,
+        "time": 1782050469000,
+        "timestamp": "2026-06-21T14:01:09",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.109,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446965.3330214193,
+        "utm_northing": 4890089.770295598
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446894.4632888869,
+          4890060.351121812
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335815,
+        "depth": 2.414,
+        "temperature": 0.0,
+        "time": 1782050603000,
+        "timestamp": "2026-06-21T14:03:23",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.474,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446894.4632888869,
+        "utm_northing": 4890060.351121812
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446825.7774563157,
+          4890053.871253951
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334956666666667,
+        "depth": 0.229,
+        "temperature": 0.0,
+        "time": 1782050877000,
+        "timestamp": "2026-06-21T14:07:57",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 0.28900000000000003,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446825.7774563157,
+        "utm_northing": 4890053.871253951
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446826.29103586933,
+          4890051.460400936
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334963333333333,
+        "depth": 1.363,
+        "temperature": 0.0,
+        "time": 1782050853000,
+        "timestamp": "2026-06-21T14:07:33",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.423,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446826.29103586933,
+        "utm_northing": 4890051.460400936
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446835.7390448138,
+          4890049.717826326
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335081666666667,
+        "depth": 1.623,
+        "temperature": 0.0,
+        "time": 1782050798000,
+        "timestamp": "2026-06-21T14:06:38",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.683,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446835.7390448138,
+        "utm_northing": 4890049.717826326
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446904.0953862153,
+          4890064.901603037
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335935000000001,
+        "depth": 2.331,
+        "temperature": 0.0,
+        "time": 1782050583000,
+        "timestamp": "2026-06-21T14:03:03",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.391,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446904.0953862153,
+        "utm_northing": 4890064.901603037
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446834.1324370331,
+          4890048.805162885
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335061666666666,
+        "depth": 1.582,
+        "temperature": 0.0,
+        "time": 1782050753000,
+        "timestamp": "2026-06-21T14:05:53",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.6420000000000001,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446834.1324370331,
+        "utm_northing": 4890048.805162885
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446891.38634529815,
+          4890058.894927729
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335776666666668,
+        "depth": 2.362,
+        "temperature": 0.0,
+        "time": 1782050609000,
+        "timestamp": "2026-06-21T14:03:29",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.422,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446891.38634529815,
+        "utm_northing": 4890058.894927729
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.5964020663,
+          4890048.439235614
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335055,
+        "depth": 1.509,
+        "temperature": 0.0,
+        "time": 1782050745000,
+        "timestamp": "2026-06-21T14:05:45",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.569,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.5964020663,
+        "utm_northing": 4890048.439235614
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446935.7075862305,
+          4890084.825655569
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336328333333334,
+        "depth": 2.727,
+        "temperature": 0.0,
+        "time": 1782050520000,
+        "timestamp": "2026-06-21T14:02:00",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.787,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446935.7075862305,
+        "utm_northing": 4890084.825655569
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446828.42020639544,
+          4890051.072921487
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33499,
+        "depth": 1.384,
+        "temperature": 0.0,
+        "time": 1782050848000,
+        "timestamp": "2026-06-21T14:07:28",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.444,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446828.42020639544,
+        "utm_northing": 4890051.072921487
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446925.2610397755,
+          4890078.430395712
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336198333333334,
+        "depth": 2.009,
+        "temperature": 0.0,
+        "time": 1782050541000,
+        "timestamp": "2026-06-21T14:02:21",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.069,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446925.2610397755,
+        "utm_northing": 4890078.430395712
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446822.01622691035,
+          4890050.199056832
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33491,
+        "depth": 0.916,
+        "temperature": 0.0,
+        "time": 1782050032000,
+        "timestamp": "2026-06-21T13:53:52",
+        "water_level": 0.06884018264840182,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.9848401826484019,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446822.01622691035,
+        "utm_northing": 4890050.199056832
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.5335797584,
+          4890024.187616408
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335056666666667,
+        "depth": 3.133,
+        "temperature": 0.0,
+        "time": 1782050206000,
+        "timestamp": "2026-06-21T13:56:46",
+        "water_level": 0.06489726027397259,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.197897260273973,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.5335797584,
+        "utm_northing": 4890024.187616408
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446861.60201765306,
+          4890050.80467945
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335405,
+        "depth": 2.081,
+        "temperature": 0.0,
+        "time": 1782050662000,
+        "timestamp": "2026-06-21T14:04:22",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.141,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446861.60201765306,
+        "utm_northing": 4890050.80467945
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.76657606725,
+          4890052.406470118
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334931666666668,
+        "depth": 0.874,
+        "temperature": 0.0,
+        "time": 1782050123000,
+        "timestamp": "2026-06-21T13:55:23",
+        "water_level": 0.06698173515981734,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 0.9409817351598173,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.76657606725,
+        "utm_northing": 4890052.406470118
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446955.7159379628,
+          4890087.070911679
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336578333333334,
+        "depth": 2.966,
+        "temperature": 0.0,
+        "time": 1782050488000,
+        "timestamp": "2026-06-21T14:01:28",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.0260000000000002,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446955.7159379628,
+        "utm_northing": 4890087.070911679
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.65128104854,
+          4890054.628971557
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334930000000002,
+        "depth": 1.051,
+        "temperature": 0.0,
+        "time": 1782049982000,
+        "timestamp": "2026-06-21T13:53:02",
+        "water_level": 0.0700958904109589,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.121095890410959,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.65128104854,
+        "utm_northing": 4890054.628971557
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446944.6464343122,
+          4890086.04943738
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336440000000001,
+        "depth": 2.789,
+        "temperature": 0.0,
+        "time": 1782050504000,
+        "timestamp": "2026-06-21T14:01:44",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.849,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446944.6464343122,
+        "utm_northing": 4890086.04943738
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.1633626714,
+          4890052.032999721
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334936666666666,
+        "depth": 0.957,
+        "temperature": 0.0,
+        "time": 1782050134000,
+        "timestamp": "2026-06-21T13:55:34",
+        "water_level": 0.0667054794520548,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.0237054794520548,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.1633626714,
+        "utm_northing": 4890052.032999721
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446886.57701842097,
+          4890057.452728517
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335716666666666,
+        "depth": 2.373,
+        "temperature": 0.0,
+        "time": 1782050618000,
+        "timestamp": "2026-06-21T14:03:38",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.4330000000000003,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446886.57701842097,
+        "utm_northing": 4890057.452728517
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446836.3993594075,
+          4890048.9719644645
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335090000000001,
+        "depth": 1.353,
+        "temperature": 0.0,
+        "time": 1782050784000,
+        "timestamp": "2026-06-21T14:06:24",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.413,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446836.3993594075,
+        "utm_northing": 4890048.9719644645
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446836.5341164734,
+          4890049.156005656
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335091666666667,
+        "depth": 1.405,
+        "temperature": 0.0,
+        "time": 1782050781000,
+        "timestamp": "2026-06-21T14:06:21",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.465,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446836.5341164734,
+        "utm_northing": 4890049.156005656
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446830.02082675445,
+          4890051.245108964
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33501,
+        "depth": 1.426,
+        "temperature": 0.0,
+        "time": 1782050845000,
+        "timestamp": "2026-06-21T14:07:25",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.486,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446830.02082675445,
+        "utm_northing": 4890051.245108964
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446826.17274590937,
+          4890053.312665029
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334961666666667,
+        "depth": 1.27,
+        "temperature": 0.0,
+        "time": 1782050872000,
+        "timestamp": "2026-06-21T14:07:52",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.33,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446826.17274590937,
+        "utm_northing": 4890053.312665029
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446842.6566085373,
+          4890048.180852661
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335168333333334,
+        "depth": 1.925,
+        "temperature": 0.0,
+        "time": 1782050697000,
+        "timestamp": "2026-06-21T14:04:57",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.985,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446842.6566085373,
+        "utm_northing": 4890048.180852661
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446821.2211565899,
+          4890050.760879268
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334900000000001,
+        "depth": 0.676,
+        "temperature": 0.0,
+        "time": 1782050042000,
+        "timestamp": "2026-06-21T13:54:02",
+        "water_level": 0.06858904109589041,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.7445890410958904,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446821.2211565899,
+        "utm_northing": 4890050.760879268
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446932.23237863183,
+          4890083.557787491
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336285,
+        "depth": 2.383,
+        "temperature": 0.0,
+        "time": 1782050527000,
+        "timestamp": "2026-06-21T14:02:07",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.443,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446932.23237863183,
+        "utm_northing": 4890083.557787491
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.0065237419,
+          4890024.932400993
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335049999999999,
+        "depth": 3.382,
+        "temperature": 0.0,
+        "time": 1782050204000,
+        "timestamp": "2026-06-21T13:56:44",
+        "water_level": 0.06494748858447488,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.446947488584475,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.0065237419,
+        "utm_northing": 4890024.932400993
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446837.45945517946,
+          4890048.222870369
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335103333333333,
+        "depth": 1.665,
+        "temperature": 0.0,
+        "time": 1782050706000,
+        "timestamp": "2026-06-21T14:05:06",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.725,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446837.45945517946,
+        "utm_northing": 4890048.222870369
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446926.73586192017,
+          4890079.529275566
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336216666666667,
+        "depth": 1.977,
+        "temperature": 0.0,
+        "time": 1782050538000,
+        "timestamp": "2026-06-21T14:02:18",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.037,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446926.73586192017,
+        "utm_northing": 4890079.529275566
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446866.0040948197,
+          4890051.324497797
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335460000000001,
+        "depth": 2.394,
+        "temperature": 0.0,
+        "time": 1782050654000,
+        "timestamp": "2026-06-21T14:04:14",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.454,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446866.0040948197,
+        "utm_northing": 4890051.324497797
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446951.74686587823,
+          4890074.143783451
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33653,
+        "depth": 3.06,
+        "temperature": 0.0,
+        "time": 1782050424000,
+        "timestamp": "2026-06-21T14:00:24",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.12,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446951.74686587823,
+        "utm_northing": 4890074.143783451
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446937.439960817,
+          4890084.811675013
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336350000000001,
+        "depth": 2.831,
+        "temperature": 0.0,
+        "time": 1782050517000,
+        "timestamp": "2026-06-21T14:01:57",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.891,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446937.439960817,
+        "utm_northing": 4890084.811675013
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446836.66887353186,
+          4890049.340046853
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335093333333333,
+        "depth": 1.79,
+        "temperature": 0.0,
+        "time": 1782050773000,
+        "timestamp": "2026-06-21T14:06:13",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.85,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446836.66887353186,
+        "utm_northing": 4890049.340046853
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446825.15908313374,
+          4890043.323802018
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33495,
+        "depth": 1.655,
+        "temperature": 0.0,
+        "time": 1782050170000,
+        "timestamp": "2026-06-21T13:56:10",
+        "water_level": 0.0658013698630137,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.7208013698630138,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446825.15908313374,
+        "utm_northing": 4890043.323802018
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446922.7131992943,
+          4890043.46125835
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336170000000001,
+        "depth": 3.715,
+        "temperature": 0.0,
+        "time": 1782050356000,
+        "timestamp": "2026-06-21T13:59:16",
+        "water_level": 0.06113013698630137,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.776130136986301,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446922.7131992943,
+        "utm_northing": 4890043.46125835
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446925.27204365074,
+          4890046.772956042
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336201666666666,
+        "depth": 3.351,
+        "temperature": 0.0,
+        "time": 1782050361000,
+        "timestamp": "2026-06-21T13:59:21",
+        "water_level": 0.06100456621004566,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.4120045662100456,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446925.27204365074,
+        "utm_northing": 4890046.772956042
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.59340842476,
+          4890048.068998328
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335055,
+        "depth": 1.499,
+        "temperature": 0.0,
+        "time": 1782050730000,
+        "timestamp": "2026-06-21T14:05:30",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.5590000000000002,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.59340842476,
+        "utm_northing": 4890048.068998328
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.9961830827,
+          4890048.436003101
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33506,
+        "depth": 1.499,
+        "temperature": 0.0,
+        "time": 1782050747000,
+        "timestamp": "2026-06-21T14:05:47",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.5590000000000002,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.9961830827,
+        "utm_northing": 4890048.436003101
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446828.4396975466,
+          4890037.002827142
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334991666666667,
+        "depth": 2.518,
+        "temperature": 0.0,
+        "time": 1782050181000,
+        "timestamp": "2026-06-21T13:56:21",
+        "water_level": 0.06552511415525114,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.583525114155251,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446828.4396975466,
+        "utm_northing": 4890037.002827142
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446817.8761738661,
+          4890049.12175631
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334858333333333,
+        "depth": 0.937,
+        "temperature": 0.0,
+        "time": 1782049949000,
+        "timestamp": "2026-06-21T13:52:29",
+        "water_level": 0.07087442922374429,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.0078744292237443,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446817.8761738661,
+        "utm_northing": 4890049.12175631
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.3268877319,
+          4890048.07115335
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335051666666667,
+        "depth": 1.447,
+        "temperature": 0.0,
+        "time": 1782050732000,
+        "timestamp": "2026-06-21T14:05:32",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.5070000000000001,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.3268877319,
+        "utm_northing": 4890048.07115335
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446892.7249271121,
+          4890059.624639057
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335793333333333,
+        "depth": 2.518,
+        "temperature": 0.0,
+        "time": 1782050606000,
+        "timestamp": "2026-06-21T14:03:26",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.578,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446892.7249271121,
+        "utm_northing": 4890059.624639057
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446836.134335502,
+          4890049.159238016
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335086666666665,
+        "depth": 1.353,
+        "temperature": 0.0,
+        "time": 1782050791000,
+        "timestamp": "2026-06-21T14:06:31",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.413,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446836.134335502,
+        "utm_northing": 4890049.159238016
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446907.0465379596,
+          4890067.284472288
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335971666666667,
+        "depth": 2.206,
+        "temperature": 0.0,
+        "time": 1782050576000,
+        "timestamp": "2026-06-21T14:02:56",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.266,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446907.0465379596,
+        "utm_northing": 4890067.284472288
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446839.8566447005,
+          4890048.018358428
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335133333333333,
+        "depth": 1.551,
+        "temperature": 0.0,
+        "time": 1782050702000,
+        "timestamp": "2026-06-21T14:05:02",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.611,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446839.8566447005,
+        "utm_northing": 4890048.018358428
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446941.1816858238,
+          4890086.077395159
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336396666666667,
+        "depth": 2.675,
+        "temperature": 0.0,
+        "time": 1782050510000,
+        "timestamp": "2026-06-21T14:01:50",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.735,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446941.1816858238,
+        "utm_northing": 4890086.077395159
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446846.91944305034,
+          4890047.961261017
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335221666666666,
+        "depth": 1.821,
+        "temperature": 0.0,
+        "time": 1782050689000,
+        "timestamp": "2026-06-21T14:04:49",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.881,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446846.91944305034,
+        "utm_northing": 4890047.961261017
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446869.7398699252,
+          4890051.849702932
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335506666666667,
+        "depth": 2.321,
+        "temperature": 0.0,
+        "time": 1782050647000,
+        "timestamp": "2026-06-21T14:04:07",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.3810000000000002,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446869.7398699252,
+        "utm_northing": 4890051.849702932
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446825.5828171863,
+          4890046.282467261
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334955,
+        "depth": 0.239,
+        "temperature": 0.0,
+        "time": 1782050052000,
+        "timestamp": "2026-06-21T13:54:12",
+        "water_level": 0.06851369863013698,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.307513698630137,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446825.5828171863,
+        "utm_northing": 4890046.282467261
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446845.9866206271,
+          4890047.96880175
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33521,
+        "depth": 1.769,
+        "temperature": 0.0,
+        "time": 1782050691000,
+        "timestamp": "2026-06-21T14:04:51",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.829,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446845.9866206271,
+        "utm_northing": 4890047.96880175
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446927.40514877194,
+          4890079.894134771
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336225,
+        "depth": 2.04,
+        "temperature": 0.0,
+        "time": 1782050537000,
+        "timestamp": "2026-06-21T14:02:17",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.1,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446927.40514877194,
+        "utm_northing": 4890079.894134771
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446930.10378089413,
+          4890050.991963149
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336261666666667,
+        "depth": 3.237,
+        "temperature": 0.0,
+        "time": 1782050370000,
+        "timestamp": "2026-06-21T13:59:30",
+        "water_level": 0.06077853881278539,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.2977785388127856,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446930.10378089413,
+        "utm_northing": 4890050.991963149
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446965.7462379387,
+          4890091.433138948
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336703333333332,
+        "depth": 2.893,
+        "temperature": 0.0,
+        "time": 1782050466000,
+        "timestamp": "2026-06-21T14:01:06",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.953,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446965.7462379387,
+        "utm_northing": 4890091.433138948
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.1047661214,
+          4890052.967214625
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334923333333334,
+        "depth": 1.259,
+        "temperature": 0.0,
+        "time": 1782049994000,
+        "timestamp": "2026-06-21T13:53:14",
+        "water_level": 0.0697945205479452,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.328794520547945,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.1047661214,
+        "utm_northing": 4890052.967214625
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.5180208332,
+          4890054.630049269
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334928333333332,
+        "depth": 0.853,
+        "temperature": 0.0,
+        "time": 1782049979000,
+        "timestamp": "2026-06-21T13:52:59",
+        "water_level": 0.07017123287671233,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.9231712328767123,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.5180208332,
+        "utm_northing": 4890054.630049269
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.4646385519,
+          4890048.625431765
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335053333333333,
+        "depth": 1.54,
+        "temperature": 0.0,
+        "time": 1782050743000,
+        "timestamp": "2026-06-21T14:05:43",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.6,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.4646385519,
+        "utm_northing": 4890048.625431765
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.5794201224,
+          4890045.743276689
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334930000000002,
+        "depth": 0.645,
+        "temperature": 0.0,
+        "time": 1782050164000,
+        "timestamp": "2026-06-21T13:56:04",
+        "water_level": 0.06595205479452054,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 0.7109520547945205,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.5794201224,
+        "utm_northing": 4890045.743276689
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.03609077143,
+          4890052.774551996
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334935,
+        "depth": 0.77,
+        "temperature": 0.0,
+        "time": 1782050097000,
+        "timestamp": "2026-06-21T13:54:57",
+        "water_level": 0.06760958904109589,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.837609589041096,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.03609077143,
+        "utm_northing": 4890052.774551996
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.1122517135,
+          4890053.892807844
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334923333333334,
+        "depth": 0.895,
+        "temperature": 0.0,
+        "time": 1782049974000,
+        "timestamp": "2026-06-21T13:52:54",
+        "water_level": 0.07029680365296803,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.9652968036529681,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.1122517135,
+        "utm_northing": 4890053.892807844
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446836.40384963417,
+          4890049.527320392
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335090000000001,
+        "depth": 1.832,
+        "temperature": 0.0,
+        "time": 1782050775000,
+        "timestamp": "2026-06-21T14:06:15",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.8920000000000001,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446836.40384963417,
+        "utm_northing": 4890049.527320392
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446831.31155503396,
+          4890029.574374838
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335028333333334,
+        "depth": 3.07,
+        "temperature": 0.0,
+        "time": 1782050194000,
+        "timestamp": "2026-06-21T13:56:34",
+        "water_level": 0.06519863013698629,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.135198630136986,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446831.31155503396,
+        "utm_northing": 4890029.574374838
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446961.8682749851,
+          4890089.798242491
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336655,
+        "depth": 3.018,
+        "temperature": 0.0,
+        "time": 1782050453000,
+        "timestamp": "2026-06-21T14:00:53",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.078,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446961.8682749851,
+        "utm_northing": 4890089.798242491
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446832.93010037206,
+          4890048.444623188
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335046666666667,
+        "depth": 1.426,
+        "temperature": 0.0,
+        "time": 1782050736000,
+        "timestamp": "2026-06-21T14:05:36",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.486,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446832.93010037206,
+        "utm_northing": 4890048.444623188
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446915.44988338114,
+          4890035.189011404
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33608,
+        "depth": 3.778,
+        "temperature": 0.0,
+        "time": 1782050342000,
+        "timestamp": "2026-06-21T13:59:02",
+        "water_level": 0.06148173515981735,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.839481735159817,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446915.44988338114,
+        "utm_northing": 4890035.189011404
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446859.0267928965,
+          4890028.980065346
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335374999999999,
+        "depth": 3.466,
+        "temperature": 0.0,
+        "time": 1782050252000,
+        "timestamp": "2026-06-21T13:57:32",
+        "water_level": 0.06374200913242009,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.5297420091324203,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446859.0267928965,
+        "utm_northing": 4890028.980065346
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446935.85638167633,
+          4890053.722496515
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336333333333332,
+        "depth": 3.341,
+        "temperature": 0.0,
+        "time": 1782050382000,
+        "timestamp": "2026-06-21T13:59:42",
+        "water_level": 0.06047716894977169,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.401477168949772,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446935.85638167633,
+        "utm_northing": 4890053.722496515
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446874.41744020756,
+          4890053.478085205
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335565,
+        "depth": 2.113,
+        "temperature": 0.0,
+        "time": 1782050638000,
+        "timestamp": "2026-06-21T14:03:58",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.173,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446874.41744020756,
+        "utm_northing": 4890053.478085205
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446922.0424141884,
+          4890042.911280971
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336161666666667,
+        "depth": 3.642,
+        "temperature": 0.0,
+        "time": 1782050355000,
+        "timestamp": "2026-06-21T13:59:15",
+        "water_level": 0.06115525114155251,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.703155251141552,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446922.0424141884,
+        "utm_northing": 4890042.911280971
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446917.76412306086,
+          4890074.232907723
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336105,
+        "depth": 2.227,
+        "temperature": 0.0,
+        "time": 1782050556000,
+        "timestamp": "2026-06-21T14:02:36",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.287,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446917.76412306086,
+        "utm_northing": 4890074.232907723
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446964.0228241788,
+          4890092.557823983
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336681666666667,
+        "depth": 3.351,
+        "temperature": 0.0,
+        "time": 1782050462000,
+        "timestamp": "2026-06-21T14:01:02",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.411,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446964.0228241788,
+        "utm_northing": 4890092.557823983
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.7725644653,
+          4890053.146944692
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334931666666668,
+        "depth": 1.062,
+        "temperature": 0.0,
+        "time": 1782050101000,
+        "timestamp": "2026-06-21T13:55:01",
+        "water_level": 0.06750913242009132,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.1295091324200914,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.7725644653,
+        "utm_northing": 4890053.146944692
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446822.567233726,
+          4890052.4161696
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334916666666667,
+        "depth": 0.926,
+        "temperature": 0.0,
+        "time": 1782050009000,
+        "timestamp": "2026-06-21T13:53:29",
+        "water_level": 0.06941780821917808,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.9954178082191781,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446822.567233726,
+        "utm_northing": 4890052.4161696
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446955.5095016465,
+          4890078.001172831
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336576666666668,
+        "depth": 3.361,
+        "temperature": 0.0,
+        "time": 1782050435000,
+        "timestamp": "2026-06-21T14:00:35",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.4210000000000003,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446955.5095016465,
+        "utm_northing": 4890078.001172831
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446890.58379415434,
+          4890058.53114852
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335766666666666,
+        "depth": 2.612,
+        "temperature": 0.0,
+        "time": 1782050611000,
+        "timestamp": "2026-06-21T14:03:31",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.672,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446890.58379415434,
+        "utm_northing": 4890058.53114852
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.1678539358,
+          4890052.58835565
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334936666666666,
+        "depth": 0.885,
+        "temperature": 0.0,
+        "time": 1782050091000,
+        "timestamp": "2026-06-21T13:54:51",
+        "water_level": 0.06776027397260273,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.9527602739726028,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.1678539358,
+        "utm_northing": 4890052.58835565
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446826.30001803755,
+          4890052.571112797
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334963333333333,
+        "depth": 1.218,
+        "temperature": 0.0,
+        "time": 1782050866000,
+        "timestamp": "2026-06-21T14:07:46",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.278,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446826.30001803755,
+        "utm_northing": 4890052.571112797
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446958.38411530666,
+          4890087.419648727
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336611666666666,
+        "depth": 3.195,
+        "temperature": 0.0,
+        "time": 1782050484000,
+        "timestamp": "2026-06-21T14:01:24",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.255,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446958.38411530666,
+        "utm_northing": 4890087.419648727
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446822.7019911155,
+          4890052.600210514
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334918333333333,
+        "depth": 0.916,
+        "temperature": 0.0,
+        "time": 1782050011000,
+        "timestamp": "2026-06-21T13:53:31",
+        "water_level": 0.0693675799086758,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.9853675799086759,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446822.7019911155,
+        "utm_northing": 4890052.600210514
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446822.05964421126,
+          4890055.567497503
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33491,
+        "depth": 1.186,
+        "temperature": 0.0,
+        "time": 1782049961000,
+        "timestamp": "2026-06-21T13:52:41",
+        "water_level": 0.07062328767123287,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.2566232876712329,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446822.05964421126,
+        "utm_northing": 4890055.567497503
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.63631001365,
+          4890052.777785116
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334930000000002,
+        "depth": 0.5,
+        "temperature": 0.0,
+        "time": 1782050120000,
+        "timestamp": "2026-06-21T13:55:20",
+        "water_level": 0.06705707762557077,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 0.5670570776255708,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.63631001365,
+        "utm_northing": 4890052.777785116
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446822.4474477002,
+          4890054.08331513
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334915,
+        "depth": 0.937,
+        "temperature": 0.0,
+        "time": 1782049987000,
+        "timestamp": "2026-06-21T13:53:07",
+        "water_level": 0.0699703196347032,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.0069703196347033,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446822.4474477002,
+        "utm_northing": 4890054.08331513
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446962.4087789693,
+          4890090.719536115
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336661666666666,
+        "depth": 3.257,
+        "temperature": 0.0,
+        "time": 1782050456000,
+        "timestamp": "2026-06-21T14:00:56",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.317,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446962.4087789693,
+        "utm_northing": 4890090.719536115
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446915.9874092393,
+          4890035.74006395
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336086666666667,
+        "depth": 3.778,
+        "temperature": 0.0,
+        "time": 1782050343000,
+        "timestamp": "2026-06-21T13:59:03",
+        "water_level": 0.06145662100456621,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.839456621004566,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446915.9874092393,
+        "utm_northing": 4890035.74006395
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446825.08570511325,
+          4890050.7296253815
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334948333333333,
+        "depth": 0.947,
+        "temperature": 0.0,
+        "time": 1782050151000,
+        "timestamp": "2026-06-21T13:55:51",
+        "water_level": 0.06627853881278538,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.0132785388127854,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446825.08570511325,
+        "utm_northing": 4890050.7296253815
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.4601480782,
+          4890048.070075838
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335053333333333,
+        "depth": 1.509,
+        "temperature": 0.0,
+        "time": 1782050727000,
+        "timestamp": "2026-06-21T14:05:27",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.569,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.4601480782,
+        "utm_northing": 4890048.070075838
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446828.1776673081,
+          4890037.560338285
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334988333333333,
+        "depth": 2.269,
+        "temperature": 0.0,
+        "time": 1782050180000,
+        "timestamp": "2026-06-21T13:56:20",
+        "water_level": 0.06555022831050228,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.334550228310502,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446828.1776673081,
+        "utm_northing": 4890037.560338285
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446834.26569736435,
+          4890048.804085391
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335063333333332,
+        "depth": 1.582,
+        "temperature": 0.0,
+        "time": 1782050755000,
+        "timestamp": "2026-06-21T14:05:55",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.6420000000000001,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446834.26569736435,
+        "utm_northing": 4890048.804085391
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446822.700493986,
+          4890052.4150918685
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334918333333333,
+        "depth": 1.145,
+        "temperature": 0.0,
+        "time": 1782049999000,
+        "timestamp": "2026-06-21T13:53:19",
+        "water_level": 0.0696689497716895,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.2146689497716896,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446822.700493986,
+        "utm_northing": 4890052.4150918685
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446889.6558272239,
+          4890026.1407683315
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335758333333333,
+        "depth": 3.611,
+        "temperature": 0.0,
+        "time": 1782050301000,
+        "timestamp": "2026-06-21T13:58:21",
+        "water_level": 0.06251141552511415,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.6735114155251143,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446889.6558272239,
+        "utm_northing": 4890026.1407683315
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446835.4590532731,
+          4890048.053913479
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335078333333334,
+        "depth": 1.582,
+        "temperature": 0.0,
+        "time": 1782050712000,
+        "timestamp": "2026-06-21T14:05:12",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.6420000000000001,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446835.4590532731,
+        "utm_northing": 4890048.053913479
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446849.59213182685,
+          4890048.865310008
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335255,
+        "depth": 1.915,
+        "temperature": 0.0,
+        "time": 1782050683000,
+        "timestamp": "2026-06-21T14:04:43",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.975,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446849.59213182685,
+        "utm_northing": 4890048.865310008
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446847.4554772963,
+          4890048.327189371
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335228333333333,
+        "depth": 1.78,
+        "temperature": 0.0,
+        "time": 1782050688000,
+        "timestamp": "2026-06-21T14:04:48",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.84,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446847.4554772963,
+        "utm_northing": 4890048.327189371
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446863.7088699786,
+          4890031.163796012
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335433333333333,
+        "depth": 3.164,
+        "temperature": 0.0,
+        "time": 1782050259000,
+        "timestamp": "2026-06-21T13:57:39",
+        "water_level": 0.0635662100456621,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.227566210045662,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446863.7088699786,
+        "utm_northing": 4890031.163796012
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446859.5986250937,
+          4890050.2654779395
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335379999999999,
+        "depth": 2.081,
+        "temperature": 0.0,
+        "time": 1782050665000,
+        "timestamp": "2026-06-21T14:04:25",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.141,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446859.5986250937,
+        "utm_northing": 4890050.2654779395
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446835.51153765,
+          4890021.579793243
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335081666666667,
+        "depth": 3.33,
+        "temperature": 0.0,
+        "time": 1782050215000,
+        "timestamp": "2026-06-21T13:56:55",
+        "water_level": 0.06467123287671232,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.3946712328767124,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446835.51153765,
+        "utm_northing": 4890021.579793243
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446846.519662012,
+          4890047.964492744
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335216666666668,
+        "depth": 1.634,
+        "temperature": 0.0,
+        "time": 1782050690000,
+        "timestamp": "2026-06-21T14:04:50",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.694,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446846.519662012,
+        "utm_northing": 4890047.964492744
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446952.1481387655,
+          4890074.32567676
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336535,
+        "depth": 2.945,
+        "temperature": 0.0,
+        "time": 1782050425000,
+        "timestamp": "2026-06-21T14:00:25",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.005,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446952.1481387655,
+        "utm_northing": 4890074.32567676
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446950.0040336261,
+          4890072.861929675
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336508333333335,
+        "depth": 3.309,
+        "temperature": 0.0,
+        "time": 1782050419000,
+        "timestamp": "2026-06-21T14:00:19",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.369,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446950.0040336261,
+        "utm_northing": 4890072.861929675
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.3265646345,
+          4890055.734294903
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334938333333334,
+        "depth": 1.041,
+        "temperature": 0.0,
+        "time": 1782050886000,
+        "timestamp": "2026-06-21T14:08:06",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.101,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.3265646345,
+        "utm_northing": 4890055.734294903
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446836.53561321186,
+          4890049.3411243
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335091666666667,
+        "depth": 1.488,
+        "temperature": 0.0,
+        "time": 1782050779000,
+        "timestamp": "2026-06-21T14:06:19",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.548,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446836.53561321186,
+        "utm_northing": 4890049.3411243
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446846.8581663501,
+          4890023.894760755
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335223333333333,
+        "depth": 3.476,
+        "temperature": 0.0,
+        "time": 1782050233000,
+        "timestamp": "2026-06-21T13:57:13",
+        "water_level": 0.06421917808219178,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.5402191780821917,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446846.8581663501,
+        "utm_northing": 4890023.894760755
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.8429467247,
+          4890045.370883991
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334933333333334,
+        "depth": 1.384,
+        "temperature": 0.0,
+        "time": 1782050165000,
+        "timestamp": "2026-06-21T13:56:05",
+        "water_level": 0.0659269406392694,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.4499269406392692,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.8429467247,
+        "utm_northing": 4890045.370883991
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.03010240383,
+          4890052.034077423
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334935,
+        "depth": 0.895,
+        "temperature": 0.0,
+        "time": 1782050125000,
+        "timestamp": "2026-06-21T13:55:25",
+        "water_level": 0.06693150684931506,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 0.961931506849315,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.03010240383,
+        "utm_northing": 4890052.034077423
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446936.2406245648,
+          4890084.821353811
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336335,
+        "depth": 2.82,
+        "temperature": 0.0,
+        "time": 1782050519000,
+        "timestamp": "2026-06-21T14:01:59",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.88,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446936.2406245648,
+        "utm_northing": 4890084.821353811
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446845.05379820365,
+          4890047.976342616
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335198333333333,
+        "depth": 1.967,
+        "temperature": 0.0,
+        "time": 1782050693000,
+        "timestamp": "2026-06-21T14:04:53",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.027,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446845.05379820365,
+        "utm_northing": 4890047.976342616
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446927.6886601324,
+          4890048.975018475
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336231666666666,
+        "depth": 3.58,
+        "temperature": 0.0,
+        "time": 1782050365000,
+        "timestamp": "2026-06-21T13:59:25",
+        "water_level": 0.06090410958904109,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.6409041095890413,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446927.6886601324,
+        "utm_northing": 4890048.975018475
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446859.06558390456,
+          4890050.269785887
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335373333333333,
+        "depth": 1.977,
+        "temperature": 0.0,
+        "time": 1782050666000,
+        "timestamp": "2026-06-21T14:04:26",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.037,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446859.06558390456,
+        "utm_northing": 4890050.269785887
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446957.7958236078,
+          4890080.574558598
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336604999999999,
+        "depth": 3.008,
+        "temperature": 0.0,
+        "time": 1782050440000,
+        "timestamp": "2026-06-21T14:00:40",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.068,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446957.7958236078,
+        "utm_northing": 4890080.574558598
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446836.3993594075,
+          4890048.9719644645
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335090000000001,
+        "depth": 1.249,
+        "temperature": 0.0,
+        "time": 1782050785000,
+        "timestamp": "2026-06-21T14:06:25",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.3090000000000002,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446836.3993594075,
+        "utm_northing": 4890048.9719644645
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.06336071086,
+          4890048.443545668
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335048333333333,
+        "depth": 1.405,
+        "temperature": 0.0,
+        "time": 1782050735000,
+        "timestamp": "2026-06-21T14:05:35",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.465,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.06336071086,
+        "utm_northing": 4890048.443545668
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.4403627717,
+          4890053.326674831
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33494,
+        "depth": 1.062,
+        "temperature": 0.0,
+        "time": 1782050060000,
+        "timestamp": "2026-06-21T13:54:20",
+        "water_level": 0.06833789954337899,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.130337899543379,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.4403627717,
+        "utm_northing": 4890053.326674831
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446931.2950791024,
+          4890083.009960209
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336273333333333,
+        "depth": 2.009,
+        "temperature": 0.0,
+        "time": 1782050529000,
+        "timestamp": "2026-06-21T14:02:09",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.069,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446931.2950791024,
+        "utm_northing": 4890083.009960209
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446920.965870198,
+          4890041.624056295
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336148333333334,
+        "depth": 3.622,
+        "temperature": 0.0,
+        "time": 1782050353000,
+        "timestamp": "2026-06-21T13:59:13",
+        "water_level": 0.06120547945205479,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.6832054794520546,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446920.965870198,
+        "utm_northing": 4890041.624056295
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446814.9130023946,
+          4890045.257977666
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334821666666667,
+        "depth": 0.76,
+        "temperature": 0.0,
+        "time": 1782049945000,
+        "timestamp": "2026-06-21T13:52:25",
+        "water_level": 0.0709497716894977,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.8309497716894977,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446814.9130023946,
+        "utm_northing": 4890045.257977666
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.4826004504,
+          4890050.846855479
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335053333333333,
+        "depth": 0.874,
+        "temperature": 0.0,
+        "time": 1782050828000,
+        "timestamp": "2026-06-21T14:07:08",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 0.9339999999999999,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.4826004504,
+        "utm_northing": 4890050.846855479
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446933.1696780041,
+          4890084.105614904
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336296666666668,
+        "depth": 2.466,
+        "temperature": 0.0,
+        "time": 1782050525000,
+        "timestamp": "2026-06-21T14:02:05",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.5260000000000002,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446933.1696780041,
+        "utm_northing": 4890084.105614904
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446822.95204328926,
+          4890050.561749981
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334921666666666,
+        "depth": 0.885,
+        "temperature": 0.0,
+        "time": 1782050027000,
+        "timestamp": "2026-06-21T13:53:47",
+        "water_level": 0.06896575342465752,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.9539657534246575,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446822.95204328926,
+        "utm_northing": 4890050.561749981
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446825.0288168093,
+          4890043.69511698
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334948333333333,
+        "depth": 1.259,
+        "temperature": 0.0,
+        "time": 1782050169000,
+        "timestamp": "2026-06-21T13:56:09",
+        "water_level": 0.06582648401826484,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.3248264840182646,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446825.0288168093,
+        "utm_northing": 4890043.69511698
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.7860383635,
+          4890054.813012491
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334931666666668,
+        "depth": 1.009,
+        "temperature": 0.0,
+        "time": 1782049981000,
+        "timestamp": "2026-06-21T13:53:01",
+        "water_level": 0.07012100456621004,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.0791210045662099,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.7860383635,
+        "utm_northing": 4890054.813012491
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.1996147138,
+          4890048.812705434
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335049999999999,
+        "depth": 1.457,
+        "temperature": 0.0,
+        "time": 1782050739000,
+        "timestamp": "2026-06-21T14:05:39",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.5170000000000001,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.1996147138,
+        "utm_northing": 4890048.812705434
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446963.7249486217,
+          4890088.672482018
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336678333333333,
+        "depth": 3.185,
+        "temperature": 0.0,
+        "time": 1782050472000,
+        "timestamp": "2026-06-21T14:01:12",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.245,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446963.7249486217,
+        "utm_northing": 4890088.672482018
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446938.0303738806,
+          4890058.888611892
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33636,
+        "depth": 3.351,
+        "temperature": 0.0,
+        "time": 1782050391000,
+        "timestamp": "2026-06-21T13:59:51",
+        "water_level": 0.06025114155251141,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.4112511415525115,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446938.0303738806,
+        "utm_northing": 4890058.888611892
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446949.6027605888,
+          4890072.680036501
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336503333333333,
+        "depth": 3.205,
+        "temperature": 0.0,
+        "time": 1782050418000,
+        "timestamp": "2026-06-21T14:00:18",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.265,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446949.6027605888,
+        "utm_northing": 4890072.680036501
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446908.89171513816,
+          4890031.724477038
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335998333333333,
+        "depth": 3.674,
+        "temperature": 0.0,
+        "time": 1782050330000,
+        "timestamp": "2026-06-21T13:58:50",
+        "water_level": 0.06178310502283105,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.735783105022831,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446908.89171513816,
+        "utm_northing": 4890031.724477038
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446821.486180015,
+          4890050.573605112
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334903333333333,
+        "depth": 0.781,
+        "temperature": 0.0,
+        "time": 1782050038000,
+        "timestamp": "2026-06-21T13:53:58",
+        "water_level": 0.06868949771689498,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.849689497716895,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446821.486180015,
+        "utm_northing": 4890050.573605112
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446890.9854446445,
+          4890025.759767517
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335775,
+        "depth": 3.684,
+        "temperature": 0.0,
+        "time": 1782050303000,
+        "timestamp": "2026-06-21T13:58:23",
+        "water_level": 0.06246118721461187,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.746461187214612,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446890.9854446445,
+        "utm_northing": 4890025.759767517
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446931.8311057304,
+          4890083.375895397
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336279999999999,
+        "depth": 2.144,
+        "temperature": 0.0,
+        "time": 1782050528000,
+        "timestamp": "2026-06-21T14:02:08",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.204,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446931.8311057304,
+        "utm_northing": 4890083.375895397
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446894.58946630586,
+          4890026.471181832
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33582,
+        "depth": 3.497,
+        "temperature": 0.0,
+        "time": 1782050309000,
+        "timestamp": "2026-06-21T13:58:29",
+        "water_level": 0.06231050228310502,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.559310502283105,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446894.58946630586,
+        "utm_northing": 4890026.471181832
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.33137821686,
+          4890048.626509277
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335051666666667,
+        "depth": 1.634,
+        "temperature": 0.0,
+        "time": 1782050740000,
+        "timestamp": "2026-06-21T14:05:40",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.694,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.33137821686,
+        "utm_northing": 4890048.626509277
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.270051735,
+          4890024.560008694
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335053333333333,
+        "depth": 3.237,
+        "temperature": 0.0,
+        "time": 1782050205000,
+        "timestamp": "2026-06-21T13:56:45",
+        "water_level": 0.06492237442922374,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.301922374429224,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.270051735,
+        "utm_northing": 4890024.560008694
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446821.79761528806,
+          4890056.1250089295
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334906666666665,
+        "depth": 0.957,
+        "temperature": 0.0,
+        "time": 1782049960000,
+        "timestamp": "2026-06-21T13:52:40",
+        "water_level": 0.070648401826484,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.027648401826484,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446821.79761528806,
+        "utm_northing": 4890056.1250089295
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446875.1902277675,
+          4890033.662853966
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335576666666666,
+        "depth": 3.299,
+        "temperature": 0.0,
+        "time": 1782050279000,
+        "timestamp": "2026-06-21T13:57:59",
+        "water_level": 0.06306392694063927,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.3620639269406394,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446875.1902277675,
+        "utm_northing": 4890033.662853966
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446913.08060028276,
+          4890071.864020185
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336046666666666,
+        "depth": 2.113,
+        "temperature": 0.0,
+        "time": 1782050564000,
+        "timestamp": "2026-06-21T14:02:44",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.173,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446913.08060028276,
+        "utm_northing": 4890071.864020185
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446919.88932578935,
+          4890040.336831799
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336135,
+        "depth": 3.632,
+        "temperature": 0.0,
+        "time": 1782050351000,
+        "timestamp": "2026-06-21T13:59:11",
+        "water_level": 0.06125570776255707,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.693255707762557,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446919.88932578935,
+        "utm_northing": 4890040.336831799
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446848.99632519705,
+          4890024.61799988
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33525,
+        "depth": 3.445,
+        "temperature": 0.0,
+        "time": 1782050237000,
+        "timestamp": "2026-06-21T13:57:17",
+        "water_level": 0.06411872146118722,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.509118721461187,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446848.99632519705,
+        "utm_northing": 4890024.61799988
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.4298832066,
+          4890052.030844326
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33494,
+        "depth": 1.155,
+        "temperature": 0.0,
+        "time": 1782050130000,
+        "timestamp": "2026-06-21T13:55:30",
+        "water_level": 0.06680593607305936,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.2218059360730593,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.4298832066,
+        "utm_northing": 4890052.030844326
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446835.47402095736,
+          4890049.905099904
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335078333333334,
+        "depth": 1.707,
+        "temperature": 0.0,
+        "time": 1782050804000,
+        "timestamp": "2026-06-21T14:06:44",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.7670000000000001,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446835.47402095736,
+        "utm_northing": 4890049.905099904
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.8521200544,
+          4890054.804390912
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334945000000001,
+        "depth": 1.155,
+        "temperature": 0.0,
+        "time": 1782050882000,
+        "timestamp": "2026-06-21T14:08:02",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.215,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.8521200544,
+        "utm_northing": 4890054.804390912
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446890.9835745275,
+          4890058.527919468
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335771666666666,
+        "depth": 2.352,
+        "temperature": 0.0,
+        "time": 1782050610000,
+        "timestamp": "2026-06-21T14:03:30",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.412,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446890.9835745275,
+        "utm_northing": 4890058.527919468
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446836.5341164734,
+          4890049.156005656
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335091666666667,
+        "depth": 1.561,
+        "temperature": 0.0,
+        "time": 1782050782000,
+        "timestamp": "2026-06-21T14:06:22",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.621,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446836.5341164734,
+        "utm_northing": 4890049.156005656
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446960.7708407266,
+          4890085.919350205
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336641666666667,
+        "depth": 3.393,
+        "temperature": 0.0,
+        "time": 1782050448000,
+        "timestamp": "2026-06-21T14:00:48",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.453,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446960.7708407266,
+        "utm_northing": 4890085.919350205
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446826.303012094,
+          4890052.941350085
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334963333333333,
+        "depth": 1.259,
+        "temperature": 0.0,
+        "time": 1782050870000,
+        "timestamp": "2026-06-21T14:07:50",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.319,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446826.303012094,
+        "utm_northing": 4890052.941350085
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446965.8705386821,
+          4890090.321352194
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336705,
+        "depth": 2.914,
+        "temperature": 0.0,
+        "time": 1782050468000,
+        "timestamp": "2026-06-21T14:01:08",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.974,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446965.8705386821,
+        "utm_northing": 4890090.321352194
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446836.0040686852,
+          4890049.53055276
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335085,
+        "depth": 1.519,
+        "temperature": 0.0,
+        "time": 1782050795000,
+        "timestamp": "2026-06-21T14:06:35",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.579,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446836.0040686852,
+        "utm_northing": 4890049.53055276
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.66384697414,
+          4890023.816301633
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335058333333334,
+        "depth": 3.153,
+        "temperature": 0.0,
+        "time": 1782050207000,
+        "timestamp": "2026-06-21T13:56:47",
+        "water_level": 0.06487214611872145,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.2178721461187214,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.66384697414,
+        "utm_northing": 4890023.816301633
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446930.7590524146,
+          4890082.644025064
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336266666666667,
+        "depth": 1.998,
+        "temperature": 0.0,
+        "time": 1782050530000,
+        "timestamp": "2026-06-21T14:02:10",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.058,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446930.7590524146,
+        "utm_northing": 4890082.644025064
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446831.3549264653,
+          4890051.419451928
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335026666666666,
+        "depth": 0.937,
+        "temperature": 0.0,
+        "time": 1782050839000,
+        "timestamp": "2026-06-21T14:07:19",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 0.9970000000000001,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446831.3549264653,
+        "utm_northing": 4890051.419451928
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446932.6351455602,
+          4890083.9247982595
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33629,
+        "depth": 2.31,
+        "temperature": 0.0,
+        "time": 1782050526000,
+        "timestamp": "2026-06-21T14:02:06",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.37,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446932.6351455602,
+        "utm_northing": 4890083.9247982595
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446868.1392509142,
+          4890051.6775058
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335486666666666,
+        "depth": 2.716,
+        "temperature": 0.0,
+        "time": 1782050650000,
+        "timestamp": "2026-06-21T14:04:10",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.7760000000000002,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446868.1392509142,
+        "utm_northing": 4890051.6775058
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446825.0842080518,
+          4890050.544506738
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334948333333333,
+        "depth": 0.999,
+        "temperature": 0.0,
+        "time": 1782050153000,
+        "timestamp": "2026-06-21T13:55:53",
+        "water_level": 0.0662283105022831,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.065228310502283,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446825.0842080518,
+        "utm_northing": 4890050.544506738
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.72966240504,
+          4890048.438158107
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335056666666667,
+        "depth": 1.53,
+        "temperature": 0.0,
+        "time": 1782050746000,
+        "timestamp": "2026-06-21T14:05:46",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.59,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.72966240504,
+        "utm_northing": 4890048.438158107
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446860.9342201707,
+          4890050.624945546
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335396666666666,
+        "depth": 2.331,
+        "temperature": 0.0,
+        "time": 1782050663000,
+        "timestamp": "2026-06-21T14:04:23",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.391,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446860.9342201707,
+        "utm_northing": 4890050.624945546
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446957.3900712077,
+          4890079.837309
+        ]
+      },
+      "properties": {
+        "longtitude": 8.3366,
+        "depth": 3.133,
+        "temperature": 0.0,
+        "time": 1782050439000,
+        "timestamp": "2026-06-21T14:00:39",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.193,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446957.3900712077,
+        "utm_northing": 4890079.837309
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446870.80595203245,
+          4890051.841088809
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33552,
+        "depth": 2.175,
+        "temperature": 0.0,
+        "time": 1782050645000,
+        "timestamp": "2026-06-21T14:04:05",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.235,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446870.80595203245,
+        "utm_northing": 4890051.841088809
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446962.2576008958,
+          4890088.499187186
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33666,
+        "depth": 3.164,
+        "temperature": 0.0,
+        "time": 1782050474000,
+        "timestamp": "2026-06-21T14:01:14",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.224,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446962.2576008958,
+        "utm_northing": 4890088.499187186
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446822.83375424624,
+          4890052.41401414
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33492,
+        "depth": 0.905,
+        "temperature": 0.0,
+        "time": 1782050005000,
+        "timestamp": "2026-06-21T13:53:25",
+        "water_level": 0.06951826484018264,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.9745182648401827,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446822.83375424624,
+        "utm_northing": 4890052.41401414
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446956.9858120798,
+          4890079.2851780765
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336594999999999,
+        "depth": 3.237,
+        "temperature": 0.0,
+        "time": 1782050438000,
+        "timestamp": "2026-06-21T14:00:38",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.297,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446956.9858120798,
+        "utm_northing": 4890079.2851780765
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446933.70421041787,
+          4890084.286431594
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336303333333332,
+        "depth": 2.643,
+        "temperature": 0.0,
+        "time": 1782050524000,
+        "timestamp": "2026-06-21T14:02:04",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.703,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446933.70421041787,
+        "utm_northing": 4890084.286431594
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446835.07723359077,
+          4890050.2785696145
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335073333333334,
+        "depth": 1.311,
+        "temperature": 0.0,
+        "time": 1782050820000,
+        "timestamp": "2026-06-21T14:07:00",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.371,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446835.07723359077,
+        "utm_northing": 4890050.2785696145
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446835.99359141145,
+          4890048.234722261
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335085,
+        "depth": 1.571,
+        "temperature": 0.0,
+        "time": 1782050711000,
+        "timestamp": "2026-06-21T14:05:11",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.631,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446835.99359141145,
+        "utm_northing": 4890048.234722261
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446835.641805032,
+          4890021.20847851
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335083333333333,
+        "depth": 3.507,
+        "temperature": 0.0,
+        "time": 1782050216000,
+        "timestamp": "2026-06-21T13:56:56",
+        "water_level": 0.06464611872146118,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.5716461187214614,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446835.641805032,
+        "utm_northing": 4890021.20847851
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446822.9864770953,
+          4890054.8194787875
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334921666666666,
+        "depth": 0.656,
+        "temperature": 0.0,
+        "time": 1782049968000,
+        "timestamp": "2026-06-21T13:52:48",
+        "water_level": 0.07044748858447487,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.7264474885844749,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446822.9864770953,
+        "utm_northing": 4890054.8194787875
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446873.73183924716,
+          4890034.600290607
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335558333333333,
+        "depth": 3.08,
+        "temperature": 0.0,
+        "time": 1782050277000,
+        "timestamp": "2026-06-21T13:57:57",
+        "water_level": 0.06311415525114154,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.1431141552511415,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446873.73183924716,
+        "utm_northing": 4890034.600290607
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446951.34409945045,
+          4890073.77677152
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336525,
+        "depth": 3.143,
+        "temperature": 0.0,
+        "time": 1782050423000,
+        "timestamp": "2026-06-21T14:00:23",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.203,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446951.34409945045,
+        "utm_northing": 4890073.77677152
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.8983392317,
+          4890052.220273769
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334933333333334,
+        "depth": 0.947,
+        "temperature": 0.0,
+        "time": 1782050124000,
+        "timestamp": "2026-06-21T13:55:24",
+        "water_level": 0.0669566210045662,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.013956621004566,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.8983392317,
+        "utm_northing": 4890052.220273769
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446850.73320482497,
+          4890025.159352521
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335271666666667,
+        "depth": 3.361,
+        "temperature": 0.0,
+        "time": 1782050240000,
+        "timestamp": "2026-06-21T13:57:20",
+        "water_level": 0.06404337899543379,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.425043378995434,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446850.73320482497,
+        "utm_northing": 4890025.159352521
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446825.48099484446,
+          4890050.171036423
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334953333333335,
+        "depth": 1.03,
+        "temperature": 0.0,
+        "time": 1782050155000,
+        "timestamp": "2026-06-21T13:55:55",
+        "water_level": 0.06617808219178081,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.0961780821917808,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446825.48099484446,
+        "utm_northing": 4890050.171036423
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446919.0807964013,
+          4890039.232574562
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336125000000001,
+        "depth": 3.424,
+        "temperature": 0.0,
+        "time": 1782050349000,
+        "timestamp": "2026-06-21T13:59:09",
+        "water_level": 0.061305936073059356,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.4853059360730594,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446919.0807964013,
+        "utm_northing": 4890039.232574562
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446836.00706219237,
+          4890049.900790046
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335085,
+        "depth": 1.27,
+        "temperature": 0.0,
+        "time": 1782050769000,
+        "timestamp": "2026-06-21T14:06:09",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.33,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446836.00706219237,
+        "utm_northing": 4890049.900790046
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446933.17922524293,
+          4890052.263056646
+        ]
+      },
+      "properties": {
+        "longtitude": 8.3363,
+        "depth": 3.674,
+        "temperature": 0.0,
+        "time": 1782050377000,
+        "timestamp": "2026-06-21T13:59:37",
+        "water_level": 0.060602739726027394,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.7346027397260273,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446933.17922524293,
+        "utm_northing": 4890052.263056646
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446962.0075073653,
+          4890090.537642188
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336656666666666,
+        "depth": 3.247,
+        "temperature": 0.0,
+        "time": 1782050455000,
+        "timestamp": "2026-06-21T14:00:55",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.307,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446962.0075073653,
+        "utm_northing": 4890090.537642188
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446892.987346748,
+          4890026.113859973
+        ]
+      },
+      "properties": {
+        "longtitude": 8.3358,
+        "depth": 3.736,
+        "temperature": 0.0,
+        "time": 1782050307000,
+        "timestamp": "2026-06-21T13:58:27",
+        "water_level": 0.062360730593607305,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.7983607305936076,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446892.987346748,
+        "utm_northing": 4890026.113859973
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446833.19362738554,
+          4890048.072230864
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335049999999999,
+        "depth": 1.426,
+        "temperature": 0.0,
+        "time": 1782050733000,
+        "timestamp": "2026-06-21T14:05:33",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.486,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446833.19362738554,
+        "utm_northing": 4890048.072230864
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446871.4664088379,
+          4890034.618594766
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33553,
+        "depth": 2.966,
+        "temperature": 0.0,
+        "time": 1782050272000,
+        "timestamp": "2026-06-21T13:57:52",
+        "water_level": 0.06323972602739726,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.0292397260273973,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446871.4664088379,
+        "utm_northing": 4890034.618594766
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446882.03420973755,
+          4890056.008379746
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335659999999999,
+        "depth": 2.3,
+        "temperature": 0.0,
+        "time": 1782050625000,
+        "timestamp": "2026-06-21T14:03:45",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.36,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446882.03420973755,
+        "utm_northing": 4890056.008379746
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.1678539358,
+          4890052.58835565
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334936666666666,
+        "depth": 0.937,
+        "temperature": 0.0,
+        "time": 1782050093000,
+        "timestamp": "2026-06-21T13:54:53",
+        "water_level": 0.06771004566210045,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.0047100456621005,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.1678539358,
+        "utm_northing": 4890052.58835565
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446880.83486814477,
+          4890056.018068606
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335645,
+        "depth": 1.884,
+        "temperature": 0.0,
+        "time": 1782050627000,
+        "timestamp": "2026-06-21T14:03:47",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.944,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446880.83486814477,
+        "utm_northing": 4890056.018068606
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446831.7532104279,
+          4890051.231100638
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335031666666668,
+        "depth": 1.478,
+        "temperature": 0.0,
+        "time": 1782050835000,
+        "timestamp": "2026-06-21T14:07:15",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.538,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446831.7532104279,
+        "utm_northing": 4890051.231100638
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.80870504375,
+          4890049.4359502485
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334945000000001,
+        "depth": 0.343,
+        "temperature": 0.0,
+        "time": 1782050054000,
+        "timestamp": "2026-06-21T13:54:14",
+        "water_level": 0.06848858447488584,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.4114885844748859,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.80870504375,
+        "utm_northing": 4890049.4359502485
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446912.37143837253,
+          4890033.54768886
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336041666666667,
+        "depth": 3.851,
+        "temperature": 0.0,
+        "time": 1782050336000,
+        "timestamp": "2026-06-21T13:58:56",
+        "water_level": 0.0616324200913242,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.9126324200913243,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446912.37143837253,
+        "utm_northing": 4890033.54768886
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446821.6209374716,
+          4890050.757646003
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334905,
+        "depth": 0.978,
+        "temperature": 0.0,
+        "time": 1782050034000,
+        "timestamp": "2026-06-21T13:53:54",
+        "water_level": 0.06878995433789954,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.0467899543378996,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446821.6209374716,
+        "utm_northing": 4890050.757646003
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446951.0760863155,
+          4890073.593803129
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336521666666666,
+        "depth": 3.237,
+        "temperature": 0.0,
+        "time": 1782050422000,
+        "timestamp": "2026-06-21T14:00:22",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.297,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446951.0760863155,
+        "utm_northing": 4890073.593803129
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446884.7446181524,
+          4890028.587138065
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335696666666667,
+        "depth": 3.455,
+        "temperature": 0.0,
+        "time": 1782050294000,
+        "timestamp": "2026-06-21T13:58:14",
+        "water_level": 0.06268721461187214,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.5176872146118723,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446884.7446181524,
+        "utm_northing": 4890028.587138065
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446827.52034642943,
+          4890038.6764382385
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33498,
+        "depth": 2.061,
+        "temperature": 0.0,
+        "time": 1782050178000,
+        "timestamp": "2026-06-21T13:56:18",
+        "water_level": 0.06560045662100455,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.1266004566210044,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446827.52034642943,
+        "utm_northing": 4890038.6764382385
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446954.29224294715,
+          4890075.789424533
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336561666666666,
+        "depth": 3.205,
+        "temperature": 0.0,
+        "time": 1782050430000,
+        "timestamp": "2026-06-21T14:00:30",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.265,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446954.29224294715,
+        "utm_northing": 4890075.789424533
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.9674154741,
+          4890052.581889499
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334946666666667,
+        "depth": 0.26,
+        "temperature": 0.0,
+        "time": 1782050084000,
+        "timestamp": "2026-06-21T13:54:44",
+        "water_level": 0.06793607305936072,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.32793607305936073,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.9674154741,
+        "utm_northing": 4890052.581889499
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446906.2424939419,
+          4890066.735572532
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335961666666666,
+        "depth": 2.071,
+        "temperature": 0.0,
+        "time": 1782050578000,
+        "timestamp": "2026-06-21T14:02:58",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 2.1310000000000002,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446906.2424939419,
+        "utm_northing": 4890066.735572532
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446822.58819359506,
+          4890055.007830619
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334916666666667,
+        "depth": 0.781,
+        "temperature": 0.0,
+        "time": 1782049967000,
+        "timestamp": "2026-06-21T13:52:47",
+        "water_level": 0.07047260273972603,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.851472602739726,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446822.58819359506,
+        "utm_northing": 4890055.007830619
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446860.2664226509,
+          4890050.445211709
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335388333333333,
+        "depth": 1.748,
+        "temperature": 0.0,
+        "time": 1782050664000,
+        "timestamp": "2026-06-21T14:04:24",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 1.808,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446860.2664226509,
+        "utm_northing": 4890050.445211709
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446823.6288244979,
+          4890051.852191898
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334930000000002,
+        "depth": 1.02,
+        "temperature": 0.0,
+        "time": 1782050018000,
+        "timestamp": "2026-06-21T13:53:38",
+        "water_level": 0.0691917808219178,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.0891917808219178,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446823.6288244979,
+        "utm_northing": 4890051.852191898
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.43736861,
+          4890052.956437544
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33494,
+        "depth": 0.937,
+        "temperature": 0.0,
+        "time": 1782050061000,
+        "timestamp": "2026-06-21T13:54:21",
+        "water_level": 0.06831278538812785,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 1.0053127853881278,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.43736861,
+        "utm_northing": 4890052.956437544
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446847.3942025277,
+          4890024.260689109
+        ]
+      },
+      "properties": {
+        "longtitude": 8.33523,
+        "depth": 3.455,
+        "temperature": 0.0,
+        "time": 1782050234000,
+        "timestamp": "2026-06-21T13:57:14",
+        "water_level": 0.06419406392694063,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.519194063926941,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446847.3942025277,
+        "utm_northing": 4890024.260689109
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446834.1474050943,
+          4890050.656349314
+        ]
+      },
+      "properties": {
+        "longtitude": 8.335061666666666,
+        "depth": 0.968,
+        "temperature": 0.0,
+        "time": 1782050824000,
+        "timestamp": "2026-06-21T14:07:04",
+        "water_level": 0.06,
+        "nearest_tide_timestamp": "2026-06-21T14:10:00",
+        "tide_correction": 1.028,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446834.1474050943,
+        "utm_northing": 4890050.656349314
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446941.1356889836,
+          4890063.862081969
+        ]
+      },
+      "properties": {
+        "longtitude": 8.336398333333333,
+        "depth": 3.153,
+        "temperature": 0.0,
+        "time": 1782050399000,
+        "timestamp": "2026-06-21T13:59:59",
+        "water_level": 0.06005022831050228,
+        "nearest_tide_timestamp": "2026-06-21T14:00:00",
+        "tide_correction": 3.2130502283105025,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446941.1356889836,
+        "utm_northing": 4890063.862081969
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          446824.69041544996,
+          4890051.288214371
+        ]
+      },
+      "properties": {
+        "longtitude": 8.334943333333333,
+        "depth": 0.395,
+        "temperature": 0.0,
+        "time": 1782050057000,
+        "timestamp": "2026-06-21T13:54:17",
+        "water_level": 0.06841324200913242,
+        "nearest_tide_timestamp": "2026-06-21T13:50:00",
+        "tide_correction": 0.4634132420091324,
+        "dataset": "validation",
+        "utm_epsg": 32632,
+        "utm_easting": 446824.69041544996,
+        "utm_northing": 4890051.288214371
+      }
+    }
+  ]
+}
