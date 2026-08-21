@@ -8,3 +8,4 @@ SEASTRONG Field Processing Tools
    index_page
    echosounder_bathymetry
    photo_geotagging
+   underwater_photogrammetry
