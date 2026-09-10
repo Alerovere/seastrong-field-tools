@@ -1,0 +1,3 @@
+site,raw_file,n_calibration_points,slope,intercept_pa,r2,sampling_rate_hz,survey_start,survey_end,n_samples,duration_hours,height_above_bed_m,rho,site_dir,clean_csv,oceanlyz_csv
+Offshore_200m,Data/07200569/Unive1_21_08_26_200m.csv,7,1.020966614932422,-4124.178027972744,0.999556733172098,4.0,2026-08-21 06:00:00,2026-08-22 15:00:00,475201,33.0,0.0,1025,./Offshore_200m,./Offshore_200m/clean.csv,./Offshore_200m/oceanlyz.csv
+Onshore_30m,Data/07200568/Unive2_21_08_26.csv,7,1.0266109504213716,-3995.1273460687853,0.9971043442280288,4.0,2026-08-21 06:00:00,2026-08-22 15:00:00,475201,33.0,0.0,1025,./Onshore_30m,./Onshore_30m/clean.csv,./Onshore_30m/oceanlyz.csv
