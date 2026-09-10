@@ -6,3 +6,5 @@ matplotlib==3.9.2
 folium==0.17.0
 streamlit-folium==0.23.1
 pyTMD==3.0.9
+h5py==3.12.1
+netCDF4==1.7.2
