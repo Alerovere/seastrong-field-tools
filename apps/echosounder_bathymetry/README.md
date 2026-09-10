@@ -47,6 +47,27 @@ docker run --rm -p 8501:8501 \
 
 Then enter `/data/fes2022` as the "FES2022 model folder" in the app.
 
+### Saving results to your Mac
+
+By default, results are only offered as a download (.zip) at the end of the
+run -- they live inside the container and disappear once it stops. To have
+them written straight to a folder on your Mac instead, mount one as a
+volume:
+
+```
+docker run --rm -p 8501:8501 \
+    -v ~/seastrong_outputs:/data/outputs \
+    seastrong-echosounder
+```
+
+Then, in the app's "3. Output location" section, enter `/data/outputs` as
+the output folder and give the survey a site name (e.g. `corridor3_mangrove`)
+-- results are written to `~/seastrong_outputs/corridor3_mangrove/` on your
+Mac, one subfolder per site name so repeated runs don't overwrite each
+other. Leave the output folder blank to just use the download button
+instead. You can combine this with the FES2022 volume mount above (two
+`-v` flags on the same `docker run`).
+
 ### Getting FES2022 data
 
 FES2022 is not bundled here. Request it from AVISO:

@@ -14,9 +14,11 @@ so it stays testable and reusable outside this app.
 from __future__ import annotations
 
 import io
+import re
 import sys
 import tempfile
 import zipfile
+from datetime import datetime
 from pathlib import Path
 
 import matplotlib.dates as mdates
@@ -77,6 +79,12 @@ def _zip_output_dir(output_dir: Path) -> bytes:
     return buffer.getvalue()
 
 
+def _slugify(name: str) -> str:
+    """Turn a site name into a safe folder name; fall back to a timestamp."""
+    slug = re.sub(r"[^A-Za-z0-9_-]+", "_", name.strip()).strip("_")
+    return slug or datetime.now().strftime("%Y%m%dT%H%M%S")
+
+
 # -----------------------------------------------------------------------
 # 1. Scan data
 # -----------------------------------------------------------------------
@@ -88,7 +96,7 @@ scan_preview = None
 
 if scan_upload is not None:
     scan_preview = _read_preview(scan_upload)
-    st.dataframe(scan_preview, width="stretch")
+    st.dataframe(scan_preview, use_container_width=True)
     cols = list(scan_preview.columns)
 
     c1, c2, c3, c4 = st.columns(4)
@@ -128,7 +136,7 @@ if tide_source == "Tide-gauge file":
 
     if tide_upload is not None:
         tide_preview = _read_preview(tide_upload)
-        st.dataframe(tide_preview, width="stretch")
+        st.dataframe(tide_preview, use_container_width=True)
         tcols = list(tide_preview.columns)
 
         tide_water_level_col = st.selectbox(
@@ -187,9 +195,33 @@ else:
             st.warning(f"Could not read the expected file list: {exc}")
 
 # -----------------------------------------------------------------------
-# 3. Processing options
+# 3. Output location
 # -----------------------------------------------------------------------
-with st.expander("3. Processing options", expanded=False):
+st.header("3. Output location")
+oc1, oc2 = st.columns([1, 2])
+site_name = oc1.text_input(
+    "Site name",
+    value="",
+    placeholder="corridor3_mangrove",
+    help="Names the output subfolder. Leave blank to use a timestamp instead.",
+)
+output_folder = oc2.text_input(
+    "Save results to a folder on this machine (optional)",
+    value="",
+    placeholder="/data/outputs",
+    help=(
+        "A folder inside this container, mounted from your Mac with "
+        "`-v host_folder:/data/outputs` when you started the container -- "
+        "see the tool's README. A subfolder named after the site above is "
+        "created inside it. Leave blank to just use the download button "
+        "after processing instead."
+    ),
+)
+
+# -----------------------------------------------------------------------
+# 4. Processing options
+# -----------------------------------------------------------------------
+with st.expander("4. Processing options", expanded=False):
     o1, o2 = st.columns(2)
     match_method = o1.selectbox("Tide matching method", ["interpolate", "nearest"])
     match_tolerance = o2.text_input("Matching tolerance", value="15min")
@@ -215,7 +247,7 @@ with st.expander("3. Processing options", expanded=False):
 # -----------------------------------------------------------------------
 # Run
 # -----------------------------------------------------------------------
-st.header("4. Run")
+st.header("5. Run")
 run_disabled = scan_upload is None or (
     tide_source == "Tide-gauge file" and tide_upload is None
 ) or (tide_source == "FES2022 model" and not fes_directory)
@@ -225,63 +257,87 @@ if st.button("Run processing", type="primary", disabled=run_disabled):
         with st.spinner("Processing..."):
             tmpdir = Path(tempfile.mkdtemp(prefix="echosounder_"))
             scan_path = _save_upload_to_tempdir(scan_upload, tmpdir)
-            output_dir = tmpdir / "processed_outputs"
+
+            site_slug = _slugify(site_name)
+            persisted_path: Path | None = None
+            output_dir_ok = True
+
+            if output_folder.strip():
+                output_dir = Path(output_folder.strip()).expanduser() / site_slug
+                try:
+                    output_dir.mkdir(parents=True, exist_ok=True)
+                    persisted_path = output_dir
+                except OSError as exc:
+                    output_dir_ok = False
+                    st.error(
+                        f"Can't write to '{output_dir}': {exc}. Check that "
+                        f"'{output_folder}' was mounted as a volume when you "
+                        "started the container (see the tool's README), and "
+                        "that the folder is writable."
+                    )
+            else:
+                output_dir = tmpdir / site_slug
 
             tz = timezone.strip() or None
 
-            if tide_source == "Tide-gauge file":
-                tide_path = _save_upload_to_tempdir(tide_upload, tmpdir)
-                tide_df = load_tide_data(
-                    tide_csv=tide_path,
-                    water_level_column=tide_water_level_col,
-                    date_column=tide_date_col,
-                    time_column=tide_time_col,
-                    datetime_column=tide_datetime_col,
-                    timezone=tz,
-                )
-            else:
-                # Need the scan timestamps first, to know what times to predict.
-                from core.bathymetry_tide_processing import load_scan_data
+            if output_dir_ok:
+                if tide_source == "Tide-gauge file":
+                    tide_path = _save_upload_to_tempdir(tide_upload, tmpdir)
+                    tide_df = load_tide_data(
+                        tide_csv=tide_path,
+                        water_level_column=tide_water_level_col,
+                        date_column=tide_date_col,
+                        time_column=tide_time_col,
+                        datetime_column=tide_datetime_col,
+                        timezone=tz,
+                    )
+                else:
+                    # Need the scan timestamps first, to know what times to predict.
+                    from core.bathymetry_tide_processing import load_scan_data
 
-                scan_for_times = load_scan_data(
+                    scan_for_times = load_scan_data(
+                        scan_csv=scan_path,
+                        depth_column=scan_depth_col,
+                        time_column=scan_time_col,
+                        latitude_column=scan_lat_col,
+                        longitude_column=scan_lon_col,
+                        unix_unit=scan_unix_unit,
+                        timezone=tz,
+                    )
+                    tide_df = predict_fes2022_tide(
+                        model_directory=fes_directory,
+                        longitude=fes_lon,
+                        latitude=fes_lat,
+                        timestamps=scan_for_times["timestamp"],
+                    )
+
+                results = process_bathymetry_with_tide_df(
                     scan_csv=scan_path,
-                    depth_column=scan_depth_col,
-                    time_column=scan_time_col,
-                    latitude_column=scan_lat_col,
-                    longitude_column=scan_lon_col,
-                    unix_unit=scan_unix_unit,
+                    tide_df=tide_df,
+                    output_dir=output_dir,
+                    scan_depth_column=scan_depth_col,
+                    scan_time_column=scan_time_col,
+                    scan_latitude_column=scan_lat_col,
+                    scan_longitude_column=scan_lon_col,
+                    scan_unix_unit=scan_unix_unit,
                     timezone=tz,
+                    match_method=match_method,
+                    match_tolerance=match_tolerance or None,
+                    train_fraction=train_fraction,
+                    random_seed=int(random_seed),
+                    shuffle_split=shuffle_split,
+                    export_geojson=export_geojson,
+                    export_utm_geojson=export_utm_geojson,
                 )
-                tide_df = predict_fes2022_tide(
-                    model_directory=fes_directory,
-                    longitude=fes_lon,
-                    latitude=fes_lat,
-                    timestamps=scan_for_times["timestamp"],
+
+                st.session_state["results"] = results
+                st.session_state["output_zip"] = _zip_output_dir(output_dir)
+                st.session_state["persisted_path"] = (
+                    str(persisted_path) if persisted_path else None
                 )
 
-            results = process_bathymetry_with_tide_df(
-                scan_csv=scan_path,
-                tide_df=tide_df,
-                output_dir=output_dir,
-                scan_depth_column=scan_depth_col,
-                scan_time_column=scan_time_col,
-                scan_latitude_column=scan_lat_col,
-                scan_longitude_column=scan_lon_col,
-                scan_unix_unit=scan_unix_unit,
-                timezone=tz,
-                match_method=match_method,
-                match_tolerance=match_tolerance or None,
-                train_fraction=train_fraction,
-                random_seed=int(random_seed),
-                shuffle_split=shuffle_split,
-                export_geojson=export_geojson,
-                export_utm_geojson=export_utm_geojson,
-            )
-
-            st.session_state["results"] = results
-            st.session_state["output_zip"] = _zip_output_dir(output_dir)
-
-        st.success("Processing complete.")
+        if output_dir_ok:
+            st.success("Processing complete.")
     except Exception as exc:  # noqa: BLE001
         st.error(f"Processing failed: {exc}")
 
@@ -294,7 +350,14 @@ if "results" in st.session_state:
     merged = results["merged"]
     tide_df = results["tide"]
 
-    st.header("5. Results")
+    st.header("6. Results")
+
+    persisted_path = st.session_state.get("persisted_path")
+    if persisted_path:
+        st.info(
+            f"Results saved to `{persisted_path}` inside the container -- "
+            "on your Mac at whatever host folder you mounted there with `-v`."
+        )
 
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("Scan points", f"{summary['total_scan_points_after_cleaning']:,}")
