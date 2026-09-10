@@ -31,12 +31,12 @@ rest of the pipeline runs.
 
 ```
 docker build -f apps/echosounder_bathymetry/Dockerfile -t seastrong-echosounder apps/
-docker run --rm -p 8501:8501 -v ~:/host seastrong-echosounder
+docker run --rm -p 8501:8501 -v "$HOME":/host seastrong-echosounder
 ```
 
 Then open http://localhost:8501.
 
-That `-v ~:/host` mounts your whole Mac home folder into the container at
+That `-v "$HOME":/host` mounts your whole Mac home folder into the container at
 `/host`, read-write. In the app, both the FES2022 folder and the output
 folder are click-through browsers rooted at `/host` -- you navigate and pick
 subfolders visually instead of typing container paths from memory (there's
@@ -47,7 +47,7 @@ flags for each.
 
 If you'd rather not share your whole home folder, mount a narrower parent
 folder instead (anything that contains both your FES2022 data and where you
-want outputs written), e.g. `-v ~/Documents:/host`.
+want outputs written), e.g. `-v "$HOME/Documents":/host`.
 
 ### Saving results to your Mac
 

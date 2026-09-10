@@ -52,7 +52,7 @@ render_header(
 st.caption(
     "To browse folders on your Mac below (for FES2022 data or to save "
     "results), start the container with one folder mounted to `/host` -- "
-    "e.g. `-v ~:/host` for your whole home folder -- see the tool's README "
+    "e.g. `-v $HOME:/host` for your whole home folder -- see the tool's README "
     "for the exact command. Without that mount you'll get a plain text box "
     "instead."
 )
