@@ -9,3 +9,4 @@ SEASTRONG Field Processing Tools
    echosounder_bathymetry
    photo_geotagging
    underwater_photogrammetry
+   wave_attenuation
