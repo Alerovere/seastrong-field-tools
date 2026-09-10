@@ -1,0 +1,8 @@
+streamlit==1.39.0
+pandas==2.2.3
+numpy==1.26.4
+pyproj==3.7.0
+matplotlib==3.9.2
+folium==0.17.0
+streamlit-folium==0.23.1
+pyTMD==3.0.9

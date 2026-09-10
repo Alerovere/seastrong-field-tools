@@ -1,0 +1,12 @@
+# Canonical Streamlit theme for all SEASTRONG tools under apps/.
+# Each tool's Dockerfile copies this to <tool>/.streamlit/config.toml at build
+# time, so every tool gets the same look from one edit here.
+[theme]
+primaryColor = "#0f6e8c"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f0f4f6"
+textColor = "#1a1a1a"
+font = "sans serif"
+
+[server]
+maxUploadSize = 500
