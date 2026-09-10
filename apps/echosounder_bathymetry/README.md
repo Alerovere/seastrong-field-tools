@@ -73,10 +73,17 @@ instead. You can combine this with the FES2022 volume mount above (two
 FES2022 is not bundled here. Request it from AVISO:
 <https://www.aviso.altimetry.fr/en/data/products/auxiliary-products/global-tide-fes.html>
 
-Point the app at the folder that contains `fes2022b/` inside it, and don't
-reorganize the files -- the app's "What files does this look for?" panel
-shows the exact relative paths it expects, read live from the pinned pyTMD
-version so it can't drift out of sync with what's actually installed.
+Real downloads don't all come laid out the same way, so the app doesn't
+require one exact folder structure. It searches the folder you point it at
+for all 34 `<constituent>_fes2022.nc` files (plain or gzip `.nc.gz` --
+either is fine), trying, in order: pyTMD's own default nested layout
+(`fes2022b/ocean_tide_<date>/`), one level of `fes2022b/` only, a dated
+`ocean_tide_<date>/` folder directly, and a flat folder with no subfolders
+at all. Whichever one actually has all the files is used automatically --
+you don't need to reorganize your copy to match a specific layout. The
+app's "What files does this look for?" panel spells this out, and if none
+of them match, the error after running lists exactly what was tried and how
+many files were found in each place.
 
 The predicted tide is relative to FES2022's mean sea level reference (not
 necessarily your local chart datum), and it's the astronomical tide only --

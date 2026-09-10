@@ -186,11 +186,26 @@ else:
     with st.expander("What files does this look for?"):
         try:
             expected = describe_expected_layout()
+            n = len(expected)
             st.write(
-                f"Under the folder above, pyTMD (as currently pinned) looks for "
-                f"{len(expected)} constituent files, e.g.:"
+                f"Looks for all {n} FES2022 ocean-tide constituent files, named "
+                f"`<constituent>_fes2022.nc` (plain or gzip-compressed `.nc.gz` -- "
+                f"either is fine), under the folder above. Several common layouts "
+                f"are accepted automatically, checked in this order:"
             )
-            st.code("\n".join(expected[:6]) + f"\n... ({len(expected)} total)")
+            st.markdown(
+                "- `<folder>/fes2022b/ocean_tide_<date>/<constituent>_fes2022.nc` "
+                "(pyTMD's own default, e.g. the first path below)\n"
+                "- `<folder>/fes2022b/<constituent>_fes2022.nc`\n"
+                "- `<folder>/ocean_tide_<date>/<constituent>_fes2022.nc`\n"
+                "- `<folder>/<constituent>_fes2022.nc` (flat, no subfolders)"
+            )
+            st.code("\n".join(expected[:3]) + f"\n... ({n} total)")
+            st.caption(
+                "If none of these match, the error message after running will "
+                "list exactly what was tried and how many files it found in "
+                "each place."
+            )
         except Exception as exc:  # noqa: BLE001
             st.warning(f"Could not read the expected file list: {exc}")
 

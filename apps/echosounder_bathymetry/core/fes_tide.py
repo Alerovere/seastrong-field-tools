@@ -16,13 +16,14 @@ FES2022 is not bundled with this tool (the full distribution is tens of GB).
 Request it from AVISO:
 https://www.aviso.altimetry.fr/en/data/products/auxiliary-products/global-tide-fes.html
 
-pyTMD expects the folder you point it at to contain the model exactly as
-AVISO distributes it -- i.e. `<your_folder>/fes2022b/ocean_tide_<date>/
-<constituent>_fes2022.nc[.gz]` for each tidal constituent (m2, s2, k1, o1,
-...). Point `model_directory` at the parent of `fes2022b/`, not at
-`fes2022b/` itself, and don't reorganize the files pyTMD is looking for --
-see `describe_expected_layout()` below to print the exact relative paths
-pyTMD (as currently pinned in requirements.txt) will look for.
+Real-world FES2022 downloads don't all come laid out the same way -- some
+are the nested `fes2022b/ocean_tide_<date>/<constituent>_fes2022.nc` layout
+pyTMD expects by default, some are a flat folder of `<constituent>_fes2022.nc`
+files with no subfolders at all, and constituent files can be plain `.nc` or
+gzip-compressed `.nc.gz`. Rather than requiring one specific layout,
+predict_fes2022_tide() below searches model_directory for a handful of
+common layouts and accepts whichever one actually has all 34 constituent
+files, in either compression -- see _resolve_fes2022_layout().
 
 Notes on the output
 --------------------
@@ -39,8 +40,10 @@ Notes on the output
 """
 from __future__ import annotations
 
+import json
+import tempfile
 from pathlib import Path
-from typing import Union
+from typing import Dict, List, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -50,25 +53,146 @@ PathLike = Union[str, Path]
 MODEL_NAME = "FES2022"
 
 
-def describe_expected_layout() -> list[str]:
+def _load_fes2022_database_entry() -> dict:
     """
-    Return the relative file paths pyTMD expects to find under the FES2022
-    model directory, as currently defined by the installed pyTMD version's
-    model database. Useful for showing the user exactly what to check if
-    prediction fails with a FileNotFoundError -- read directly from
-    pyTMD's own data/database.json rather than guessing at an internal API,
-    so it can never drift out of sync with the pinned pyTMD version.
+    Read pyTMD's own FES2022 entry from its data/database.json. Used both
+    to know the 34 expected constituent names, and as a template for the
+    dynamically-built definition file in _resolve_fes2022_layout() --
+    reading it directly rather than guessing at an internal API means this
+    can never drift out of sync with whatever pyTMD version is installed.
     """
-    import json as _json
-
     import pyTMD
 
     db_path = Path(pyTMD.__file__).parent / "data" / "database.json"
     with open(db_path, encoding="utf-8") as f:
-        db = _json.load(f)
+        db = json.load(f)
 
-    entry = db.get(MODEL_NAME, {})
+    entry = db.get(MODEL_NAME)
+    if entry is None:
+        raise RuntimeError(
+            f"The installed pyTMD version has no '{MODEL_NAME}' entry in its "
+            "model database -- this shouldn't happen with a supported pyTMD "
+            "version. Check the pinned pyTMD version in requirements.txt."
+        )
+    return entry
+
+
+def describe_expected_layout() -> List[str]:
+    """
+    Return the relative file paths pyTMD's *default* lookup expects for the
+    FES2022 model, as currently defined by the installed pyTMD version.
+    Shown to the user as a reference -- predict_fes2022_tide() itself is
+    not limited to this exact layout, see _resolve_fes2022_layout().
+    """
+    entry = _load_fes2022_database_entry()
     return list(entry.get("z", {}).get("model_file", []))
+
+
+def _constituent_names() -> List[str]:
+    """['2n2', 'eps2', 'j1', ...] -- derived from describe_expected_layout()
+    so it always matches whatever constituents the installed pyTMD actually
+    ships for FES2022."""
+    names = []
+    for rel_path in describe_expected_layout():
+        filename = Path(rel_path).name  # e.g. "2n2_fes2022.nc"
+        suffix = f"_{MODEL_NAME.lower()}.nc"
+        names.append(
+            filename[: -len(suffix)] if filename.lower().endswith(suffix) else filename
+        )
+    return names
+
+
+def _candidate_base_dirs(model_directory: Path) -> List[Path]:
+    """
+    Base directories to check for the constituent files, most-specific
+    (pyTMD's own default expectation) first, flattest last.
+    """
+    candidates: List[Path] = []
+
+    fes2022b = model_directory / "fes2022b"
+    if fes2022b.is_dir():
+        candidates.extend(sorted(fes2022b.glob("ocean_tide_*")))
+        candidates.append(fes2022b)
+
+    candidates.extend(sorted(model_directory.glob("ocean_tide_*")))
+    candidates.append(model_directory)  # flat layout -- files directly here
+
+    # de-duplicate while preserving order
+    seen = set()
+    unique: List[Path] = []
+    for c in candidates:
+        resolved = c.resolve()
+        if resolved not in seen:
+            seen.add(resolved)
+            unique.append(c)
+    return unique
+
+
+def _resolve_fes2022_layout(model_directory: Path) -> Tuple[Path, Dict[str, str]]:
+    """
+    Find a base directory under model_directory that contains all of the
+    FES2022 ocean-tide constituent files, trying several common layouts and
+    accepting either plain .nc or gzip .nc.gz for each file.
+
+    Returns
+    -------
+    (base_dir, {constituent_name: actual_filename_found})
+
+    Raises
+    ------
+    FileNotFoundError
+        Listing every layout that was tried and how many of the 34
+        constituents it found there, plus the closest partial match --
+        enough to tell a user *which* files are missing/misnamed rather
+        than just "not found".
+    """
+    constituents = _constituent_names()
+    tried: List[Tuple[Path, int, bool]] = []  # (dir, n_found, existed)
+    best_dir = None
+    best_found: Dict[str, str] = {}
+
+    for base in _candidate_base_dirs(model_directory):
+        if not base.is_dir():
+            tried.append((base, 0, False))
+            continue
+
+        found: Dict[str, str] = {}
+        for name in constituents:
+            plain = base / f"{name}_fes2022.nc"
+            gz = base / f"{name}_fes2022.nc.gz"
+            if plain.exists():
+                found[name] = plain.name
+            elif gz.exists():
+                found[name] = gz.name
+
+        tried.append((base, len(found), True))
+
+        if len(found) == len(constituents):
+            return base, found
+
+        if len(found) > len(best_found):
+            best_found = found
+            best_dir = base
+
+    lines = []
+    for base, n_found, existed in tried:
+        status = f"{n_found}/{len(constituents)} constituent files found" if existed else "folder does not exist"
+        lines.append(f"  {base} -- {status}")
+    tried_desc = "\n".join(lines)
+
+    closest = (
+        f"\nClosest match: {best_dir} ({len(best_found)}/{len(constituents)} found)."
+        if best_dir is not None
+        else ""
+    )
+
+    raise FileNotFoundError(
+        f"Could not find all {len(constituents)} FES2022 ocean-tide constituent "
+        f"files under {model_directory}. Layouts tried:\n{tried_desc}{closest}\n"
+        "Expected files are named '<constituent>_fes2022.nc' (or '.nc.gz'), "
+        "e.g. 'm2_fes2022.nc' -- either directly inside the folder above, or "
+        "inside a 'fes2022b/' or 'fes2022b/ocean_tide_<date>/' subfolder."
+    )
 
 
 def predict_fes2022_tide(
@@ -84,8 +208,10 @@ def predict_fes2022_tide(
     Parameters
     ----------
     model_directory : str or Path
-        Local folder containing the FES2022 model distribution -- the
-        folder that has `fes2022b/` inside it (see module docstring).
+        Local folder containing your FES2022 download. Several common
+        layouts are accepted -- see module docstring and
+        _resolve_fes2022_layout() -- including a flat folder of
+        '<constituent>_fes2022.nc' files with no subfolders.
     longitude : float
         Longitude in decimal degrees (WGS84).
     latitude : float
@@ -105,8 +231,8 @@ def predict_fes2022_tide(
     ImportError
         If pyTMD is not installed.
     FileNotFoundError
-        If model_directory (or the expected files inside it) don't exist --
-        the original pyTMD error message names the specific missing file.
+        If model_directory, or a recognizable FES2022 layout inside it,
+        can't be found -- the error lists every layout that was tried.
     """
     try:
         import pyTMD.compute as compute
@@ -122,6 +248,16 @@ def predict_fes2022_tide(
             f"FES2022 model directory not found: {model_directory}"
         )
 
+    base_dir, found_files = _resolve_fes2022_layout(model_directory)
+
+    entry = _load_fes2022_database_entry()
+    definition = dict(entry)
+    definition["z"] = dict(entry["z"])
+    # Order doesn't matter functionally, but keep it deterministic.
+    definition["z"]["model_file"] = [
+        found_files[name] for name in _constituent_names()
+    ]
+
     ts = pd.to_datetime(pd.Series(timestamps).rename("timestamp"))
     if ts.dt.tz is not None:
         ts = ts.dt.tz_convert("UTC").dt.tz_localize(None)
@@ -134,16 +270,25 @@ def predict_fes2022_tide(
     x = np.full(delta_time.shape, float(longitude))
     y = np.full(delta_time.shape, float(latitude))
 
-    tide = compute.tide_elevations(
-        x=x,
-        y=y,
-        delta_time=delta_time,
-        directory=str(model_directory),
-        model=MODEL_NAME,
-        crs=4326,
-        type="time series",
-        standard="datetime",
+    definition_fp = tempfile.NamedTemporaryFile(
+        mode="w", suffix=".json", delete=False
     )
+    try:
+        json.dump(definition, definition_fp)
+        definition_fp.close()
+
+        tide = compute.tide_elevations(
+            x=x,
+            y=y,
+            delta_time=delta_time,
+            directory=str(base_dir),
+            definition_file=definition_fp.name,
+            crs=4326,
+            type="time series",
+            standard="datetime",
+        )
+    finally:
+        Path(definition_fp.name).unlink(missing_ok=True)
 
     water_level = np.asarray(tide).reshape(-1).astype(float)
 
