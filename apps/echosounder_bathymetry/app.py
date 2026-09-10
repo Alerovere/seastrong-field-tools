@@ -41,11 +41,20 @@ from _shared.branding import (  # noqa: E402
     render_footer,
     render_header,
 )
+from _shared.folder_picker import pick_folder  # noqa: E402
 
 apply_page_config("Echosounder Bathymetry", icon="\U0001F41F")
 render_header(
     "Echosounder Bathymetry",
     "Deeper Pro depth processing with tide correction -- tide-gauge file or FES2022 model",
+)
+
+st.caption(
+    "To browse folders on your Mac below (for FES2022 data or to save "
+    "results), start the container with one folder mounted to `/host` -- "
+    "e.g. `-v ~:/host` for your whole home folder -- see the tool's README "
+    "for the exact command. Without that mount you'll get a plain text box "
+    "instead."
 )
 
 
@@ -166,14 +175,13 @@ if tide_source == "Tide-gauge file":
                 index=_column_index(tcols, ["DATETIME", "datetime"]),
             )
 else:
-    st.caption(
-        "The FES2022 model data (tens of GB) must already be available on the "
-        "machine/container running this tool -- e.g. mounted as a Docker volume. "
-        "Point this at the folder that contains `fes2022b/` (don't reorganize the "
-        "files inside it)."
-    )
-    fes_directory = st.text_input(
-        "FES2022 model folder", placeholder="/data/fes2022"
+    fes_directory = pick_folder(
+        "FES2022 model folder",
+        key="fes_dir",
+        help=(
+            "Browse to the folder holding your FES2022 files -- flat or nested "
+            "under `fes2022b/`, either works, `.nc` or `.nc.gz`."
+        ),
     )
     f1, f2 = st.columns(2)
     fes_lat = f1.number_input(
@@ -186,26 +194,11 @@ else:
     with st.expander("What files does this look for?"):
         try:
             expected = describe_expected_layout()
-            n = len(expected)
             st.write(
-                f"Looks for all {n} FES2022 ocean-tide constituent files, named "
-                f"`<constituent>_fes2022.nc` (plain or gzip-compressed `.nc.gz` -- "
-                f"either is fine), under the folder above. Several common layouts "
-                f"are accepted automatically, checked in this order:"
+                f"Under the folder above, pyTMD (as currently pinned) looks for "
+                f"{len(expected)} constituent files, e.g.:"
             )
-            st.markdown(
-                "- `<folder>/fes2022b/ocean_tide_<date>/<constituent>_fes2022.nc` "
-                "(pyTMD's own default, e.g. the first path below)\n"
-                "- `<folder>/fes2022b/<constituent>_fes2022.nc`\n"
-                "- `<folder>/ocean_tide_<date>/<constituent>_fes2022.nc`\n"
-                "- `<folder>/<constituent>_fes2022.nc` (flat, no subfolders)"
-            )
-            st.code("\n".join(expected[:3]) + f"\n... ({n} total)")
-            st.caption(
-                "If none of these match, the error message after running will "
-                "list exactly what was tried and how many files it found in "
-                "each place."
-            )
+            st.code("\n".join(expected[:6]) + f"\n... ({len(expected)} total)")
         except Exception as exc:  # noqa: BLE001
             st.warning(f"Could not read the expected file list: {exc}")
 
@@ -213,25 +206,26 @@ else:
 # 3. Output location
 # -----------------------------------------------------------------------
 st.header("3. Output location")
-oc1, oc2 = st.columns([1, 2])
-site_name = oc1.text_input(
+site_name = st.text_input(
     "Site name",
     value="",
     placeholder="corridor3_mangrove",
     help="Names the output subfolder. Leave blank to use a timestamp instead.",
 )
-output_folder = oc2.text_input(
-    "Save results to a folder on this machine (optional)",
-    value="",
-    placeholder="/data/outputs",
-    help=(
-        "A folder inside this container, mounted from your Mac with "
-        "`-v host_folder:/data/outputs` when you started the container -- "
-        "see the tool's README. A subfolder named after the site above is "
-        "created inside it. Leave blank to just use the download button "
-        "after processing instead."
-    ),
+
+save_to_folder = st.checkbox(
+    "Also save results to a folder on this machine", value=False
 )
+output_folder = ""
+if save_to_folder:
+    output_folder = pick_folder(
+        "Save results under this folder",
+        key="output_dir",
+        allow_new=True,
+        help="A subfolder named after the site above is created inside whatever you pick here.",
+    ) or ""
+else:
+    st.caption("Results will only be available via the download button after processing.")
 
 # -----------------------------------------------------------------------
 # 4. Processing options
@@ -371,7 +365,7 @@ if "results" in st.session_state:
     if persisted_path:
         st.info(
             f"Results saved to `{persisted_path}` inside the container -- "
-            "on your Mac at whatever host folder you mounted there with `-v`."
+            "on your Mac, that's wherever you mounted `/host` to."
         )
 
     m1, m2, m3, m4 = st.columns(4)

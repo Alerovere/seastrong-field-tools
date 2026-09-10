@@ -31,42 +31,36 @@ rest of the pipeline runs.
 
 ```
 docker build -f apps/echosounder_bathymetry/Dockerfile -t seastrong-echosounder apps/
-docker run --rm -p 8501:8501 seastrong-echosounder
+docker run --rm -p 8501:8501 -v ~:/host seastrong-echosounder
 ```
 
 Then open http://localhost:8501.
 
-To use the FES2022 option, mount your local FES2022 data as a read-only
-volume rather than copying it into the image (it's tens of GB):
+That `-v ~:/host` mounts your whole Mac home folder into the container at
+`/host`, read-write. In the app, both the FES2022 folder and the output
+folder are click-through browsers rooted at `/host` -- you navigate and pick
+subfolders visually instead of typing container paths from memory (there's
+also a "jump to path" box if you'd rather paste one, e.g.
+`/host/Documents/ocean_tide_20241025`). One mount now covers both the
+FES2022 input and the output location below -- you don't need separate `-v`
+flags for each.
 
-```
-docker run --rm -p 8501:8501 \
-    -v /path/to/fes2022:/data/fes2022:ro \
-    seastrong-echosounder
-```
-
-Then enter `/data/fes2022` as the "FES2022 model folder" in the app.
+If you'd rather not share your whole home folder, mount a narrower parent
+folder instead (anything that contains both your FES2022 data and where you
+want outputs written), e.g. `-v ~/Documents:/host`.
 
 ### Saving results to your Mac
 
 By default, results are only offered as a download (.zip) at the end of the
 run -- they live inside the container and disappear once it stops. To have
-them written straight to a folder on your Mac instead, mount one as a
-volume:
-
-```
-docker run --rm -p 8501:8501 \
-    -v ~/seastrong_outputs:/data/outputs \
-    seastrong-echosounder
-```
-
-Then, in the app's "3. Output location" section, enter `/data/outputs` as
-the output folder and give the survey a site name (e.g. `corridor3_mangrove`)
--- results are written to `~/seastrong_outputs/corridor3_mangrove/` on your
-Mac, one subfolder per site name so repeated runs don't overwrite each
-other. Leave the output folder blank to just use the download button
-instead. You can combine this with the FES2022 volume mount above (two
-`-v` flags on the same `docker run`).
+them written straight to a folder on your Mac instead, tick "Also save
+results to a folder on this machine" in the app's "3. Output location"
+section and browse (or type a new folder name) under `/host` -- e.g. picking
+`/host/seastrong_outputs`. Give the survey a site name too (e.g.
+`corridor3_mangrove`); results land in
+`<folder you picked>/corridor3_mangrove/` on your Mac, one subfolder per
+site name so repeated runs don't overwrite each other. Leave the checkbox
+unticked to just use the download button instead.
 
 ### Getting FES2022 data
 
@@ -100,7 +94,9 @@ streamlit run echosounder_bathymetry/app.py
 ```
 
 (Run from the `apps/` folder, or add it to `PYTHONPATH`, so the `_shared`
-import in `app.py` resolves.)
+import in `app.py` resolves. Without Docker there's no `/host` mount, so the
+folder pickers fall back to plain text boxes for the FES2022 and output
+folders.)
 
 ## Layout
 
@@ -114,4 +110,8 @@ echosounder_bathymetry/
     fes_tide.py                     # FES2022 prediction via pyTMD
   Dockerfile
   requirements.txt
+
+apps/_shared/
+  folder_picker.py    # click-through folder browser used above, shared
+                       # across tools that need to point at a local folder
 ```
