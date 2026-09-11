@@ -267,8 +267,16 @@ def predict_fes2022_tide(
         raise ValueError("No valid timestamps to predict tide for.")
 
     delta_time = ts.to_numpy().astype("datetime64[s]")
-    x = np.full(delta_time.shape, float(longitude))
-    y = np.full(delta_time.shape, float(latitude))
+    # A single fixed point ("time series" type), NOT one x/y per timestamp --
+    # pyTMD treats every x/y entry as its own separate "station" and predicts
+    # the full time series at *each* one, so repeating the point per
+    # timestamp (as an earlier version of this function did) turns an O(N)
+    # prediction into an O(N^2) one -- fine for a handful of points, but for
+    # thousands of scan timestamps it can run for a very long time (or
+    # effectively never finish). One station, many times, is the correct
+    # (and fast) shape.
+    x = np.array([float(longitude)])
+    y = np.array([float(latitude)])
 
     definition_fp = tempfile.NamedTemporaryFile(
         mode="w", suffix=".json", delete=False
