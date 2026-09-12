@@ -36,6 +36,8 @@ import math
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -303,6 +305,54 @@ def load_scan_data(
     scan_df = scan_df.sort_values("timestamp").reset_index(drop=True)
 
     return scan_df
+
+
+def filter_depth_outliers(
+    scan_df: pd.DataFrame,
+    min_depth: Optional[float] = None,
+    max_depth: Optional[float] = None,
+    depth_column: str = "depth",
+) -> Tuple[pd.DataFrame, int]:
+    """
+    Drop scan rows whose depth reading falls outside a plausible range.
+
+    Deeper Pro (and single-beam echosounders generally) occasionally report
+    a runaway depth reading well outside anything actually present at the
+    site -- most often when the sensor loses bottom lock, e.g. as it's
+    lifted out of the water at the end of a survey. Those readings look
+    like perfectly ordinary numbers (just a much larger depth), so nothing
+    downstream can tell them apart from real data without an explicit
+    plausible-range check like this one.
+
+    Parameters
+    ----------
+    scan_df : pd.DataFrame
+        Scan dataframe with a depth column (e.g. from load_scan_data()).
+    min_depth, max_depth : float, optional
+        Inclusive plausible depth range, in the same units as depth_column
+        (meters, for this tool). Either or both may be None to skip that
+        bound -- pass both None (the default) to disable filtering.
+    depth_column : str
+        Name of the depth column to filter on.
+
+    Returns
+    -------
+    (pd.DataFrame, int)
+        The filtered dataframe (rows outside the range removed, index
+        reset), and how many rows were dropped.
+    """
+    if min_depth is None and max_depth is None:
+        return scan_df, 0
+
+    mask = pd.Series(True, index=scan_df.index)
+    if min_depth is not None:
+        mask &= scan_df[depth_column] >= min_depth
+    if max_depth is not None:
+        mask &= scan_df[depth_column] <= max_depth
+
+    n_dropped = int((~mask).sum())
+    filtered = scan_df.loc[mask].reset_index(drop=True)
+    return filtered, n_dropped
 
 
 def load_tide_data(
@@ -1151,6 +1201,80 @@ def print_processing_summary(summary: Dict[str, Any]) -> None:
 
 
 # =============================================================================
+# Summary plot
+# =============================================================================
+
+
+def build_summary_figure(
+    merged_df: pd.DataFrame,
+    tide_df: pd.DataFrame,
+    site_name: str = "",
+) -> "plt.Figure":
+    """
+    Build the 3-panel depth / tide / tide-corrected-depth summary figure.
+
+    Pure matplotlib -- no Streamlit dependency -- so the exact same figure
+    used for the in-app preview is also what gets saved as a PNG into the
+    results folder/zip (see process_bathymetry_with_tide_df()), and it's
+    reusable from a notebook too.
+
+    Parameters
+    ----------
+    merged_df : pd.DataFrame
+        The merged scan+tide dataframe (timestamp, depth, tide_correction).
+    tide_df : pd.DataFrame
+        The tide dataframe used for correction (timestamp, water_level).
+    site_name : str
+        Used as the figure's overall title -- the app makes this a
+        required field precisely so every exported plot is identifiable.
+        Falls back to a generic title if left blank (e.g. direct core/
+        usage outside the app).
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+    """
+    fig, axes = plt.subplots(3, 1, figsize=(10, 9))
+
+    ax = axes[0]
+    ax.scatter(merged_df["timestamp"], merged_df["depth"], s=2, color="#2196F3", alpha=0.6)
+    ax.set_xlabel("Date / time")
+    ax.set_ylabel("Depth (m)")
+    ax.set_title("Echosounder depth over time")
+    ax.invert_yaxis()
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%d/%m %H:%M"))
+    plt.setp(ax.get_xticklabels(), rotation=30, ha="right")
+    ax.grid(True, alpha=0.3)
+
+    ax = axes[1]
+    ax.plot(tide_df["timestamp"], tide_df["water_level"], color="#4CAF50", linewidth=1.2)
+    ax.set_xlabel("Date / time")
+    ax.set_ylabel("Water level (m)")
+    ax.set_title("Tide water level used for correction")
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%d/%m %H:%M"))
+    plt.setp(ax.get_xticklabels(), rotation=30, ha="right")
+    ax.grid(True, alpha=0.3)
+
+    ax = axes[2]
+    valid = (
+        merged_df["tide_correction"].dropna()
+        if "tide_correction" in merged_df.columns
+        else pd.Series(dtype=float)
+    )
+    if len(valid) > 0:
+        ax.hist(valid, bins=40, color="#FF9800", edgecolor="white", linewidth=0.5)
+    ax.set_xlabel("Tide-corrected depth (m)")
+    ax.set_ylabel("Scan points")
+    ax.set_title("Distribution of tide-corrected depth")
+    ax.grid(True, alpha=0.3)
+
+    fig.suptitle(site_name.strip() or "Echosounder bathymetry", fontsize=15, fontweight="bold")
+    fig.tight_layout(rect=(0, 0, 1, 0.96))
+
+    return fig
+
+
+# =============================================================================
 # Main processing function (tide-gauge CSV input)
 # =============================================================================
 
@@ -1180,6 +1304,9 @@ def process_bathymetry_with_tide(
     export_utm_geojson: bool = True,
     utm_epsg: Optional[int] = None,
     drop_missing_coordinates: bool = True,
+    min_depth: Optional[float] = None,
+    max_depth: Optional[float] = None,
+    site_name: str = "",
 ) -> Dict[str, Any]:
     """
     Complete bathymetry + tide processing workflow, reading tide data from a
@@ -1223,6 +1350,9 @@ def process_bathymetry_with_tide(
         train_fraction=train_fraction,
         random_seed=random_seed,
         shuffle_split=shuffle_split,
+        min_depth=min_depth,
+        max_depth=max_depth,
+        site_name=site_name,
         export_geojson=export_geojson,
         export_utm_geojson=export_utm_geojson,
         utm_epsg=utm_epsg,
@@ -1254,6 +1384,9 @@ def process_bathymetry_with_tide_df(
     export_utm_geojson: bool = True,
     utm_epsg: Optional[int] = None,
     drop_missing_coordinates: bool = True,
+    min_depth: Optional[float] = None,
+    max_depth: Optional[float] = None,
+    site_name: str = "",
 ) -> Dict[str, Any]:
     """
     Complete bathymetry + tide processing workflow, taking an already-built
@@ -1300,6 +1433,15 @@ def process_bathymetry_with_tide_df(
         Manual UTM EPSG. If None, inferred automatically.
     drop_missing_coordinates : bool
         Remove scan rows with missing coordinates.
+    min_depth, max_depth : float, optional
+        Inclusive plausible depth range (meters). Scan rows outside it are
+        dropped before tide correction -- see filter_depth_outliers() for
+        why this matters (Deeper Pro can report a runaway depth reading
+        when it loses bottom lock). Either or both may be None (the
+        default) to skip that bound.
+    site_name : str
+        Used as the title of the saved summary plot (summary_plot.png in
+        output_dir) -- see build_summary_figure().
 
     Returns
     -------
@@ -1312,6 +1454,7 @@ def process_bathymetry_with_tide_df(
         - validation
         - summary
         - output_files
+        - warnings
     """
     output_dir = _ensure_path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -1328,6 +1471,10 @@ def process_bathymetry_with_tide_df(
         unix_unit=scan_unix_unit,
         timezone=timezone,
         drop_missing_coordinates=drop_missing_coordinates,
+    )
+
+    scan_df, n_depth_outliers = filter_depth_outliers(
+        scan_df, min_depth=min_depth, max_depth=max_depth
     )
 
     tide_df = tide_df.copy()
@@ -1363,6 +1510,32 @@ def process_bathymetry_with_tide_df(
         utm_epsg=utm_epsg,
     )
 
+    warnings_list: List[str] = []
+    if n_depth_outliers > 0:
+        bounds = []
+        if min_depth is not None:
+            bounds.append(f">= {min_depth:g} m")
+        if max_depth is not None:
+            bounds.append(f"<= {max_depth:g} m")
+        warnings_list.append(
+            f"Removed {n_depth_outliers} scan point(s) with depth outside "
+            f"the plausible range ({' and '.join(bounds)}) before tide "
+            "correction -- likely sensor outliers (e.g. Deeper Pro losing "
+            "bottom lock)."
+        )
+    warnings_list.extend(export_warnings)
+
+    try:
+        fig = build_summary_figure(
+            merged_df=merged_df, tide_df=tide_df, site_name=site_name
+        )
+        plot_path = output_dir / "summary_plot.png"
+        fig.savefig(plot_path, dpi=150, bbox_inches="tight")
+        plt.close(fig)
+        output_paths["summary_plot"] = plot_path
+    except Exception as exc:  # noqa: BLE001
+        warnings_list.append(f"Could not save the summary plot: {exc}")
+
     summary = summarize_processing_results(
         scan_df=scan_df,
         tide_df=tide_df,
@@ -1371,6 +1544,7 @@ def process_bathymetry_with_tide_df(
         validation_df=validation_df,
         water_level_column="water_level",
     )
+    summary["depth_outliers_removed"] = n_depth_outliers
 
     results = {
         "scan": scan_df,
@@ -1380,7 +1554,7 @@ def process_bathymetry_with_tide_df(
         "validation": validation_df,
         "summary": summary,
         "output_files": output_paths,
-        "warnings": export_warnings,
+        "warnings": warnings_list,
     }
 
     return results

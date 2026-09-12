@@ -21,7 +21,6 @@ import zipfile
 from datetime import datetime
 from pathlib import Path
 
-import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
@@ -31,6 +30,7 @@ sys.path.insert(0, str(APP_DIR))
 sys.path.insert(0, str(APP_DIR.parent))
 
 from core.bathymetry_tide_processing import (  # noqa: E402
+    build_summary_figure,
     load_tide_data,
     process_bathymetry_with_tide_df,
 )
@@ -269,11 +269,16 @@ else:
 # -----------------------------------------------------------------------
 st.header("3. Output location")
 site_name = st.text_input(
-    "Site name",
+    "Site name *",
     value="",
     placeholder="corridor3_mangrove",
-    help="Names the output subfolder. Leave blank to use a timestamp instead.",
+    help=(
+        "Required. Names the output subfolder and is used as the title "
+        "of the summary plot (below and in the downloaded results)."
+    ),
 )
+if not site_name.strip():
+    st.caption(":red[Site name is required to run processing.]")
 
 save_to_folder = st.checkbox(
     "Also save results to a folder on this machine", value=False
@@ -309,6 +314,31 @@ with st.expander("4. Processing options", expanded=False):
     export_geojson = o7.checkbox("Export WGS84 GeoJSON", value=True)
     export_utm_geojson = o8.checkbox("Export UTM GeoJSON", value=True)
 
+    st.caption("Depth outlier filtering")
+    o9, o10 = st.columns(2)
+    min_depth_input = o9.number_input(
+        "Minimum plausible depth (m)",
+        min_value=0.0,
+        value=0.0,
+        step=0.5,
+        help="Scan points at or below this are dropped. 0 disables this bound.",
+    )
+    max_depth_input = o10.number_input(
+        "Maximum plausible depth (m)",
+        min_value=0.0,
+        value=20.0,
+        step=1.0,
+        help=(
+            "Scan points above this are dropped before tide correction -- "
+            "handles Deeper Pro's occasional runaway depth reading (e.g. "
+            "when it loses bottom lock as it's lifted out of the water). "
+            "Set to comfortably above your site's real maximum depth. "
+            "0 disables this bound."
+        ),
+    )
+    min_depth = float(min_depth_input) if min_depth_input > 0 else None
+    max_depth = float(max_depth_input) if max_depth_input > 0 else None
+
     timezone = st.text_input(
         "Timezone override (optional)",
         value="",
@@ -321,7 +351,7 @@ with st.expander("4. Processing options", expanded=False):
 st.header("5. Run")
 run_disabled = scan_upload is None or (
     tide_source == "Tide-gauge file" and tide_upload is None
-) or (tide_source == "FES2022 model" and not fes_directory)
+) or (tide_source == "FES2022 model" and not fes_directory) or not site_name.strip()
 
 if st.button("Run processing", type="primary", disabled=run_disabled):
     try:
@@ -407,6 +437,9 @@ if st.button("Run processing", type="primary", disabled=run_disabled):
                     shuffle_split=shuffle_split,
                     export_geojson=export_geojson,
                     export_utm_geojson=export_utm_geojson,
+                    min_depth=min_depth,
+                    max_depth=max_depth,
+                    site_name=site_name.strip(),
                 )
 
                 st.session_state["results"] = results
@@ -414,6 +447,7 @@ if st.button("Run processing", type="primary", disabled=run_disabled):
                 st.session_state["persisted_path"] = (
                     str(persisted_path) if persisted_path else None
                 )
+                st.session_state["results_site_name"] = site_name.strip()
 
         if output_dir_ok:
             st.success("Processing complete.")
@@ -438,7 +472,7 @@ if "results" in st.session_state:
     for warning_msg in results.get("warnings", []):
         st.warning(warning_msg)
 
-    m1, m2, m3, m4 = st.columns(4)
+    m1, m2, m3, m4, m5 = st.columns(5)
     m1.metric("Scan points", f"{summary['total_scan_points_after_cleaning']:,}")
     m2.metric(
         "Matched to tide",
@@ -447,38 +481,22 @@ if "results" in st.session_state:
     )
     m3.metric("Training points", f"{summary['training_points']:,}")
     m4.metric("Validation points", f"{summary['validation_points']:,}")
+    m5.metric("Depth outliers removed", f"{summary.get('depth_outliers_removed', 0):,}")
 
     tab_plots, tab_map, tab_download = st.tabs(["Plots", "Map", "Download"])
 
     with tab_plots:
-        fig, axes = plt.subplots(3, 1, figsize=(10, 9))
-
-        ax = axes[0]
-        ax.scatter(merged["timestamp"], merged["depth"], s=2, color="#2196F3", alpha=0.6)
-        ax.set_ylabel("Depth (m)")
-        ax.set_title("Echosounder depth over time")
-        ax.invert_yaxis()
-        ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
-        ax.grid(True, alpha=0.3)
-
-        ax = axes[1]
-        ax.plot(tide_df["timestamp"], tide_df["water_level"], color="#4CAF50", linewidth=1.2)
-        ax.set_ylabel("Water level (m)")
-        ax.set_title("Tide water level used for correction")
-        ax.xaxis.set_major_formatter(mdates.DateFormatter("%d/%m %H:%M"))
-        ax.grid(True, alpha=0.3)
-
-        ax = axes[2]
-        valid = merged["tide_correction"].dropna()
-        if len(valid) > 0:
-            ax.hist(valid, bins=40, color="#FF9800", edgecolor="white", linewidth=0.5)
-        ax.set_xlabel("Tide-corrected depth (m)")
-        ax.set_ylabel("Scan points")
-        ax.set_title("Distribution of tide-corrected depth")
-        ax.grid(True, alpha=0.3)
-
-        fig.tight_layout()
+        # Same figure-building function used to save summary_plot.png into
+        # the results folder/zip during Run -- rebuilt here (cheap) rather
+        # than reusing a stored Figure object, so the in-app preview always
+        # matches what's in the download.
+        fig = build_summary_figure(
+            merged_df=merged,
+            tide_df=tide_df,
+            site_name=st.session_state.get("results_site_name", ""),
+        )
         st.pyplot(fig)
+        plt.close(fig)
 
     with tab_map:
         map_data = merged.dropna(subset=["latitude", "longitude"]).copy()
@@ -516,8 +534,8 @@ if "results" in st.session_state:
             mime="application/zip",
         )
         st.caption(
-            "Contains merged/training/validation CSV, plus WGS84 and UTM GeoJSON "
-            "if enabled above."
+            "Contains merged/training/validation CSV, summary_plot.png, "
+            "plus WGS84 and UTM GeoJSON if enabled above."
         )
 
 render_footer(
