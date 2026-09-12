@@ -29,30 +29,43 @@ rest of the pipeline runs.
 
 ## Running it
 
-This tool runs directly on your Mac in its own conda environment -- no
-Docker. You'll need [Anaconda](https://www.anaconda.com/download) or
+This tool runs directly on your machine in its own conda environment --
+no Docker. Works on **macOS, Windows, or Linux**. You'll need
+[Anaconda](https://www.anaconda.com/download) or
 [Miniconda](https://docs.conda.io/en/latest/miniconda.html) installed
 first; if you already use Anaconda for other things, this creates a
 separate environment (`seastrong-echosounder`) and won't touch it.
 
-**Double-click `Launch Echosounder Bathymetry.command`** in this folder.
+**Double-click the launcher for your system**, in this folder:
+
+- macOS: `Launch Echosounder Bathymetry.command`
+- Windows: `Launch Echosounder Bathymetry (Windows).bat`
+
 The first time, it creates the conda environment and installs everything
 needed (a few minutes); every time after that it starts in a few seconds.
 Your browser opens automatically at http://localhost:8501.
 
-To stop it, close the Terminal window that opened, or press `Ctrl+C` in it.
+To stop it, close the window that opened, or press `Ctrl+C` in it.
 
-### First-time macOS security prompt
+### First-time security prompt
 
-The first time you double-click it, macOS will likely refuse to run it
-("cannot be opened because it is from an unidentified developer"). To allow
-it once: right-click (or Control-click) the file → **Open** → **Open** in
-the dialog that appears. You only need to do this once; after that,
-double-clicking works normally.
+**macOS** will likely refuse to run the `.command` file the first time
+("cannot be opened because it is from an unidentified developer"). To
+allow it once: right-click (or Control-click) the file → **Open** →
+**Open** in the dialog that appears. You only need to do this once; after
+that, double-clicking works normally.
 
-### Running from Terminal instead
+**Windows** may show a "Windows protected your PC" SmartScreen prompt for
+the `.bat` file the first time. Click **More info** → **Run anyway**.
 
-If you'd rather not use the launcher:
+If Windows can't find `conda` at all (the launcher will say so), either
+reinstall Anaconda with "Add Anaconda to my PATH environment variable"
+checked, or run the launcher's contents from an **Anaconda Prompt**
+instead of double-clicking.
+
+### Running from a terminal instead
+
+If you'd rather not use the launcher (any OS):
 
 ```
 conda create -n seastrong-echosounder python=3.11   # first time only
@@ -92,8 +105,9 @@ of them match, the error after running lists exactly what was tried and how
 many files were found in each place.
 
 Since the app now runs natively (not in a container), the folder browser
-in "2. Tide data" shows your actual Mac folders directly -- browse straight
-to wherever you saved the FES2022 download, no path translation needed.
+in "2. Tide data" shows your actual folders directly -- browse straight to
+wherever you saved the FES2022 download (any drive, on any OS), no path
+translation needed.
 
 The predicted tide is relative to FES2022's mean sea level reference (not
 necessarily your local chart datum), and it's the astronomical tide only --
@@ -105,7 +119,8 @@ worth keeping in mind for anything that needs an absolute datum.
 
 ```
 echosounder_bathymetry/
-  Launch Echosounder Bathymetry.command   # double-click this to run
+  Launch Echosounder Bathymetry.command             # double-click this to run (macOS)
+  "Launch Echosounder Bathymetry (Windows).bat"     # double-click this to run (Windows)
   app.py              # Streamlit UI (thin -- no processing logic here)
   core/
     bathymetry_tide_processing.py   # same processing code as scripts/ in the

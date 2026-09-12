@@ -12,8 +12,15 @@ container, so there's no container filesystem boundary to work around: this
 widget just lets the user click through their real folders instead of
 typing a full path from memory, starting at their home directory by
 default. There's also a "jump to path" box for pasting a path directly
-(handy for a path copied from Finder, or an external drive under
-`/Volumes/...`).
+(handy for a path copied from Finder/Explorer, an external drive under
+`/Volumes/...` on macOS, or another drive letter like `D:/` on Windows).
+
+Deliberately not confined to any particular root: on Windows especially,
+restricting navigation to "under" a single starting path would make it
+impossible to jump to a different drive letter (the FES2022 data on
+`D:/...` when the app started browsing from `C:/Users/...`), so the "jump
+to path" box accepts any absolute path. `start` only controls where
+browsing *begins*, not where it's allowed to go.
 """
 from __future__ import annotations
 
@@ -22,16 +29,10 @@ from typing import Optional
 
 import streamlit as st
 
-# No real confinement needed now that this runs natively (not in a
-# container) -- "/" means "anywhere this user account can read", same as
-# Finder. `start` is where browsing begins, independent of `root`.
-DEFAULT_ROOT = "/"
-
 
 def pick_folder(
     label: str,
     key: str,
-    root: str = DEFAULT_ROOT,
     start: Optional[str] = None,
     help: Optional[str] = None,
     allow_new: bool = False,
@@ -39,8 +40,7 @@ def pick_folder(
     """
     Render a folder browser plus a "jump to a path" box for typing/pasting
     a path directly. Returns the currently browsed/selected absolute path
-    (a string), or None if `root` doesn't exist on this machine at all
-    (falls back to a plain text input in that vanishingly unlikely case).
+    as a string.
 
     Parameters
     ----------
@@ -48,41 +48,24 @@ def pick_folder(
         Shown above the widget.
     key : str
         Unique key -- use a different one per picker on the same page.
-    root : str
-        Path the browser is confined to (can't navigate above it).
-        Defaults to "/" -- i.e. no real restriction, since this runs
-        natively on the user's own machine.
     start : str, optional
         Where browsing begins. Defaults to the user's home directory.
     help : str, optional
         Extra explanatory text shown under the label.
     allow_new : bool
         If True, accepts a path that doesn't exist yet (e.g. for an output
-        folder the caller will create) as long as it's still under `root`.
-        If False (default -- appropriate for picking existing input data),
-        a path that doesn't exist or isn't a directory is rejected and the
-        browser resets to `start`.
+        folder the caller will create). If False (default -- appropriate
+        for picking existing input data), a path that doesn't exist or
+        isn't a directory is rejected and the browser resets to `start`.
     """
-    root_path = Path(root)
     start_path = Path(start) if start else Path.home()
     state_key = f"_picker_{key}_path"
-
-    if not root_path.is_dir():
-        st.caption(
-            f"**{label}** -- `{root}` isn't available on this machine, so "
-            "folder browsing isn't available here. Enter a path directly."
-        )
-        return st.text_input(label, key=f"_picker_{key}_fallback", help=help) or None
 
     if state_key not in st.session_state:
         st.session_state[state_key] = str(start_path)
 
     current = Path(st.session_state[state_key])
-    try:
-        current.relative_to(root_path)
-        if not allow_new and not current.is_dir():
-            current = start_path
-    except ValueError:
+    if not allow_new and not current.is_dir():
         current = start_path
     st.session_state[state_key] = str(current)
 
@@ -90,10 +73,14 @@ def pick_folder(
     if help:
         st.caption(help)
 
+    # At a true filesystem root (POSIX "/", or a Windows drive root like
+    # "C:\\"), a path's parent is itself -- that's the natural stopping
+    # point for "Up", and works the same way on every OS without needing
+    # to special-case drive letters.
+    at_top = current.parent == current
+
     col_up, col_path = st.columns([1, 6])
-    if col_up.button(
-        "⬆️ Up", key=f"_picker_{key}_up_{current}", disabled=(current == root_path)
-    ):
+    if col_up.button("⬆️ Up", key=f"_picker_{key}_up_{current}", disabled=at_top):
         st.session_state[state_key] = str(current.parent)
         st.rerun()
     col_path.code(str(current))
@@ -129,7 +116,7 @@ def pick_folder(
         value=str(current),
         key=f"_picker_{key}_manual_{current}",
         label_visibility="collapsed",
-        placeholder="...or paste a path (e.g. from Finder)",
+        placeholder="...or paste a path (e.g. from Finder/Explorer, or another drive)",
     )
     if go_col.button("Go", key=f"_picker_{key}_go_{current}"):
         st.session_state[state_key] = manual

@@ -26,7 +26,8 @@ apps/
   echosounder_bathymetry/  # first tool -- see its own README.md
     app.py
     core/
-    "Launch Echosounder Bathymetry.command"
+    "Launch Echosounder Bathymetry.command"           # macOS
+    "Launch Echosounder Bathymetry (Windows).bat"     # Windows
     requirements.txt
     README.md
   <next_tool>/              # same shape as above
@@ -43,18 +44,21 @@ apps/
    `_shared.folder_picker.pick_folder()` wherever the tool needs the user to
    point at a local folder (a raw dataset, a model directory) instead of
    uploading it through the browser.
-3. Add a `requirements.txt` and a double-click `.command` launcher (see
-   `echosounder_bathymetry/Launch Echosounder Bathymetry.command`) that
-   creates/activates a dedicated conda environment, `pip install`s
-   `requirements.txt`, and runs `streamlit run app.py`.
+3. Add a `requirements.txt` and double-click launchers for both macOS
+   (`.command`) and Windows (`.bat`) -- see
+   `echosounder_bathymetry/Launch Echosounder Bathymetry.command` and
+   `echosounder_bathymetry/Launch Echosounder Bathymetry (Windows).bat`.
+   Both do the same thing: create/activate a dedicated conda environment,
+   `pip install` `requirements.txt`, and run `streamlit run app.py`.
 4. Write a short `README.md` in the tool's folder: what it does, how to run
    it, what inputs it expects.
 
 ## Running a tool
 
-Each tool is self-contained. From Finder, double-click that tool's
-`.command` launcher (macOS will ask for a one-time security approval the
-first time -- see the tool's README). From Terminal, the equivalent is:
+Each tool is self-contained. Double-click the launcher for your OS
+(macOS/Windows will each ask for a one-time security approval the first
+time -- see the tool's README). From a terminal, the equivalent on any OS
+is:
 
 ```
 conda create -n <tool-env-name> python=3.11   # first time only
