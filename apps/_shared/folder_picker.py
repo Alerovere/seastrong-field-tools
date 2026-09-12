@@ -6,14 +6,14 @@ point at a folder on their own machine -- e.g. a large local dataset that
 shouldn't be uploaded through the browser (see apps/README.md's "point at
 large data, don't upload it" principle).
 
-Docker containers can't browse the host filesystem on their own; they only
-see what's explicitly mounted with `-v host_path:container_path`. Typing an
-exact container-side path from memory is a common source of confusion (a
-Mac path typed directly into the app, or a path that doesn't match what was
-actually mounted, silently "not found" or empty). This widget mounts one
-folder once, at a fixed container path, and lets the user navigate it
-visually instead -- see each tool's README for the exact `-v` flag to use
-alongside this.
+These tools run directly on the user's machine (via a conda environment and
+a double-click launcher -- see each tool's README), not inside a Docker
+container, so there's no container filesystem boundary to work around: this
+widget just lets the user click through their real folders instead of
+typing a full path from memory, starting at their home directory by
+default. There's also a "jump to path" box for pasting a path directly
+(handy for a path copied from Finder, or an external drive under
+`/Volumes/...`).
 """
 from __future__ import annotations
 
@@ -22,23 +22,25 @@ from typing import Optional
 
 import streamlit as st
 
-DEFAULT_ROOT = "/host"
+# No real confinement needed now that this runs natively (not in a
+# container) -- "/" means "anywhere this user account can read", same as
+# Finder. `start` is where browsing begins, independent of `root`.
+DEFAULT_ROOT = "/"
 
 
 def pick_folder(
     label: str,
     key: str,
     root: str = DEFAULT_ROOT,
+    start: Optional[str] = None,
     help: Optional[str] = None,
     allow_new: bool = False,
 ) -> Optional[str]:
     """
-    Render a folder browser rooted at `root` (a path mounted into the
-    container -- see module docstring) plus a "jump to a path" box for
-    typing/pasting a path directly. Returns the currently browsed/selected
-    absolute path (a string), or None if `root` isn't mounted at all (falls
-    back to a plain text input in that case, so local `streamlit run`
-    development without Docker still works).
+    Render a folder browser plus a "jump to a path" box for typing/pasting
+    a path directly. Returns the currently browsed/selected absolute path
+    (a string), or None if `root` doesn't exist on this machine at all
+    (falls back to a plain text input in that vanishingly unlikely case).
 
     Parameters
     ----------
@@ -47,8 +49,11 @@ def pick_folder(
     key : str
         Unique key -- use a different one per picker on the same page.
     root : str
-        Container path the browser is confined to (can't navigate above
-        it). Must match what you mounted with `-v host_path:root`.
+        Path the browser is confined to (can't navigate above it).
+        Defaults to "/" -- i.e. no real restriction, since this runs
+        natively on the user's own machine.
+    start : str, optional
+        Where browsing begins. Defaults to the user's home directory.
     help : str, optional
         Extra explanatory text shown under the label.
     allow_new : bool
@@ -56,29 +61,29 @@ def pick_folder(
         folder the caller will create) as long as it's still under `root`.
         If False (default -- appropriate for picking existing input data),
         a path that doesn't exist or isn't a directory is rejected and the
-        browser resets to `root`.
+        browser resets to `start`.
     """
     root_path = Path(root)
+    start_path = Path(start) if start else Path.home()
     state_key = f"_picker_{key}_path"
 
     if not root_path.is_dir():
         st.caption(
-            f"**{label}** -- `{root}` isn't mounted in this container, so "
-            "folder browsing isn't available here. Enter a path directly "
-            "(this only happens when running without Docker)."
+            f"**{label}** -- `{root}` isn't available on this machine, so "
+            "folder browsing isn't available here. Enter a path directly."
         )
         return st.text_input(label, key=f"_picker_{key}_fallback", help=help) or None
 
     if state_key not in st.session_state:
-        st.session_state[state_key] = str(root_path)
+        st.session_state[state_key] = str(start_path)
 
     current = Path(st.session_state[state_key])
     try:
         current.relative_to(root_path)
         if not allow_new and not current.is_dir():
-            current = root_path
+            current = start_path
     except ValueError:
-        current = root_path
+        current = start_path
     st.session_state[state_key] = str(current)
 
     st.markdown(f"**{label}**")
@@ -124,7 +129,7 @@ def pick_folder(
         value=str(current),
         key=f"_picker_{key}_manual_{current}",
         label_visibility="collapsed",
-        placeholder=f"...or paste a path under {root}",
+        placeholder="...or paste a path (e.g. from Finder)",
     )
     if go_col.button("Go", key=f"_picker_{key}_go_{current}"):
         st.session_state[state_key] = manual

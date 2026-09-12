@@ -50,11 +50,8 @@ render_header(
 )
 
 st.caption(
-    "To browse folders on your Mac below (for FES2022 data or to save "
-    "results), start the container with one folder mounted to `/host` -- "
-    "e.g. `-v $HOME:/host` for your whole home folder -- see the tool's README "
-    "for the exact command. Without that mount you'll get a plain text box "
-    "instead."
+    "Runs directly on this machine (via conda) -- no Docker container, so "
+    "the folder browser below can see your real Mac paths directly."
 )
 
 
@@ -279,10 +276,9 @@ if st.button("Run processing", type="primary", disabled=run_disabled):
                 except OSError as exc:
                     output_dir_ok = False
                     st.error(
-                        f"Can't write to '{output_dir}': {exc}. Check that "
-                        f"'{output_folder}' was mounted as a volume when you "
-                        "started the container (see the tool's README), and "
-                        "that the folder is writable."
+                        f"Can't write to '{output_dir}': {exc}. Check the "
+                        f"path '{output_folder}' is correct and you have "
+                        "write access to it."
                     )
             else:
                 output_dir = tmpdir / site_slug
@@ -363,10 +359,7 @@ if "results" in st.session_state:
 
     persisted_path = st.session_state.get("persisted_path")
     if persisted_path:
-        st.info(
-            f"Results saved to `{persisted_path}` inside the container -- "
-            "on your Mac, that's wherever you mounted `/host` to."
-        )
+        st.info(f"Results saved to `{persisted_path}` on your Mac.")
 
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("Scan points", f"{summary['total_scan_points_after_cleaning']:,}")
