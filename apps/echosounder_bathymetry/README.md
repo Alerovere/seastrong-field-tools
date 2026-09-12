@@ -39,6 +39,19 @@ reused instead of re-read from the 34 FES2022 constituent files. The
 first run for a given survey still has to read those files once; the
 buffer/caching mainly pays off on repeated runs.
 
+### Near-shore points and "no valid tide data"
+
+FES2022's native grid is only about 1/16 degree (~7 km), and it masks many
+narrow lagoons, reef flats, and mangrove creeks as "land" cells with no
+tide data at all -- common for exactly the kind of nearshore site this
+tool is used for. If your survey point falls on one of those, the app
+extrapolates from the nearest valid open-water cell instead (up to the
+"Extrapolation distance for near-shore points (km)" you set next to the
+FES2022 lat/lon inputs, default 25 km). If even that finds nothing, you'll
+get a clear error rather than a run that silently finishes with no tide
+correction applied -- try raising the cutoff, double-check the coordinates
+aren't swapped, or use a tide-gauge CSV for that site instead.
+
 ### If a run finishes with warnings
 
 CSV export always runs first and never fails. If the UTM GeoJSON export
