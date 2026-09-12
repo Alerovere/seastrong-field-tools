@@ -55,6 +55,33 @@ st.caption(
 )
 
 
+@st.cache_data(show_spinner=False)
+def _cached_fes2022_tide_table(
+    model_directory: str,
+    longitude: float,
+    latitude: float,
+    start_iso: str,
+    end_iso: str,
+    interval: str,
+) -> pd.DataFrame:
+    """
+    Predict FES2022 tide on a regular time grid and cache the result.
+
+    Cached (within this running app -- not across restarts) by the exact
+    combination of arguments, so re-running with the same FES2022 folder,
+    coordinates, and survey time window -- e.g. after only changing
+    something in "Processing options" -- reuses the previous prediction
+    instead of re-reading the FES2022 files and re-predicting from scratch.
+    """
+    grid = pd.date_range(start=start_iso, end=end_iso, freq=interval)
+    return predict_fes2022_tide(
+        model_directory=model_directory,
+        longitude=longitude,
+        latitude=latitude,
+        timestamps=pd.Series(grid),
+    )
+
+
 def _read_preview(uploaded_file) -> pd.DataFrame:
     uploaded_file.seek(0)
     preview = pd.read_csv(uploaded_file, sep=None, engine="python", nrows=5)
@@ -136,6 +163,7 @@ tide_source = st.radio(
 tide_upload = None
 tide_water_level_col = tide_date_col = tide_time_col = tide_datetime_col = None
 fes_directory = fes_lat = fes_lon = None
+fes_buffer_hours = 2.0
 
 if tide_source == "Tide-gauge file":
     tide_upload = st.file_uploader("Tide-gauge CSV", type=["csv"], key="tide_upload")
@@ -180,12 +208,28 @@ else:
             "under `fes2022b/`, either works, `.nc` or `.nc.gz`."
         ),
     )
-    f1, f2 = st.columns(2)
+    f1, f2, f3 = st.columns(3)
     fes_lat = f1.number_input(
         "Latitude (decimal degrees)", min_value=-90.0, max_value=90.0, value=0.0, format="%.6f"
     )
     fes_lon = f2.number_input(
         "Longitude (decimal degrees)", min_value=-180.0, max_value=180.0, value=0.0, format="%.6f"
+    )
+    fes_buffer_hours = f3.number_input(
+        "Buffer around survey (hours)",
+        min_value=0.0,
+        max_value=48.0,
+        value=2.0,
+        step=0.5,
+        help=(
+            "Tide is predicted on a 1-minute table spanning the survey's own "
+            "start/end time, padded by this many hours on each side, then "
+            "interpolated onto each scan point (same matching step used for "
+            "a tide-gauge CSV). A one-time table like this is what makes "
+            "re-running with different processing options fast -- it's "
+            "cached and reused as long as the FES2022 folder, coordinates, "
+            "and survey time window stay the same."
+        ),
     )
 
     with st.expander("What files does this look for?"):
@@ -297,7 +341,9 @@ if st.button("Run processing", type="primary", disabled=run_disabled):
                         timezone=tz,
                     )
                 else:
-                    # Need the scan timestamps first, to know what times to predict.
+                    # Need the scan timestamps first, to size the tide table
+                    # (survey start/end + buffer) -- not to predict at each
+                    # individual ping, see _cached_fes2022_tide_table() above.
                     from core.bathymetry_tide_processing import load_scan_data
 
                     scan_for_times = load_scan_data(
@@ -309,11 +355,17 @@ if st.button("Run processing", type="primary", disabled=run_disabled):
                         unix_unit=scan_unix_unit,
                         timezone=tz,
                     )
-                    tide_df = predict_fes2022_tide(
-                        model_directory=fes_directory,
-                        longitude=fes_lon,
-                        latitude=fes_lat,
-                        timestamps=scan_for_times["timestamp"],
+                    scan_start = scan_for_times["timestamp"].min()
+                    scan_end = scan_for_times["timestamp"].max()
+                    buffer = pd.Timedelta(hours=float(fes_buffer_hours))
+
+                    tide_df = _cached_fes2022_tide_table(
+                        model_directory=str(Path(fes_directory).expanduser().resolve()),
+                        longitude=float(fes_lon),
+                        latitude=float(fes_lat),
+                        start_iso=(scan_start - buffer).isoformat(),
+                        end_iso=(scan_end + buffer).isoformat(),
+                        interval="1min",
                     )
 
                 results = process_bathymetry_with_tide_df(
@@ -360,6 +412,9 @@ if "results" in st.session_state:
     persisted_path = st.session_state.get("persisted_path")
     if persisted_path:
         st.info(f"Results saved to `{persisted_path}` on your Mac.")
+
+    for warning_msg in results.get("warnings", []):
+        st.warning(warning_msg)
 
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("Scan points", f"{summary['total_scan_points_after_cleaning']:,}")

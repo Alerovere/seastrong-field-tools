@@ -34,7 +34,7 @@ from __future__ import annotations
 import json
 import math
 from pathlib import Path
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -915,7 +915,7 @@ def export_outputs(
     latitude_column: str = "latitude",
     longitude_column: str = "longitude",
     utm_epsg: Optional[int] = None,
-) -> Dict[str, Path]:
+) -> Tuple[Dict[str, Path], List[str]]:
     """
     Export merged, training, and validation datasets.
 
@@ -947,13 +947,19 @@ def export_outputs(
 
     Returns
     -------
-    dict
-        Dictionary of output paths.
+    tuple
+        (output_paths, warnings): a dict of output paths, and a list of
+        human-readable warning messages for any export step that was
+        skipped rather than failing the whole export -- most commonly a
+        GeoJSON export skipped because a dataset (training or validation,
+        after the random split) happened to have no rows with valid
+        coordinates, e.g. from sparse/intermittent GPS fixes.
     """
     output_dir = _ensure_path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     output_paths: Dict[str, Path] = {}
+    warnings: List[str] = []
 
     datasets = {
         "merged": merged_df,
@@ -969,35 +975,51 @@ def export_outputs(
 
     if export_geojson:
         for name, data in datasets.items():
-            output_paths[f"{name}_geojson_wgs84"] = dataframe_to_geojson(
-                data,
-                output_dir / f"{name}_wgs84.geojson",
-                latitude_column=latitude_column,
-                longitude_column=longitude_column,
-            )
+            try:
+                output_paths[f"{name}_geojson_wgs84"] = dataframe_to_geojson(
+                    data,
+                    output_dir / f"{name}_wgs84.geojson",
+                    latitude_column=latitude_column,
+                    longitude_column=longitude_column,
+                )
+            except Exception as exc:  # noqa: BLE001
+                warnings.append(
+                    f"Skipped WGS84 GeoJSON export for '{name}': {exc}"
+                )
 
     if export_utm_geojson:
-        inferred_epsg = utm_epsg
+        try:
+            inferred_epsg = utm_epsg
 
-        if inferred_epsg is None:
-            inferred_epsg = infer_utm_epsg_from_lonlat(
-                merged_df,
-                latitude_column=latitude_column,
-                longitude_column=longitude_column,
+            if inferred_epsg is None:
+                inferred_epsg = infer_utm_epsg_from_lonlat(
+                    merged_df,
+                    latitude_column=latitude_column,
+                    longitude_column=longitude_column,
+                )
+
+            output_paths["utm_epsg"] = Path(str(inferred_epsg))
+
+            for name, data in datasets.items():
+                try:
+                    output_paths[f"{name}_geojson_utm"] = dataframe_to_utm_geojson(
+                        data,
+                        output_dir / f"{name}_utm_EPSG{inferred_epsg}.geojson",
+                        latitude_column=latitude_column,
+                        longitude_column=longitude_column,
+                        epsg=inferred_epsg,
+                    )
+                except Exception as exc:  # noqa: BLE001
+                    warnings.append(
+                        f"Skipped UTM GeoJSON export for '{name}': {exc}"
+                    )
+        except Exception as exc:  # noqa: BLE001
+            warnings.append(
+                f"Skipped UTM GeoJSON export entirely -- could not determine "
+                f"a UTM zone: {exc}"
             )
 
-        output_paths["utm_epsg"] = Path(str(inferred_epsg))
-
-        for name, data in datasets.items():
-            output_paths[f"{name}_geojson_utm"] = dataframe_to_utm_geojson(
-                data,
-                output_dir / f"{name}_utm_EPSG{inferred_epsg}.geojson",
-                latitude_column=latitude_column,
-                longitude_column=longitude_column,
-                epsg=inferred_epsg,
-            )
-
-    return output_paths
+    return output_paths, warnings
 
 
 # =============================================================================
@@ -1329,7 +1351,7 @@ def process_bathymetry_with_tide_df(
         require_matched_tide=True,
     )
 
-    output_paths = export_outputs(
+    output_paths, export_warnings = export_outputs(
         merged_df=merged_df,
         training_df=training_df,
         validation_df=validation_df,
@@ -1358,6 +1380,7 @@ def process_bathymetry_with_tide_df(
         "validation": validation_df,
         "summary": summary,
         "output_files": output_paths,
+        "warnings": export_warnings,
     }
 
     return results
