@@ -27,6 +27,28 @@ export, plots, map) is identical regardless of which tide source you use --
 both are converted to the same `timestamp, water_level` shape before the
 rest of the pipeline runs.
 
+When using FES2022, the tide isn't predicted at every individual scan
+ping -- it's predicted once on a 1-minute table spanning your survey's own
+start/end time, padded by a "Buffer around survey (hours)" you can set
+(default 2h), and that table is then interpolated onto each ping (same
+matching step used for a tide-gauge CSV). That table is also cached for
+the running app session, keyed on the FES2022 folder, coordinates, and
+time window -- so if you tweak something in "Processing options" and
+re-run without changing any of those three things, the tide table is
+reused instead of re-read from the 34 FES2022 constituent files. The
+first run for a given survey still has to read those files once; the
+buffer/caching mainly pays off on repeated runs.
+
+### If a run finishes with warnings
+
+CSV export always runs first and never fails. If the UTM GeoJSON export
+(or a WGS84 GeoJSON export for one dataset) can't be produced -- most
+often because a train/validation split left too few rows with valid GPS
+coordinates -- the app no longer discards the whole run over it. You'll
+see a warning for just that export in the Results section, and every
+other output (CSVs, and any GeoJSON that did have valid coordinates) is
+still written/offered for download.
+
 ## Running it
 
 This tool runs directly on your machine in its own conda environment --
