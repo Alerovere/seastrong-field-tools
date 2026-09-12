@@ -63,6 +63,7 @@ def _cached_fes2022_tide_table(
     start_iso: str,
     end_iso: str,
     interval: str,
+    cutoff_km: float = 25.0,
 ) -> pd.DataFrame:
     """
     Predict FES2022 tide on a regular time grid and cache the result.
@@ -79,6 +80,7 @@ def _cached_fes2022_tide_table(
         longitude=longitude,
         latitude=latitude,
         timestamps=pd.Series(grid),
+        cutoff_km=cutoff_km,
     )
 
 
@@ -164,6 +166,7 @@ tide_upload = None
 tide_water_level_col = tide_date_col = tide_time_col = tide_datetime_col = None
 fes_directory = fes_lat = fes_lon = None
 fes_buffer_hours = 2.0
+fes_cutoff_km = 25.0
 
 if tide_source == "Tide-gauge file":
     tide_upload = st.file_uploader("Tide-gauge CSV", type=["csv"], key="tide_upload")
@@ -229,6 +232,24 @@ else:
             "re-running with different processing options fast -- it's "
             "cached and reused as long as the FES2022 folder, coordinates, "
             "and survey time window stay the same."
+        ),
+    )
+
+    fes_cutoff_km = st.number_input(
+        "Extrapolation distance for near-shore points (km)",
+        min_value=0.0,
+        max_value=200.0,
+        value=25.0,
+        step=5.0,
+        help=(
+            "FES2022's native grid (~7 km resolution) treats many narrow "
+            "lagoons, reef flats, and mangrove creeks as 'land' cells with "
+            "no tide data at all. If your survey point falls on one of "
+            "those, the app extrapolates from the nearest valid open-water "
+            "cell within this distance instead of failing outright. Leave "
+            "at 25 km unless you get a 'no valid tide data' error asking "
+            "you to raise it (e.g. a point deep inside a wide lagoon, far "
+            "from open water)."
         ),
     )
 
@@ -366,6 +387,7 @@ if st.button("Run processing", type="primary", disabled=run_disabled):
                         start_iso=(scan_start - buffer).isoformat(),
                         end_iso=(scan_end + buffer).isoformat(),
                         interval="1min",
+                        cutoff_km=float(fes_cutoff_km),
                     )
 
                 results = process_bathymetry_with_tide_df(

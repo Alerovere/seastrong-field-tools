@@ -200,6 +200,8 @@ def predict_fes2022_tide(
     longitude: float,
     latitude: float,
     timestamps: "pd.Series[pd.Timestamp]",
+    extrapolate: bool = True,
+    cutoff_km: float = 25.0,
 ) -> pd.DataFrame:
     """
     Predict ocean tide elevation at one point for a series of timestamps,
@@ -219,6 +221,23 @@ def predict_fes2022_tide(
     timestamps : pd.Series
         Timestamps (naive or tz-aware, treated as UTC) to predict tide at --
         typically the scan data's timestamp column.
+    extrapolate : bool
+        FES2022's native grid (~1/16 degree, ~7 km) masks cells it treats
+        as land, which routinely includes narrow lagoons, reef flats, and
+        mangrove creeks -- exactly the kind of site this tool is built for.
+        With pyTMD's own default (extrapolate=False), a survey point that
+        lands on one of those masked cells silently predicts NaN for
+        *every* requested timestamp (it's the same x/y each time, so it's
+        all-or-nothing, not a partial gap) -- no error, just an empty tide
+        table downstream. Defaulting this to True instead extrapolates
+        from the nearest valid open-water cells within `cutoff_km`, which
+        is what you want for a nearshore point like this.
+    cutoff_km : float
+        Maximum distance (kilometers) from the requested point to a valid
+        FES2022 cell for extrapolation to be used. 25 km comfortably
+        covers being a few grid cells inside a masked lagoon/reef area at
+        FES2022's resolution, without extrapolating from a cell so far
+        away the result stops being meaningful.
 
     Returns
     -------
@@ -233,6 +252,10 @@ def predict_fes2022_tide(
     FileNotFoundError
         If model_directory, or a recognizable FES2022 layout inside it,
         can't be found -- the error lists every layout that was tried.
+    RuntimeError
+        If FES2022 has no valid tide value at (longitude, latitude) even
+        after extrapolation -- the point is likely too far from any
+        FES2022 ocean cell (or the coordinates are swapped/wrong).
     """
     try:
         import pyTMD.compute as compute
@@ -294,6 +317,8 @@ def predict_fes2022_tide(
             crs=4326,
             type="time series",
             standard="datetime",
+            extrapolate=extrapolate,
+            cutoff=cutoff_km,
         )
     finally:
         Path(definition_fp.name).unlink(missing_ok=True)
@@ -304,6 +329,30 @@ def predict_fes2022_tide(
         raise RuntimeError(
             "pyTMD returned an unexpected number of tide values "
             f"({water_level.shape[0]} for {ts.shape[0]} timestamps)."
+        )
+
+    # x/y is the same single point for every timestamp (see the "one
+    # station, many times" note above), so validity here isn't
+    # time-dependent -- either the point resolves to a real FES2022 cell
+    # (directly or via extrapolation) and every value is finite, or it
+    # doesn't and *every* value is NaN. Catch the all-NaN case explicitly
+    # rather than letting it silently reach the caller as an
+    # empty-after-dropna tide table with no explanation.
+    if not np.isfinite(water_level).any():
+        extra_hint = (
+            f"Extrapolation from the nearest valid cell within {cutoff_km:.0f} km "
+            "was already tried and still found nothing."
+            if extrapolate
+            else "Extrapolation was not attempted."
+        )
+        raise RuntimeError(
+            f"FES2022 has no valid tide data at ({latitude}, {longitude}) -- "
+            "the point falls on a cell FES2022 treats as land (common for "
+            "narrow lagoons, reef flats, and mangrove creeks, since "
+            "FES2022's native grid is only about 1/16 degree, ~7 km). "
+            f"{extra_hint} Double-check the coordinates aren't swapped, try "
+            "a point a bit further into open water, increase cutoff_km, or "
+            "use a tide-gauge CSV for this site instead."
         )
 
     return pd.DataFrame({"timestamp": ts.values, "water_level": water_level})
