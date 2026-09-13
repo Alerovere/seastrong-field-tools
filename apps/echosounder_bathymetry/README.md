@@ -52,6 +52,24 @@ get a clear error rather than a run that silently finishes with no tide
 correction applied -- try raising the cutoff, double-check the coordinates
 aren't swapped, or use a tide-gauge CSV for that site instead.
 
+### Depth outlier filtering and the summary plot
+
+Site name is required -- it's used to name the output subfolder and as
+the title of the summary plot. In "4. Processing options", "Minimum/
+Maximum plausible depth (m)" drops scan points outside that range before
+tide correction (max defaults to 20 m; 0 disables a bound). This is aimed
+at a common Deeper Pro artifact: a runaway depth reading -- tens of
+meters, in shallow water -- when the sensor loses bottom lock, most often
+as it's lifted out of the water at the end of a survey. Set the maximum
+comfortably above your site's real depth; how many points were removed
+shows up as both a warning and a "Depth outliers removed" metric after a
+run.
+
+The depth / tide / distribution plot shown after a run is also saved as
+`summary_plot.png` in the results folder and the downloaded zip, titled
+with the site name and with both time axes labeled "Date / time" (date
+and time, not just time-of-day).
+
 ### If a run finishes with warnings
 
 CSV export always runs first and never fails. If the UTM GeoJSON export
