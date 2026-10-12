@@ -160,9 +160,9 @@ Use this method where the forest is so dense that neither photogrammetry nor pho
 
 ```{figure} _static/mangrove_manual_measurements.svg
 :width: 100%
-:alt: Plan view of the three 5 m by 5 m plots with sample trees and a pneumatophore quadrat, and side view of a sample tree with measuring heights every 10 cm up to the top of the roots and every 25 cm up to 2 m
+:alt: Plan view of the three 5 m by 5 m plots with sample trees and a pneumatophore quadrat, and side view of a sample tree with measuring heights at 25, 50, 75, 100 and 150 cm
 
-Manual measurements. (A) Three 5 m × 5 m plots along the tape (front, centre, back): count all trees, measure 3–5 sample trees in detail, and count pneumatophores in one quadrat. (B) On each sample tree, prop roots and trunk are counted and measured at fixed heights along a measuring pole.
+Manual measurements. (A) Three 5 m × 5 m plots along the tape (front, centre, back): count all trees, measure 3–5 sample trees in detail, and count pneumatophores in one quadrat. (B) On each sample tree, prop roots and trunk are counted and measured at 25, 50, 75, 100 and 150 cm along a measuring pole.
 ```
 
 ### Where to measure
@@ -181,7 +181,7 @@ Manual measurements. (A) Three 5 m × 5 m plots along the tape (front, centre, b
 Choose **3–5 sample trees** per plot that cover the range of sizes present. For each tree:
 
 1. Place a **measuring pole** (marked every 10 cm) vertically next to the trunk.
-2. Measuring heights: **every 10 cm** from 10 cm up to the top of the root system, then **every 25 cm** up to **2 m**, or up to the highest water level expected in the model scenarios if this is higher.
+2. Measuring heights: **every 25 cm up to 1 m** (25, 50, 75 and 100 cm), then at **150 cm**. This gives five heights, up to 1.5 m above the ground.
 3. At each height:
    - **count** the prop roots of this tree that cross that height;
    - **measure** their diameters with a caliper (all of them, or up to 10 if there are more);
@@ -196,15 +196,15 @@ For each plot and height z:
 
 a(z) = tree density × mean (sum of diameters per tree at z) + pneumatophore density × pneumatophore diameter (only below the pneumatophore height)
 
-with the density in trees (or pneumatophores) per m² and diameters in m, so that a(z) is in m²/m³ (m⁻¹). Example for one plot with 20 trees in 25 m² (0.8 trees/m²) and 60 pneumatophores/m², about 25 cm high and 1.2 cm wide (illustrative numbers):
+with the density in trees (or pneumatophores) per m² and diameters in m, so that a(z) is in m²/m³ (m⁻¹). Example for one plot with 20 trees in 25 m² (0.8 trees/m²) and 60 pneumatophores/m², about 30 cm high and 1.2 cm wide (illustrative numbers):
 
 | Height | Per tree: roots × diameter (+ trunk) | Sum of diameters per tree | Trees: 0.8 × sum | Pneumatophores: 60 × 0.012 | a(z) |
 | --- | --- | --- | --- | --- | --- |
-| 10 cm | 12 × 2.5 cm | 0.30 m | 0.24 | 0.72 | 0.96 m⁻¹ |
-| 30 cm | 10 × 3.0 cm | 0.30 m | 0.24 | – | 0.24 m⁻¹ |
-| 60 cm | 6 × 3.5 cm | 0.21 m | 0.17 | – | 0.17 m⁻¹ |
+| 25 cm | 12 × 2.5 cm | 0.30 m | 0.24 | 0.72 | 0.96 m⁻¹ |
+| 50 cm | 9 × 3.0 cm | 0.27 m | 0.22 | – | 0.22 m⁻¹ |
+| 75 cm | 2 × 3.5 cm + trunk 12 cm | 0.19 m | 0.15 | – | 0.15 m⁻¹ |
 | 100 cm | trunk 12 cm | 0.12 m | 0.10 | – | 0.10 m⁻¹ |
-| 200 cm | trunk 10 cm | 0.10 m | 0.08 | – | 0.08 m⁻¹ |
+| 150 cm | trunk 11 cm | 0.11 m | 0.09 | – | 0.09 m⁻¹ |
 
 The profiles of the front, centre and back plots are then grouped into the vertical layers used by the model.
 
@@ -251,7 +251,7 @@ Print this section so that nothing is forgotten.
 | ☐ | **Data:** tree count and species in each plot; DBH of each tree (and measurement height if not 1.3 m) |
 | ☐ | **Data:** pneumatophore count in one quadrat per plot (and quadrat size); height and diameter (base, mid-height) of up to 20 |
 | ☐ | 3–5 sample trees per plot, covering the range of sizes |
-| ☐ | **Data per sample tree, at every 10 cm up to the top of the roots and every 25 cm up to 2 m:** number of roots crossing, their diameters, trunk diameter |
+| ☐ | **Data per sample tree, at 25, 50, 75, 100 and 150 cm:** number of roots crossing, their diameters, trunk diameter |
 | ☐ | **Data per sample tree:** Hroot and tree height |
 | ☐ | Photos of each plot and sample tree, with scale |
 
