@@ -38,3 +38,5 @@ myst_enable_extensions = [
     "colon_fence",
     "deflist",
 ]
+# Generate anchors for headings (for links like page.md#section)
+myst_heading_anchors = 3

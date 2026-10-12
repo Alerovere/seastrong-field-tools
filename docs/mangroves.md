@@ -15,30 +15,32 @@ Mangrove forests range from open stands with pneumatophores to dense stands of p
 - The transect is **cross-shore**, between the two pressure sensors of the wave-attenuation deployment: **sensor 1 at the front** (seaward edge of the forest) and **sensor 2 at the back**. See the [wave attenuation](wave_attenuation.md) page for the sensor deployment.
 - A **30 m tape** is laid along the transect, from the 0 m mark (front) to the 30 m mark (back). The 0 m mark is always at sensor 1, at the forest edge.
 - Record on the field sheet: site, transect ID, date, operators, sensor IDs and their position along the tape, approximate GPS position of the 0 m end, and the compass bearing from 0 m to 30 m.
-- Work at **low tide**, when the forest floor is exposed.
+- Note the tape positions where the vegetation type or density visibly changes (e.g. "pneumatophores only from 0 to 6 m, dense prop roots from 6 to 30 m"), and briefly describe the vegetation in the 5–10 m beyond the 30 m mark.
+- Work at **low tide**, when the forest floor is exposed, and in the same field campaign as the sensor deployments.
 
 ---
 
 ## Topography
 
-Topography is measured for **every** transect, whatever method is used for the structure. The profile runs from the **low-water mark** to the **30 m mark** of the tape.
+Topography is measured for **every** transect, whatever method is used for the structure. The profile runs from the **low-water mark** to **5–10 m beyond the 30 m mark** of the tape, so that the landward boundary of the model is not at sensor 2.
 
 ```{figure} _static/mangrove_topography_transect.svg
 :width: 100%
 :alt: Schematic of the topographic transect: side view with stations, one segment measured on the ground with a clinometer on a plastic board, plan view with bearing, and the resulting CSV
 
-How to measure the topographic profile. (A) Stations along the tape from the low-water mark to the 30 m mark, with the GNSS fix at the start. (B) One segment: inclination measured on the ground with a clinometer placed on a plastic board, and slope distance read on the tape. (C) The profile is a straight line with one compass bearing. (D) One CSV row per station, in the format read by the processing notebook.
+How to measure the topographic profile. (A) Stations along the tape from the low-water mark to 5–10 m beyond the 30 m mark, with the GNSS fix at the start. (B) One segment: inclination measured on the ground with a clinometer placed on a plastic board, and slope distance read on the tape. (C) The profile is a straight line with one compass bearing. (D) One CSV row per station, in the format read by the processing notebook.
 ```
 
 - Identify the **low-water mark** on the ground (the water's edge at low tide, or the visible low-water line) and record the time.
 - Measure the profile with tape distance and inclination readings, with a GNSS fix at the starting point: RTK GNSS if available (optionally also at other points as ties), otherwise a simple handheld GNSS.
+- **At least once per site**, tie the profile to an absolute vertical datum with an RTK GNSS fix or a local benchmark. Without it, the profile cannot be linked to the tide used at the model boundary.
 - The readings are processed with the notebook `Mangroves_topography/mangrove_transect_topography.ipynb`, which reconstructs the X/Y/Z profile and exports a CSV, a plot and a GeoJSON file.
 
 ### How to measure the profile
 
-1. **Start point:** the low-water mark. Take a GNSS fix there: RTK GNSS (latitude, longitude and elevation) if available, otherwise a handheld GNSS (latitude and longitude; the elevation is then only approximate and the profile is relative).
+1. **Start point:** the low-water mark. Take a GNSS fix there: RTK GNSS (latitude, longitude and elevation) if available, otherwise a handheld GNSS (latitude and longitude; the elevation is then only approximate and the profile is relative until it is tied to the datum).
 2. **Bearing:** take the compass bearing of the profile, pointing landward. The profile is straight and follows the transect.
-3. **Stations:** run the tape from the start point landward to the 30 m mark of the transect tape. Place a station at every change in slope and at most 2 m apart, and always at the transect 0 m mark, sensor 1, sensor 2 and the 30 m mark.
+3. **Stations:** run the tape from the start point landward to 5–10 m beyond the 30 m mark of the transect tape. Place a station at every change in slope and at most 2 m apart, and always at the transect 0 m mark, sensor 1, sensor 2 and the 30 m mark.
 4. **Distance:** at each station, read the cumulative distance along the taut, straight tape from the start point (slope distance).
 5. **Inclination:** for each segment between two consecutive stations, lay a rigid plastic board (e.g. a small plastic whiteboard) flat on the ground along the tape, put the clinometer (or phone app) on it, aligned with the tape, and read the slope. The board keeps the clinometer out of mud and water and smooths small bumps. Sign: **+ = uphill landward**, **− = downhill landward**.
 6. **Optional ties:** if RTK GNSS is available, also take fixes at other stations (e.g. at the sensors and the 30 m mark); the notebook uses them to correct the profile.
@@ -108,7 +110,7 @@ Same as for the [underwater survey](underwater_photogrammetry.md) (Timelapse, 0.
 6. Walk slowly (about 0.3 m/s) and avoid stepping on pneumatophores or targets.
 7. Before leaving, check that both cameras recorded the whole survey and that photos are sharp.
 
-Processing in Agisoft Metashape follows the underwater workflow: detect targets, define scale bars, then build dense cloud and mesh. Pneumatophore and root density, height and frontal area with height are extracted from the model.
+Processing in Agisoft Metashape follows the underwater workflow: detect targets, define scale bars, then build the dense point cloud. Structure is extracted from **horizontal slices** of the point cloud (about 5 cm thick) at the same heights as method C (25, 50, 75, 100 and 150 cm): in each slice, the cross-sections of roots, pneumatophores and trunks are detected and a circle is fitted to each, giving their number and diameter. This is done in the same front, centre and back plots, or along the whole transect in 5 m bins, so that the result is directly comparable with method C.
 
 ---
 
@@ -129,6 +131,7 @@ Following Mori et al. (2022, their Figure 1):
 | Parameter | How to measure |
 | --- | --- |
 | Tree height **H** | Ground to top of canopy (tape or pole; clinometer for tall trees) |
+| Crown-base height | Ground to the lowest major branch |
 | Diameter at breast height **DBH** | Trunk diameter at 1.30 m above the ground (caliper or diameter tape) |
 | Trunk diameter **D1** | Trunk diameter just above the top of the root system |
 | Root system height **Hroot** | Ground to the highest point where prop roots leave the trunk |
@@ -150,7 +153,9 @@ Example set-up for root-system photos (illustrative). (A) The board stands behin
 3. Take photos in **two directions**: along the main axis of the root system and perpendicular to it. Where possible, make one of them the **cross-shore** direction (direction of wave approach).
 4. Note tree ID and direction for each photo.
 
-In processing, each photo is binarised, the root system is extracted, and its pixels are counted and converted to area using the scale, giving the projected area and its distribution with height, A(z).
+In processing, each photo is binarised, the root system is extracted, and its pixels are counted and converted to area using the scale, giving the projected area and its distribution with height, A(z), which is then aggregated into the model layers (see [Notes for modelling](#notes-for-modelling)).
+
+Use only the measurements taken on site: the empirical relations of Mori et al. (2022) were fitted to *Rhizophora stylosa* in Japan and Kiribati and should not be used to fill gaps for other species or sites.
 
 ---
 
@@ -186,7 +191,7 @@ Choose **3–5 sample trees** per plot that cover the range of sizes present. Fo
    - **count** the prop roots of this tree that cross that height;
    - **measure** their diameters with a caliper (all of them, or up to 10 if there are more);
    - **measure** the trunk diameter (where the trunk is present at that height).
-4. Record the height of the root system (**Hroot**) and the tree height.
+4. Record the height of the root system (**Hroot**), the **crown-base height** (lowest major branch) and the tree height.
 
 A horizontal stick held at each height against the pole makes it easy to see which roots cross it. If the roots of neighbouring trees are too intertwined to tell which tree they belong to, use the **quadrat frame instead**: raise a 1 m × 1 m frame to each height and count and measure all roots and stems passing through it; this gives the number per m² directly.
 
@@ -206,7 +211,54 @@ with the density in trees (or pneumatophores) per m² and diameters in m, so tha
 | 100 cm | trunk 12 cm | 0.12 m | 0.10 | – | 0.10 m⁻¹ |
 | 150 cm | trunk 11 cm | 0.11 m | 0.09 | – | 0.09 m⁻¹ |
 
-The profiles of the front, centre and back plots are then grouped into the vertical layers used by the model.
+Each height represents the layer just below it (25 cm → 0–25 cm, 50 cm → 25–50 cm, and so on up to 150 cm → 100–150 cm); see [Notes for modelling](#notes-for-modelling).
+
+---
+
+## Notes for modelling
+
+These notes make sure the field data can be used consistently in the XBeach models.
+
+### Same vertical layers for all methods
+
+All structure data are expressed in the same five layers above the ground:
+
+| Layer | Measured at (method C) |
+| --- | --- |
+| 0–25 cm | 25 cm, plus pneumatophores |
+| 25–50 cm | 50 cm |
+| 50–75 cm | 75 cm |
+| 75–100 cm | 100 cm |
+| 100–150 cm | 150 cm |
+
+Each measuring height represents the layer just below it. Method A (point-cloud slices) and method B (photo bands) are aggregated into the same layers. Pneumatophores are added to the layers they reach.
+
+### From a(z) to XBeach vegetation input
+
+XBeach describes vegetation in vertical sections, each with a stem density N (per m² of ground) and a stem diameter bv; dissipation scales with Cd × bv × N. For each layer, use the mean measured diameter as bv and set N = a(z) / bv, so that N × bv reproduces the measured frontal area. Use the same convention for all transects, so that calibrated drag coefficients can be compared and pooled.
+
+Check whether the XBeach version used allows more than one vegetation species in a grid cell. If not, merge trees and pneumatophores into one equivalent species, layer by layer.
+
+### Methods are not interchangeable
+
+The three methods do not measure exactly the same quantity: summing diameters (method C) counts roots hidden behind others, a photo silhouette (method B) does not, and photogrammetry (method A) misses what the cameras cannot see. To avoid mistaking a difference in method for a difference in roughness:
+
+- on **1–2 transects per region**, apply two methods on the same plots, to derive a conversion between them;
+- always record which method produced each profile.
+
+### Above 1.5 m
+
+Structure is measured up to 1.5 m. For storm scenarios with deeper water, the upper layers are built from the crown-base height and the trunk diameter, assuming a constant trunk diameter up to the crown base.
+
+### Vertical datum and model domain
+
+- The bed, the sensor water levels and the boundary tide must be on the same vertical datum. The sensors tie the profile to the measured water levels (their stations are in the profile and their height above the bed is logged); the RTK fix or benchmark tie (at least once per site) links it to the tide used at the model boundary.
+- The profile extends 5–10 m beyond the 30 m mark, so that the landward model boundary is not at sensor 2.
+- Vegetation zones in the 1D model follow the vegetation boundaries noted along the tape, not only the plot positions.
+
+### Timing
+
+Do the structure and topography surveys in the same field campaign as the sensor deployments, so that the vegetation and the bed do not change in between.
 
 ---
 
@@ -223,8 +275,10 @@ Print this section so that nothing is forgotten.
 | ☐ | **Data:** approximate GPS position of the 0 m end and compass bearing from 0 m to 30 m |
 | ☐ | **Data:** method used (A, B or C), and between which tape marks if more than one |
 | ☐ | **Data:** dominant species and general description of the forest (open/dense, pneumatophores/prop roots) |
+| ☐ | **Data:** tape positions where the vegetation type or density changes; vegetation beyond the 30 m mark |
 | ☐ | Overview photos of the transect from both ends |
-| ☐ | Topography from the low-water mark to the 30 m mark, with a GNSS fix at the start (RTK if available, otherwise handheld) |
+| ☐ | Topography from the low-water mark to 5–10 m beyond the 30 m mark, with a GNSS fix at the start (RTK if available, otherwise handheld) |
+| ☐ | Vertical datum tie (RTK fix or benchmark), at least once per site |
 
 ### Method A: photogrammetry
 
@@ -240,7 +294,7 @@ Print this section so that nothing is forgotten.
 | ☐ | Item |
 |---|------|
 | ☐ | Plots at front, centre and back; **data:** tree count per 5 m × 5 m plot (density) |
-| ☐ | **Data per sample tree:** H, DBH, D1, Hroot, W in six directions, N, root diameter at 20 cm |
+| ☐ | **Data per sample tree:** H, crown-base height, DBH, D1, Hroot, W in six directions, N, root diameter at 20 cm |
 | ☐ | Root system photos against the board in two directions, with scale; **data:** tree ID and direction per photo |
 
 ### Method C: manual
@@ -252,7 +306,7 @@ Print this section so that nothing is forgotten.
 | ☐ | **Data:** pneumatophore count in one quadrat per plot (and quadrat size); height and diameter (base, mid-height) of up to 20 |
 | ☐ | 3–5 sample trees per plot, covering the range of sizes |
 | ☐ | **Data per sample tree, at 25, 50, 75, 100 and 150 cm:** number of roots crossing, their diameters, trunk diameter |
-| ☐ | **Data per sample tree:** Hroot and tree height |
+| ☐ | **Data per sample tree:** Hroot, crown-base height and tree height |
 | ☐ | Photos of each plot and sample tree, with scale |
 
 ---
