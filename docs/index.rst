@@ -10,4 +10,5 @@ SEASTRONG Field Processing Tools
    photo_geotagging
    underwater_photogrammetry
    mangroves
+   seagrass
    wave_attenuation
