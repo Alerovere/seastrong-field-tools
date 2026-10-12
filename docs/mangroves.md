@@ -25,9 +25,9 @@ Topography is measured for **every** transect, whatever method is used for the s
 
 ```{figure} _static/mangrove_topography_transect.svg
 :width: 100%
-:alt: Schematic of the topographic transect: side view with stations, one segment measured with two poles and a clinometer, plan view with bearing, and the resulting CSV
+:alt: Schematic of the topographic transect: side view with stations, one segment measured on the ground with a clinometer on a plastic board, plan view with bearing, and the resulting CSV
 
-How to measure the topographic profile. (A) Stations along the tape from the low-water mark to the 30 m mark, with the GNSS fix at the start. (B) One segment: inclination measured with a clinometer between two poles of equal height, and slope distance read on the tape. (C) The profile is a straight line with one compass bearing. (D) One CSV row per station, in the format read by the processing notebook.
+How to measure the topographic profile. (A) Stations along the tape from the low-water mark to the 30 m mark, with the GNSS fix at the start. (B) One segment: inclination measured on the ground with a clinometer placed on a plastic board, and slope distance read on the tape. (C) The profile is a straight line with one compass bearing. (D) One CSV row per station, in the format read by the processing notebook.
 ```
 
 - Identify the **low-water mark** on the ground (the water's edge at low tide, or the visible low-water line) and record the time.
@@ -40,7 +40,7 @@ How to measure the topographic profile. (A) Stations along the tape from the low
 2. **Bearing:** take the compass bearing of the profile, pointing landward. The profile is straight and follows the transect.
 3. **Stations:** run the tape from the start point landward to the 30 m mark of the transect tape. Place a station at every change in slope and at most 2 m apart, and always at the transect 0 m mark, sensor 1, sensor 2 and the 30 m mark.
 4. **Distance:** at each station, read the cumulative distance along the taut, straight tape from the start point (slope distance).
-5. **Inclination:** for each segment between two consecutive stations, measure the slope with a clinometer (or phone app), sighting between two poles of equal height held vertically on the two stations. Sign: **+ = uphill landward**, **− = downhill landward**.
+5. **Inclination:** for each segment between two consecutive stations, lay a rigid plastic board (e.g. a small plastic whiteboard) flat on the ground along the tape, put the clinometer (or phone app) on it, aligned with the tape, and read the slope. The board keeps the clinometer out of mud and water and smooths small bumps. Sign: **+ = uphill landward**, **− = downhill landward**.
 6. **Optional ties:** if RTK GNSS is available, also take fixes at other stations (e.g. at the sensors and the 30 m mark); the notebook uses them to correct the profile.
 7. **Labels:** name the key stations (low water, 0 m, sensor 1, sensor 2, 30 m).
 
@@ -138,7 +138,14 @@ Following Mori et al. (2022, their Figure 1):
 
 ### Photos of the root system
 
-1. Place a **plain board** (e.g. white, ~1 m × 2 m, with a scale marked along its edges) behind the root system so the roots stand out against it.
+```{figure} _static/mangrove_root_board.svg
+:width: 100%
+:alt: Example of root-system photos against a plain board: what the photo should look like, the set-up seen from above, and the processing to A(z)
+
+Example set-up for root-system photos (illustrative). (A) The board stands behind the root system, with a scale on its edges and a card with tree ID, plot and direction. (B) Two photos per tree, one cross-shore and one along-shore, each with the board behind the tree and the camera opposite. (C) Processing: the binarised photo is divided into 10 cm height bands and the root pixels in each band give A(z).
+```
+
+1. Place a **plain board** (e.g. white, ~1 m × 2 m, with a scale marked along its edges) behind the root system so the roots stand out against it. Include a card in the frame with tree ID, plot and photo direction.
 2. Photograph **perpendicular to the board**, camera level, far enough to include the whole root system and the scale.
 3. Take photos in **two directions**: along the main axis of the root system and perpendicular to it. Where possible, make one of them the **cross-shore** direction (direction of wave approach).
 4. Note tree ID and direction for each photo.
