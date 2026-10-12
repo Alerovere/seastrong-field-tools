@@ -42,7 +42,7 @@ Keep the same height for the whole survey, and choose the camera spacing for tha
 - **2× action cameras** (e.g. GoPro HERO10 Black with GoPro Labs firmware) in waterproof housings, with red/magenta dive filters. Label them clearly as **A** and **B**, on both the camera and the housing.
 - **Camera rig:** any rigid bar, for example a plastic (PVC) tube, holding the two cameras pointing downward at a **fixed, known distance** (camera spacing; see the table below). Measure the distance between the two lens centres and record it.
 - **30 m transect tape**
-- **Scale-bar targets (at least 8):** rigid bars (e.g. ~50 cm long) with an **Agisoft coded target** printed at each end (see the photo below). The distance between the **centres** of the two targets is measured precisely once, at the lab, and listed with the target codes in a **bar list** that travels with the kit. Each target must have a unique code, and all bars must use the same coded-target type. Print targets from Metashape (*Tools → Markers → Print Markers…*) and laminate or seal them.
+- **Scale-bar targets (at least 6):** rigid bars (e.g. ~50 cm long) with an **Agisoft coded target** printed at each end (see the photo below). The distance between the **centres** of the two targets is measured precisely once, at the lab, and listed with the target codes in a **bar list** that travels with the kit. Each target must have a unique code, and all bars must use the same coded-target type. Print targets from Metashape (*Tools → Markers → Print Markers…*) and laminate or seal them.
 - **Depth gauge or dive computer** (preferably with 0.1 m resolution or better; always use the same instrument for all targets of a transect)
 - **Phone or handheld GPS** for the location of the transect, and a **compass** for its bearing
 - **Underwater slate** and pencil, prepared with the field sheet (see the checklist below)
@@ -132,7 +132,7 @@ Data collection at a reef transect. (A) The 30 m tape is laid cross-shore betwee
 
 ### 2. Place the scale-bar targets
 
-1. Place **at least 8 scale bars** along the whole length of the tape, on **both sides**, within **~2 m of the tape** (so they are seen by the straight passes as well as the zigzag).
+1. Place **at least 6 scale bars** along the whole length of the tape, on **both sides**, within **~2 m of the tape** (so they are seen by the straight passes as well as the zigzag).
 2. Vary their **orientation**: some parallel to the tape, some across it, some diagonal.
 3. Place them at **different elevations**, for example some on top of coral colonies and others in sand patches or depressions. This constrains the vertical geometry of the model, not only its horizontal scale.
 4. Make sure the targets are flat, stable, fully visible and not shaded by overhanging structures. **Do not break, scrape or press on live coral** to place them; use sand, rubble or dead substrate where possible.
@@ -201,7 +201,7 @@ Print this section, or copy it onto the slate, so that nothing is forgotten. Eve
 |---|------|
 | ☐ | Both cameras charged, memory cards empty, settings checked against the table above (same settings on both) |
 | ☐ | Rig assembled for the planned swimming height; **data:** measured camera spacing (cm) |
-| ☐ | At least 8 scale bars, 30 m tape, depth gauge, GPS (phone), compass, slate and pencil, weights or pegs, colour reference tab (if used) |
+| ☐ | At least 6 scale bars, 30 m tape, depth gauge, GPS (phone), compass, slate and pencil, weights or pegs, colour reference tab (if used) |
 | ☐ | Conditions OK: visibility, waves and surge, tide, light |
 | ☐ | **Data:** site name, transect ID, date, names of operators, snorkel or scuba |
 | ☐ | **Data:** IDs of the two pressure sensors at the ends of the transect |
@@ -213,7 +213,7 @@ Print this section, or copy it onto the slate, so that nothing is forgotten. Eve
 | ☐ | Tape laid cross-shore between the two sensors, straight and secured at both ends |
 | ☐ | **Data:** which end of the tape (0 m) is seaward, and position of each sensor along the tape |
 | ☐ | **Data:** approximate GPS position of the 0 m end and compass bearing from 0 m to 30 m |
-| ☐ | At least 8 scale bars on **both sides**, within ~2 m of the tape, varied orientation, **different elevations** |
+| ☐ | At least 6 scale bars on **both sides**, within ~2 m of the tape, varied orientation, **different elevations** |
 | ☐ | **Data:** for each bar, its target codes, position along the tape (m) and side (L/R, looking landward) |
 | ☐ | **Data:** three depth readings at the **centre of every target**, and the time |
 
