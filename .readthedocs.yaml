@@ -4,6 +4,8 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.11"
+  apt_packages:
+    - librsvg2-bin   # rsvg-convert, to include the SVG figures in the PDF
 
 sphinx:
   configuration: docs/conf.py
@@ -11,3 +13,7 @@ sphinx:
 python:
   install:
     - requirements: docs/requirements.txt
+
+# Also build a PDF of the whole documentation (download from the version menu)
+formats:
+  - pdf

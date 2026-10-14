@@ -81,17 +81,17 @@ Each corridor should get **2–3 deployments** during the field trip, so that di
 
 ---
 
-## Field record
+## Field form and post-site report
 
-For each sensor and each deployment, note:
+One form per **corridor and deployment** (all 7 sensors), with survey ID made of area + deployment date + corridor + `waves` (e.g. `BZ140327C1waves`, see [Field resources](field_resources.md#naming-rules)): {download}`Wave sensor field form, v1.0 (PDF) <_static/forms/wave_sensor_field_form_v1.0.pdf>`.
 
-- transect ID, sensor ID (serial number), position (sensor 1 at 0 m, sensor 2 at 30 m, or post-crest);
-- start and end time of the deployment (UTC);
-- **depth at the sensor** and the time it was measured, at deployment and at retrieval;
-- **height of the pressure port above the bottom**;
-- fixing method and photo number of the mounted sensor;
-- **water temperature** (and salinity where possible);
-- data file name: `<transectID>_<sensor>_<deployment>` with sensor `S1`, `S2` or `PC` (post-crest), e.g. `BZ140327C1reef_S1_D2`.
+- **Page 1, deployment:** for each sensor, the serial number, start time (UTC), depth at the sensor and the time it was measured, height of the pressure port above the bottom, fixing method, photo number of the mounted sensor, and water temperature (and salinity where possible).
+- **Page 2, retrieval:** for each sensor, the retrieval date and end time, depth and time, data file name, and whether the sensor was found in place.
+- **Page 3, post-site report:** data downloaded, barometric record, data link, quality checks and notes.
+
+Data files are named with the survey ID, the habitat and the position (`S1`, `S2` or `PC` for post-crest), e.g. `BZ140327C1waves_reef_S1`.
+
+Fill it in with **Adobe Acrobat Reader** (free, [download it here](https://get.adobe.com/reader/)), so that the survey ID is filled in automatically and the form is saved correctly.
 
 ---
 

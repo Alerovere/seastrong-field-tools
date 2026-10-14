@@ -36,7 +36,9 @@ It hosts field data processing tools developed to support SEASTRONG fieldwork. E
 
 ## Contents
 
-The documentation has three parts:
+**Offline copy:** [download the whole documentation as PDF](https://seastrong-field-tools.readthedocs.io/_/downloads/en/latest/pdf/) (also in the version menu at the bottom of the sidebar). The field forms are separate PDFs, see [Field resources](field_resources.md).
+
+The documentation has four parts:
 
 **Bathymetry and habitat mapping** (corridor scale)
 
@@ -91,4 +93,4 @@ SEASTRONG brings together 15 partner institutions across 10 countries:
 
 This project has received funding from the European Union's Horizon Europe research and innovation programme under grant agreement HORIZON-CL6-2025-01-BIODIV-07. Views and opinions expressed are those of the authors only and do not necessarily reflect those of the European Union or the European Research Executive Agency. Neither the European Union nor the granting authority can be held responsible for them.
 
-![EU Flag](_static/EU_flag.png)
+![EU Flag](_static/Eu_flag.png)

@@ -10,6 +10,7 @@ Scripts that generate the printable and fillable PDF field forms published in th
 | Seagrass structure and bathymetry | `seagrass_field_form.py` | v1.0 |
 | Depth and bottom photos | `depth_photos_field_form.py` | v1.1 |
 | Drone survey | `drone_field_form.py` | v1.0 |
+| Wave sensors | `wave_sensor_field_form.py` | v1.0 |
 
 ## Updating a form
 

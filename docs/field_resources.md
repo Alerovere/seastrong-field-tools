@@ -12,6 +12,7 @@ One fillable form per survey, with the field data sheets and the post-site repor
 | --- | --- |
 | Depth and bottom photos | {download}`Depth and bottom photos field form, v1.1 <_static/forms/depth_photos_field_form_v1.1.pdf>` |
 | Drone survey | {download}`Drone field form, v1.0 <_static/forms/drone_field_form_v1.0.pdf>` |
+| Wave sensors | {download}`Wave sensor field form, v1.0 <_static/forms/wave_sensor_field_form_v1.0.pdf>` |
 | Reef photogrammetry | {download}`Reef photogrammetry field form, v1.0 <_static/forms/reef_photogrammetry_field_form_v1.0.pdf>` |
 | Mangrove structure and topography | {download}`Mangrove field form, v1.0 <_static/forms/mangrove_field_form_v1.0.pdf>` |
 | Seagrass structure and bathymetry | {download}`Seagrass field form, v1.0 <_static/forms/seagrass_field_form_v1.0.pdf>` |
@@ -33,9 +34,9 @@ Every survey has an ID made of **area + date (DDMMYY) + corridor + survey type**
 | Area | `BZ` (Belize), `SC` (Seychelles), `FJ` (Fiji) |
 | Date | Day, month, year of the survey: `140327` = 14 March 2027 |
 | Corridor | `C1` to `C6` |
-| Survey type | Transects: `reef`, `seagrass`, `mangrove`. Corridor mapping: `bathy` (depth and bottom photos), `drone` |
+| Survey type | Transects: `reef`, `seagrass`, `mangrove`. Corridor mapping: `bathy` (depth and bottom photos), `drone`. Wave sensors: `waves` |
 
-Examples: `BZ140327C1reef`, `BZ150327C1seagrass`, `BZ160327C1mangrove`, `BZ140327C1bathy`, `BZ150327C1drone`. If two surveys of the same type are done in the same corridor on the same day, add a letter: `BZ140327C1bathyB`.
+Examples: `BZ140327C1reef`, `BZ150327C1seagrass`, `BZ160327C1mangrove`, `BZ140327C1bathy`, `BZ150327C1drone`, `BZ140327C1waves`. If two surveys of the same type are done in the same corridor on the same day, add a letter: `BZ140327C1bathyB`.
 
 ### Files and folders
 
