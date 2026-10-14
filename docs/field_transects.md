@@ -32,7 +32,7 @@ The sensor deployment is described on the [wave attenuation](wave_attenuation.md
 | ☐ | Bar list prepared: target codes and measured centre-to-centre distance of each scale bar |
 | ☐ | Slates prepared with the field sheet of each habitat |
 | ☐ | Equipment checked against the purchase list |
-| ☐ | Field forms printed (e.g. the {download}`reef photogrammetry field form <_static/reef_photogrammetry_field_form_v2.pdf>`) |
+| ☐ | Field forms printed (e.g. the {download}`reef photogrammetry field form <_static/forms/reef_photogrammetry_field_form_v1.0.pdf>`) |
 
 Times of depth readings are written from a watch or phone; note the time zone on the slate, so that depths can be corrected for the tide with the pressure-sensor record.
 
@@ -42,7 +42,7 @@ Times of depth readings are written from a watch or phone; note the time zone on
 
 Record on the slate or field sheet (the **header**, the same for all habitats):
 
-- study area, corridor, habitat, transect ID, date, operators;
+- study area, corridor, habitat, date, operators, and the **transect ID**: area + date (DDMMYY) + corridor + habitat, e.g. `BZ140327C1reef`, `BZ150327C1seagrass`, `BZ160327C1mangrove`;
 - sensor IDs and their **position along the tape**;
 - **approximate GPS position** of the 0 m end (phone or handheld GPS) and **compass bearing** from 0 m to 30 m;
 - tape positions where the habitat visibly changes (e.g. bare sand, patchy or continuous seagrass; open or dense mangrove; change of dominant species);
@@ -52,7 +52,7 @@ At the end, **photograph the slate** before wiping it, and copy it into the digi
 
 ### File names
 
-Use the same pattern for all files: `<area>_<corridor>_<habitat>_<YYYYMMDD>_<item>`, with area `BZ`, `SC` or `FJ`, corridor `C1`–`C6` and habitat `RF` (reef), `SG` (seagrass) or `MG` (mangrove). For example: `BZ_C3_SG_20270315_Q05_photo2.jpg`, `FJ_C1_RF_20270602_camA/`.
+Start every file and folder name with the transect ID, then the item: `<transectID>_<item>`, with area `BZ`, `SC` or `FJ`, corridor `C1`–`C6` and habitat `reef`, `seagrass` or `mangrove`. For example: `BZ150327C3seagrass_Q05_photo2.jpg`, `FJ020627C1reef_camA/`. Dates in forms are written as mm/dd/yyyy; in the transect ID the date is DDMMYY.
 
 ---
 

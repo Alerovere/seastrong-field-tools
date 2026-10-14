@@ -192,7 +192,12 @@ See [Safety and care of the habitat](field_transects.md#safety-and-care-of-the-h
 
 ## Field form and post-site report
 
-The checklist, the slate data sheets and the post-site report are in one printable form: {download}`Reef photogrammetry field form (PDF) <_static/reef_photogrammetry_field_form_v2.pdf>`. Print the data sheets on waterproof paper or copy them onto the slate, and fill in the post-site report the same day. The PDF is fillable: the slate data can be typed into it after the survey (save it with Adobe Acrobat Reader or Preview; some browser viewers do not save form fields).
+The checklist, the slate data sheets and the post-site report are in one form: {download}`Reef photogrammetry field form, v1.0 (PDF) <_static/forms/reef_photogrammetry_field_form_v1.0.pdf>`.
+
+- **In the field:** print pages 1–3 on waterproof paper, or copy them onto the slate.
+- **After the survey:** type the slate data and the post-site report (page 4) into the same PDF, the same day.
+- **Fill it in with Adobe Acrobat Reader** (free, [download it here](https://get.adobe.com/reader/)). In Acrobat Reader the **Transect ID** is filled in automatically from study area, date and corridor, and appears on every page, and the form fields are saved correctly. Other viewers (Mac Preview, browsers, phone apps) may not fill in the Transect ID or may not save the fields.
+- Save the filled form with the data, named `<transectID>_field_form.pdf`, and put the data download link in section B of the report.
 
 ---
 

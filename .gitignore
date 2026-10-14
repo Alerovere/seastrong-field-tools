@@ -18,3 +18,9 @@ venv/
 # Editors
 .vscode/
 .idea/
+
+# Claude app output previews (not part of the repo)
+Claude outputs/
+
+# Temporary file of the field-form generator
+field_forms/_raw_form.pdf
