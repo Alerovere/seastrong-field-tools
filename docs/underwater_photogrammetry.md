@@ -192,7 +192,7 @@ See [Safety and care of the habitat](field_transects.md#safety-and-care-of-the-h
 
 ## Field form and post-site report
 
-The checklist, the slate data sheets and the post-site report are in one printable form: {download}`Reef photogrammetry field form (PDF) <_static/reef_photogrammetry_field_form.pdf>`. Print the data sheets on waterproof paper or copy them onto the slate, and fill in the post-site report the same day.
+The checklist, the slate data sheets and the post-site report are in one printable form: {download}`Reef photogrammetry field form (PDF) <_static/reef_photogrammetry_field_form_v2.pdf>`. Print the data sheets on waterproof paper or copy them onto the slate, and fill in the post-site report the same day. The PDF is fillable: the slate data can be typed into it after the survey (save it with Adobe Acrobat Reader or Preview; some browser viewers do not save form fields).
 
 ---
 
