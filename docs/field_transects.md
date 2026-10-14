@@ -27,13 +27,14 @@ The sensor deployment is described on the [wave attenuation](wave_attenuation.md
 
 | ☐ | Item |
 |---|------|
-| ☐ | Clocks of all cameras, depth gauges, watches and pressure sensors set to the **same time (UTC)** |
+| ☐ | The two cameras of each rig set to the **same time** (from the GoPro app) |
 | ☐ | Cameras labelled A and B (camera and housing) |
 | ☐ | Bar list prepared: target codes and measured centre-to-centre distance of each scale bar |
 | ☐ | Slates prepared with the field sheet of each habitat |
 | ☐ | Equipment checked against the purchase list |
+| ☐ | Field forms printed (e.g. the {download}`reef photogrammetry field form <_static/reef_photogrammetry_field_form.pdf>`) |
 
-The common clock is needed so that depths can be corrected for the tide with the pressure-sensor record, and photos can be matched to the wave measurements.
+Times of depth readings are written from a watch or phone; note the time zone on the slate, so that depths can be corrected for the tide with the pressure-sensor record.
 
 ---
 

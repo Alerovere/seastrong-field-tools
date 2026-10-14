@@ -2,7 +2,7 @@
 
 ## Overview
 
-This page describes the field setup and procedure for Structure-from-Motion (SfM) photogrammetric surveys of shallow coral reefs using a pair of action cameras (e.g. GoPro) mounted on a simple rig. The layout, header, file names, safety and effort common to all habitats are on the [Field transects](field_transects.md) page. The survey covers the stretch of seabed between the two pressure sensors of a wave-attenuation transect, so that the 3D structure of the habitat can be linked to the wave-height decay measured between them. Photos are colour-corrected in **DaVinci Resolve** and processed in **Agisoft Metashape** to produce scaled 3D models, orthomosaics and structural complexity metrics.
+This page describes the field setup and procedure for Structure-from-Motion (SfM) photogrammetric surveys of shallow coral reefs using a pair of action cameras (e.g. GoPro) mounted on a simple rig. The layout, header, file names, safety and effort common to all habitats are on the [Field transects](field_transects.md) page. The survey covers the stretch of seabed between the two pressure sensors of a wave-attenuation transect, so that the 3D structure of the habitat can be linked to the wave-height decay measured between them. The photos are used to build scaled 3D models and orthomosaics of the reef.
 
 **Source code:** [github.com/Alerovere/seastrong-field-tools](https://github.com/Alerovere/seastrong-field-tools/tree/main/underwater_photogrammetry)
 
@@ -24,6 +24,15 @@ Survey only when:
 - the tide is not changing fast; around slack water is best, because the target depths are compared with each other;
 - the sun is not producing strong caustic patterns on the bottom. Overcast conditions, or early morning and late afternoon, give the most uniform light.
 
+**Do NOT survey when strong caustics are visible on the bottom** (bright, moving networks of light, as in the photo below). They change from one photo to the next and prevent a reliable 3D reconstruction. Wait for clouds or a lower sun.
+
+```{figure} _static/reef_caustics_example.jpg
+:width: 80%
+:alt: Bottom photo with strong caustic light patterns over sand and coral
+
+Strong caustics on the bottom: **conditions in which the survey must not be done**.
+```
+
 If conditions are marginal, do a short test pass and check the photos on the camera before surveying the whole transect.
 
 ### Snorkel or scuba
@@ -42,12 +51,12 @@ Keep the same height for the whole survey, and choose the camera spacing for tha
 - **2× action cameras** (e.g. GoPro HERO10 Black with GoPro Labs firmware) in waterproof housings, with red/magenta dive filters. Label them clearly as **A** and **B**, on both the camera and the housing.
 - **Camera rig:** any rigid bar, for example a plastic (PVC) tube, holding the two cameras pointing downward at a **fixed, known distance** (camera spacing; see the table below). Measure the distance between the two lens centres and record it.
 - **30 m transect tape**
-- **Scale-bar targets (at least 6):** rigid bars (e.g. ~50 cm long) with an **Agisoft coded target** printed at each end (see the photo below). The distance between the **centres** of the two targets is measured precisely once, at the lab, and listed with the target codes in a **bar list** that travels with the kit. Each target must have a unique code, and all bars must use the same coded-target type. Print targets from Metashape (*Tools → Markers → Print Markers…*) and laminate or seal them.
+- **Scale-bar targets (at least 6):** rigid bars (e.g. ~50 cm long) with an **Agisoft coded target** printed at each end (see the photo below). The distance between the **centres** of the two targets is measured precisely once, at the lab, and listed with the target codes in a **bar list** that travels with the kit. Each target must have a unique code, and all bars must use the same coded-target type. Print the targets and laminate or seal them.
 - **Depth gauge or dive computer** (preferably with 0.1 m resolution or better; always use the same instrument for all targets of a transect)
-- **Phone or handheld GPS** for the location of the transect, and a **compass** for its bearing
+- **Phone or handheld GPS** to take **one approximate point** at the surface above the 0 m end of the transect (a general location, not precise positioning), and a **compass** for the bearing of the tape
 - **Underwater slate** and pencil, prepared with the field sheet (see the checklist below)
-- **Watch** set to UTC, like the cameras and sensors (see [Before the trip](field_transects.md#before-the-trip))
-- **Colour reference tab** (optional), placed at the start of the transect for colour calibration in DaVinci Resolve
+- **Watch**, for the time of the depth readings
+- **Colour reference tab** (optional), placed at the start of the transect for colour calibration of the photos
 - Weights or pegs to keep the tape and targets in place in current or surge
 
 ```{figure} _static/photogrammetry_scalebar_targets.jpg
@@ -59,11 +68,11 @@ Two scale-bar targets placed on either side of the transect tape. Each bar carri
 
 ### Clocks
 
-All clocks are set to the same time (UTC) before the trip, as described on the [Field transects](field_transects.md#before-the-trip) page.
+Set the **two cameras to the same time** before the survey (this is done easily from the GoPro app). Exact synchronisation is done afterwards.
 
 ### Camera settings
 
-Both cameras are configured identically using the following manual settings applied via the on-camera touchscreen menu. **Do not use QR codes to configure timelapse settings on the HERO10 Black.** This is a known incompatibility between the HERO10 firmware (GoPro Labs v1.62.70) and the QR timelapse command encoding: QR scans return a red checkmark with no effect. Configure each camera manually:
+Both cameras are configured identically, using the on-camera menu:
 
 | Setting | Value |
 |---------|-------|
@@ -83,7 +92,7 @@ Both cameras are configured identically using the following manual settings appl
 
 **Notes on shutter and white balance:** a fixed, short shutter speed freezes caustic light patterns common in shallow water. If test shots are too dark, step up one notch before adjusting ISO. For white balance, test-shoot at your survey depth: if images appear too blue/green, increase toward 6000–6500K; if too red/magenta, decrease toward 5000K. Set the same value on both cameras.
 
-RAW is not needed here because exposure, white balance and shutter are all locked. JPEG keeps file sizes manageable and imports directly into Metashape.
+RAW is not needed here because exposure, white balance and shutter are all locked. JPEG keeps file sizes manageable.
 
 ### Camera spacing
 
@@ -181,86 +190,9 @@ See [Safety and care of the habitat](field_transects.md#safety-and-care-of-the-h
 
 ---
 
-## Field checklist
+## Field form and post-site report
 
-Print this section, or copy it onto the slate, so that nothing is forgotten. Every item marked **data** must be written down: without it the model cannot be scaled, referenced or linked to the wave measurements.
-
-### Before the trip
-
-See the [common checklist](field_transects.md#before-the-trip) (clocks in UTC, cameras labelled, bar list).
-
-### Before going in the water
-
-| ☐ | Item |
-|---|------|
-| ☐ | Both cameras charged, memory cards empty, settings checked against the table above (same settings on both) |
-| ☐ | Rig assembled for the planned swimming height; **data:** measured camera spacing (cm) |
-| ☐ | At least 6 scale bars, 30 m tape, depth gauge, GPS (phone), compass, slate and pencil, weights or pegs, colour reference tab (if used) |
-| ☐ | Conditions OK: visibility, waves and surge, tide, light |
-| ☐ | **Data:** [slate header](field_transects.md#on-every-transect); snorkel or scuba |
-| ☐ | **Data:** IDs of the two pressure sensors at the ends of the transect |
-
-### Layout (in the water)
-
-| ☐ | Item |
-|---|------|
-| ☐ | Tape laid cross-shore between the two sensors, straight and secured at both ends |
-| ☐ | **Data:** position of each sensor along the tape (0 m at sensor 1, seaward) |
-| ☐ | **Data:** approximate GPS position of the 0 m end and compass bearing from 0 m to 30 m |
-| ☐ | At least 6 scale bars on **both sides**, within ~2 m of the tape, varied orientation, **different elevations** |
-| ☐ | **Data:** for each bar, its target codes, position along the tape (m) and side (L/R, looking landward) |
-| ☐ | **Data:** three depth readings at the **centre of every target**, and the time |
-| ☐ | **Data:** depth + time every 2 m, at each sensor and 5–10 m beyond the 30 m mark |
-
-### Photo survey
-
-| ☐ | Item |
-|---|------|
-| ☐ | Both cameras started as close to simultaneously as possible; **data:** start time |
-| ☐ | Colour reference tab in the first photos (if used) |
-| ☐ | Pass 1: forward, camera A over the tape, ~1.5–2 m above the bottom, ~0.3 m/s |
-| ☐ | Pass 2: backward, camera A over the tape |
-| ☐ | Pass 3: zigzag, ~3 m each side, ~5 crossings each way |
-| ☐ | Both cameras stopped; **data:** end time |
-| ☐ | Photos checked on both cameras (complete, sharp, not fogged); passes repeated if needed |
-
-### After the dive
-
-| ☐ | Item |
-|---|------|
-| ☐ | All targets (checked against the bar list) and the tape recovered |
-| ☐ | Slate photographed before it is wiped |
-| ☐ | Photos downloaded into one folder per camera, e.g. `FJ_C1_RF_20270602_camA` and `..._camB` |
-| ☐ | Slate copied into the digital field sheet; slate photo and field sheet saved next to the photo folders |
-
-### Slate template
-
-**Header:** the [common header](field_transects.md#on-every-transect), plus snorkel/scuba · camera spacing · camera start/end time
-
-**Depth profile:** distance along tape (m) · depth (m) · time, every 2 m to 5–10 m beyond the 30 m mark
-
-**Target depths:**
-
-| Target code | Position along tape (m) | Side (L/R) | Depth 1 (m) | Depth 2 (m) | Depth 3 (m) | Time |
-|-------------|-------------------------|------------|-------------|-------------|-------------|------|
-| T01 | | | | | | |
-| T02 | | | | | | |
-| … | | | | | | |
-
----
-
-## Processing
-
-There is no automated processing tool for this dataset. Photos are processed using two external software packages:
-
-1. **DaVinci Resolve:** colour correction is applied first, using the colour reference tab (if used) as a calibration reference. This corrects for the colour cast introduced by the water and ensures consistent colour across both cameras before SfM reconstruction.
-
-2. **Agisoft Metashape:** colour-corrected images from both cameras are imported into a single chunk. Then:
-   - detect the coded targets automatically (*Tools → Markers → Detect Markers*, with the same target type used for printing);
-   - create a **scale bar** between the two targets of each bar and enter its centre-to-centre distance from the bar list;
-   - use the **depths** measured at each target as the vertical reference, after averaging the three readings and correcting them for the tide with the pressure-sensor water-level record at the time of each reading;
-   - run the standard alignment, dense cloud, mesh and orthomosaic workflow to produce the 3D model and structural complexity metrics;
-   - orient the model using the compass bearing of the tape if a map-aligned product is needed.
+The checklist, the slate data sheets and the post-site report are in one printable form: {download}`Reef photogrammetry field form (PDF) <_static/reef_photogrammetry_field_form.pdf>`. Print the data sheets on waterproof paper or copy them onto the slate, and fill in the post-site report the same day.
 
 ---
 
