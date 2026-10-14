@@ -126,7 +126,7 @@ Allow roughly **1–1.25 hours in the water per transect**: about 20 minutes for
 
 ## Field procedure
 
-```{figure} _static/photogrammetry_field_layout.svg
+```{figure} _static/reef_photogrammetry_layout_v2.svg
 :width: 100%
 :alt: Schematic of the transect layout and the three camera passes
 
