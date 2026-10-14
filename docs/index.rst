@@ -1,6 +1,11 @@
 SEASTRONG Field Processing Tools
 =================================
 
+.. only:: html
+
+   **Offline copy:** `Download the whole documentation as PDF <https://seastrong-field-tools.readthedocs.io/_/downloads/en/latest/pdf/>`_.
+   The field forms are separate PDFs, see :doc:`field_resources`.
+
 .. toctree::
    :maxdepth: 2
    :caption: About
