@@ -47,7 +47,7 @@ The documentation has three parts:
 | [Drone survey](drone_survey.md) | Field method: drone imagery of reef flats, seagrass and mangroves | T1.2 |
 | [Depth and bottom photos: processing](depth_photos_processing.md) | Processing: tide correction of the depth points (calibration and validation sets) and geotagging of the bottom photos | T1.2, T1.3, T4.5 |
 
-**Habitat structure and wave attenuation** (transect scale)
+**Habitat structure** (transect scale)
 
 | Page | Description | Relevant WP tasks |
 |------|-------------|-------------------|
@@ -55,10 +55,15 @@ The documentation has three parts:
 | [Underwater photogrammetry](underwater_photogrammetry.md) | Reef structure with a two-camera rig | T1.2, T1.3, T2.2, T5.1 |
 | [Mangroves](mangroves.md) | Mangrove structure and topographic profile | T1.2, T4.5 |
 | [Seagrass](seagrass.md) | Seagrass structure from quadrats, and depth profile | T1.2, T4.5 |
+
+**Wave attenuation** (transect scale)
+
+| Page | Description | Relevant WP tasks |
+|------|-------------|-------------------|
 | [Wave attenuation](wave_attenuation.md) | Pressure sensors: where to place them, how to fix them, download schedule | T1.2, T4.5 |
 | [Pressure sensor calibration](pressure_sensor_calibration.md) | Calibration, barometric reference and checks of the pressure sensors | T1.2, T4.5 |
 
-**Field resources:** [field forms, naming rules and equipment list](field_resources.md).
+**Field resources:** [field forms and naming rules](field_resources.md).
 
 ## Consortium
 

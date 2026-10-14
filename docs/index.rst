@@ -18,12 +18,17 @@ SEASTRONG Field Processing Tools
 
 .. toctree::
    :maxdepth: 2
-   :caption: Habitat structure and wave attenuation
+   :caption: Habitat structure
 
    field_transects
    underwater_photogrammetry
    mangroves
    seagrass
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Wave attenuation
+
    wave_attenuation
    pressure_sensor_calibration
 
