@@ -1,4 +1,4 @@
-# Echosounder Bathymetry
+# Echosounder Bathymetry (Processing)
 
 ## Overview
 
@@ -10,24 +10,13 @@ This tool processes depth data collected with a **Deeper Pro** echosounder and a
 
 ---
 
-## Field gear and procedures
+## Field data
 
-In SEASTRONG, bathymetry and bottom photography are collected simultaneously as part of the same field operation, using a simple floating platform that can be deployed by a single operator. The video tutorial above covers the full setup and field procedure for both datasets together. This page focuses on the bathymetry component only — for the photo geotagging workflow see the [Photo Geotagging](photo_geotagging.md) page.
+The depth points are collected with the [kickboard survey](kickboard_survey.md), together with the bottom photos. This page covers the processing only.
 
-The approach is intentionally low-cost and easy to deploy. It is not designed for high-resolution surveys, but to allow field teams to quickly collect georeferenced depth points over coral reefs and seagrass beds with minimal equipment and logistics.
+### Calibration and validation
 
-### Equipment used for bathymetry
-
-- **Deeper Pro echosounder** — a consumer-grade fish finder that records depth and GPS simultaneously, connecting via Wi-Fi to a smartphone
-- **Smartphone** running the Deeper app
-- **Swimming kickboard** — used as a floating platform; the Deeper Pro is mounted on the underside facing the water, and the smartphone sits on top
-- **Dive mask and fins** — the operator swims while pushing the board along the transect
-
-### Why this approach
-
-The bathymetric points collected with this setup are used to **ground-truth and validate satellite-derived bathymetry** produced elsewhere in SEASTRONG. Satellite-derived bathymetry (SDB) relies on optical remote sensing and requires in-situ depth measurements for calibration and accuracy assessment. The Deeper Pro provides a rapid and affordable way to collect these ground-truth points across the shallow coral reef and seagrass habitats that are the focus of SEASTRONG corridor mapping.
-
-This is why, at the end of the processing notebook, the corrected depth dataset is **split into two subsets**: one for calibration and one for independent validation of the satellite-derived bathymetry model. Keeping these two subsets separate is essential for an unbiased accuracy assessment.
+The depth points are used to **calibrate and validate satellite-derived bathymetry** (see [Corridor mapping](corridor_mapping.md)). This is why, at the end of the processing, the corrected depth dataset is **split into two subsets**: one for calibration and one for independent validation of the satellite-derived bathymetry model. Keeping these two subsets separate is essential for an unbiased accuracy assessment.
 
 ---
 

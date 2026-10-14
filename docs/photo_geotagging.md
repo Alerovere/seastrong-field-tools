@@ -1,4 +1,4 @@
-# Photo Geotagging
+# Photo Geotagging (Processing)
 
 ## Overview
 
@@ -10,21 +10,13 @@ This tool geotags time-lapse photos taken during fieldwork by matching each imag
 
 ---
 
-## Field gear and procedures
+## Field data
 
-Bottom photography and bathymetry are collected simultaneously as part of the same field operation. The video tutorial above covers the full setup and field procedure for both datasets together. This page focuses on the photo geotagging component only — for the bathymetry processing workflow see the [Echosounder Bathymetry](echosounder_bathymetry.md) page.
+The bottom photos are collected with the [kickboard survey](kickboard_survey.md), together with the depth points; the GPS track of the echosounder (GPX) is used to geotag them. This page covers the processing only.
 
-### Equipment used for bottom photography
+### Clock synchronisation
 
-- **GoPro camera** (or similar action camera) in a waterproof housing — set to timelapse mode and mounted on the underside of the kickboard, facing downward to photograph the bottom
-- **Deeper Pro echosounder** — the GPS track recorded by the Deeper app during the bathymetry survey is also used as the GNSS track for photo geotagging, exported as a GPX file
-- **Swimming kickboard** — the same floating platform used for the echosounder survey
-
-### Why this approach
-
-The geotagged bottom photos provide a ground-truth layer for habitat mapping within SEASTRONG cross-shelf corridors. Having accurate GPS coordinates embedded in each image allows photos to be directly imported into GIS software and spatially linked to other datasets collected along the same transect — including the bathymetry points, drone imagery, and ecosystem condition assessments.
-
-A key challenge in this workflow is that the GoPro and the GNSS device have independent clocks that are rarely perfectly synchronised. To correct for this, the notebook uses a **reference photo** — taken at the start of the survey while the GNSS screen is visible — to calculate the time offset between the two devices and apply it to the entire photo sequence.
+The camera and the phone have independent clocks that are rarely synchronised. The notebook uses the **reference photo** taken at the start of the survey, showing the phone GPS time, to calculate the time offset between the two devices and apply it to the whole photo sequence.
 
 ---
 

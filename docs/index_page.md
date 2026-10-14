@@ -34,17 +34,31 @@ This repository is maintained by the **Ca' Foscari University of Venice (UNIVE)*
 
 It hosts field data processing tools developed to support SEASTRONG fieldwork. Each tool is self-contained and designed to be accessible to users with varying levels of coding experience, running primarily in Google Colab.
 
-## Available tools
+## Contents
 
-| Tool | Description | Relevant WP tasks |
+The documentation has three parts:
+
+**Bathymetry and habitat mapping** (corridor scale)
+
+| Page | Description | Relevant WP tasks |
 |------|-------------|-------------------|
-| [Echosounder bathymetry](echosounder_bathymetry.md) | Process depth data from a Deeper Pro echosounder and apply tide corrections | T1.2, T4.5 |
-| [Photo geotagging](photo_geotagging.md) | Geotag time-lapse bottom photos using a GPX track | T1.2, T1.3 |
-| [Field transects](field_transects.md) | Common layout, header, file names, effort and safety for the reef, seagrass and mangrove transects | T1.2, T4.5 |
-| [Underwater photogrammetry](underwater_photogrammetry.md) | Two-camera GoPro rig for SfM surveys on coral reefs | T1.2, T1.3, T2.2, T5.1 |
-| [Mangroves](mangroves.md) | Mangrove structure (photogrammetry, tree-by-tree or manual) and topographic profile | T1.2, T4.5 |
-| [Seagrass](seagrass.md) | Seagrass structure from quadrats and depth profile | T1.2, T4.5 |
+| [Corridor mapping](corridor_mapping.md) | Overview: which field data calibrate and validate the satellite bathymetry and habitat maps, and how to plan a corridor | T1.2 |
+| [Kickboard survey](kickboard_survey.md) | Field method: depth points and bottom photos with an echosounder and a camera on a kickboard | T1.2, T1.3, T4.5 |
+| [Drone survey](drone_survey.md) | Field method: drone imagery of reef flats, seagrass and mangroves | T1.2 |
+| [Echosounder bathymetry](echosounder_bathymetry.md) | Processing: tide correction of the depth points, calibration and validation sets | T1.2, T4.5 |
+| [Photo geotagging](photo_geotagging.md) | Processing: geotagging of the bottom photos with the GPS track | T1.2, T1.3 |
+
+**Habitat structure and wave attenuation** (transect scale)
+
+| Page | Description | Relevant WP tasks |
+|------|-------------|-------------------|
+| [Field transects](field_transects.md) | Common layout, header, effort and safety for the reef, seagrass and mangrove transects | T1.2, T4.5 |
+| [Underwater photogrammetry](underwater_photogrammetry.md) | Reef structure with a two-camera rig | T1.2, T1.3, T2.2, T5.1 |
+| [Mangroves](mangroves.md) | Mangrove structure and topographic profile | T1.2, T4.5 |
+| [Seagrass](seagrass.md) | Seagrass structure from quadrats, and depth profile | T1.2, T4.5 |
 | [Wave attenuation](wave_attenuation.md) | Pressure-sensor deployment, calibration and field validation | T1.2, T4.5 |
+
+**Field resources:** [field forms, naming rules and equipment list](field_resources.md).
 
 ## Consortium
 

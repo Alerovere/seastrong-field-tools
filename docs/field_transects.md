@@ -31,8 +31,8 @@ The sensor deployment is described on the [wave attenuation](wave_attenuation.md
 | ☐ | Cameras labelled A and B (camera and housing) |
 | ☐ | Bar list prepared: target codes and measured centre-to-centre distance of each scale bar |
 | ☐ | Slates prepared with the field sheet of each habitat |
-| ☐ | Equipment checked against the purchase list |
-| ☐ | Field forms printed: {download}`reef <_static/forms/reef_photogrammetry_field_form_v1.0.pdf>`, {download}`mangrove <_static/forms/mangrove_field_form_v1.0.pdf>`, {download}`seagrass <_static/forms/seagrass_field_form_v1.0.pdf>` |
+| ☐ | Equipment checked against the [purchase list](field_resources.md#equipment) |
+| ☐ | Field forms printed (see [Field resources](field_resources.md#field-forms)) |
 
 Times of depth readings are written from a watch or phone; note the time zone on the slate, so that depths can be corrected for the tide with the pressure-sensor record.
 
@@ -52,7 +52,7 @@ At the end, **photograph the slate** before wiping it, and copy it into the digi
 
 ### File names
 
-Start every file and folder name with the transect ID, then the item: `<transectID>_<item>`, with area `BZ`, `SC` or `FJ`, corridor `C1`–`C6` and habitat `reef`, `seagrass` or `mangrove`. For example: `BZ150327C3seagrass_Q05_photo2.jpg`, `FJ020627C1reef_camA/`. Dates in forms are written as mm/dd/yyyy; in the transect ID the date is DDMMYY.
+Survey IDs, file names and date formats follow the [naming rules](field_resources.md#naming-rules).
 
 ---
 
