@@ -271,50 +271,14 @@ See the [common notes for modelling](field_transects.md#notes-for-modelling-all-
 
 ---
 
-## Field checklist
+## Field form and post-site report
 
-Print this section so that nothing is forgotten.
+The header, the topography sheet, the data sheets of the three methods and the post-site report are in one form: {download}`Mangrove field form, v1.0 (PDF) <_static/forms/mangrove_field_form_v1.0.pdf>`.
 
-### All methods
-
-| ☐ | Item |
-|---|------|
-| ☐ | **Data:** [common header](field_transects.md#on-every-transect) (incl. sensor positions, GPS of 0 m end, bearing), and tide time |
-| ☐ | **Data:** method used (A, B or C), and between which tape marks if more than one |
-| ☐ | **Data:** dominant species and general description of the forest (open/dense, pneumatophores/prop roots) |
-| ☐ | **Data:** tape positions where the vegetation type or density changes; vegetation beyond the 30 m mark |
-| ☐ | Overview photos of the transect from both ends |
-| ☐ | Topography from the low-water mark to 5–10 m beyond the 30 m mark, with a GNSS fix at the start (RTK if available, otherwise handheld) |
-| ☐ | Vertical datum tie (RTK fix or benchmark), at least once per site |
-
-### Method A: photogrammetry
-
-| ☐ | Item |
-|---|------|
-| ☐ | **Data:** camera spacing (cm) |
-| ☐ | At least 6 scale bars on both sides, varied orientation and elevation; **data:** codes, position, side |
-| ☐ | Passes: forward and backward (cameras down), zigzag (cameras tilted ~45°) |
-| ☐ | Photos checked on both cameras |
-
-### Method B: tree-by-tree (Mori et al., 2022)
-
-| ☐ | Item |
-|---|------|
-| ☐ | Plots at front, centre and back; **data:** tree count per 5 m × 5 m plot (density) |
-| ☐ | **Data per sample tree:** H, crown-base height, DBH, D1, Hroot, W in six directions, N, root diameter at 20 cm |
-| ☐ | Root system photos against the board in two directions, with scale; **data:** tree ID and direction per photo |
-
-### Method C: manual
-
-| ☐ | Item |
-|---|------|
-| ☐ | Three 5 m × 5 m plots centred on the tape: front (0–5 m), centre (12.5–17.5 m), back (25–30 m) |
-| ☐ | **Data:** tree count and species in each plot; DBH of each tree (and measurement height if not 1.3 m) |
-| ☐ | **Data:** pneumatophore count in one quadrat per plot (and quadrat size); height and diameter (base, mid-height) of up to 20 |
-| ☐ | 3–5 sample trees per plot, covering the range of sizes |
-| ☐ | **Data per sample tree, at 25, 50, 75, 100 and 150 cm:** number of roots crossing, their diameters, trunk diameter |
-| ☐ | **Data per sample tree:** Hroot, crown-base height and tree height |
-| ☐ | Photos of each plot and sample tree, with scale; files named as on the [Field transects](field_transects.md#file-names) page |
+- **In the field:** print pages 1–2 (header and topography) for every transect, plus the pages of the method used: A (page 3), B (page 4) or C (pages 5–6).
+- **After the survey:** type the data and the post-site report (page 7) into the same PDF, the same day.
+- **Fill it in with Adobe Acrobat Reader** (free, [download it here](https://get.adobe.com/reader/)). In Acrobat Reader the **Transect ID** is filled in automatically from study area, date and corridor, and appears on every page, and the form fields are saved correctly. Other viewers (Mac Preview, browsers, phone apps) may not fill in the Transect ID or may not save the fields.
+- Save the filled form with the data, named `<transectID>_field_form.pdf`, and put the data download link in section B of the report. The topography stations are also typed into the CSV read by the processing notebook.
 
 ---
 
