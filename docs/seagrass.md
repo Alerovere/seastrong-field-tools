@@ -20,9 +20,9 @@ The method is **non-destructive** (nothing is collected) and designed to be quic
 
 ```{figure} _static/seagrass_transect.svg
 :width: 100%
-:alt: Schematic of the seagrass transect: depth and photo stations every 2 m along the tape, three quadrats, the two photos and canopy height at each quadrat, and the measurements taken in place on each shoot
+:alt: Schematic of the seagrass transect: depth and photo stations every 2 m along the tape, three replicate quadrats at the front, centre and back, the two photos and canopy height at each quadrat, and the measurements taken in place on each shoot
 
-Seagrass data collection. (A) Depth and a vertical photo every 2 m along the tape, and three 25 cm × 25 cm quadrats at the front, centre and back. (B) At each quadrat: canopy height, a canopy photo, and a photo of the shoot bases with the leaves pushed aside. (C) On 10–15 shoots, measured in place: number of blades, and length and width of the longest blade; thickness of a stack of blades on 3–5 shoots per quadrat.
+Seagrass data collection. (A) Depth and a vertical photo every 2 m along the tape, and three replicate 25 cm × 25 cm quadrats in a line across the tape (left, at the tape, right) at the front, centre and back positions. (B) At each quadrat: canopy height, a canopy photo, and a photo of the shoot bases with the leaves pushed aside. (C) On 5 shoots per quadrat, measured in place: number of blades, and length and width of the longest blade; thickness of one stack of blades per quadrat.
 ```
 
 ---
@@ -39,14 +39,19 @@ Swim along the tape and stop **every 2 m**, from 0 m to the 30 m mark and then *
 
 ## Quadrats
 
-Place three **25 cm × 25 cm quadrats** (a rigid frame of known size): at the **front** (2.5 m), **centre** (15 m) and **back** (27.5 m) of the transect, about 1 m to the side of the tape, in a spot representative of the surrounding meadow. These are the same front, centre and back positions used on the mangrove transects.
+Sample three positions along the transect: **front** (2.5 m), **centre** (15 m) and **back** (27.5 m), the same positions used on the mangrove transects. At each position, place **three replicate 25 cm × 25 cm quadrats** (a rigid frame of known size), **9 quadrats per transect**:
+
+- in a **line across the tape** at the position mark: one **at the tape** (centre), one **2 m to the left** and one **2 m to the right**;
+- always **on seagrass**: if the planned spot is bare sand, move the quadrat along the same line to the nearest seagrass and record the distance moved. Do not look for the densest or most attractive patch. Bare areas are accounted for by the cover photos taken every 2 m, not by the quadrats.
+
+To keep the work feasible, the effort per quadrat is small; the replicates, not the number of shoots per quadrat, give the spread. See the [workflow for two snorkellers](#workflow-for-two-snorkellers) for who does what and how long it takes.
 
 At each quadrat, in this order:
 
-1. **Canopy height:** with the metered stick, read the height of the undisturbed canopy at **5 points** around the frame.
+1. **Canopy height:** with the metered stick, read the height of the undisturbed canopy at **3 points** around the frame.
 2. **Photo 1, canopy:** a vertical photo of the whole frame, straight down, before touching the leaves. It gives cover, species composition and a record of the quadrat.
 3. **Photo 2, shoot bases:** push the leaves aside with one hand and take a vertical photo close to the bottom, so that the **shoot bases** inside the frame are visible. The shoots are counted later on this photo to obtain **shoot density**. If one photo cannot show the whole frame, take two (one per half) and note it.
-4. **Measure 10–15 shoots** of the **dominant species in place**, without cutting or pulling them: take the shoots nearest to marked points on the frame (so the sample is not biased towards long leaves). Note the other species present.
+4. **Measure 5 shoots** of the **dominant species in place**, without cutting or pulling them: take the shoots nearest to marked points on the frame (so the sample is not biased towards long leaves). Note the other species present.
 
 ### On each shoot (in place)
 
@@ -57,14 +62,33 @@ Use a ruler fixed to the slate (mm scale) and a simple plastic caliper, and writ
 | Number of blades | Count the blades on the shoot |
 | Blade length | Length of the **longest blade**, from the base to the tip, held straight along the ruler |
 | Blade width | Width of the same blade at mid-length, against the ruler |
-| Blade thickness | On **3–5 shoots per quadrat**: hold all the blades of the shoot together at mid-length, measure the thickness of the stack with the plastic caliper (jaws closed gently, without squashing), and divide by the number of blades |
+| Blade thickness | On **one shoot per quadrat**: hold all the blades of the shoot together at mid-length, measure the thickness of the stack with the plastic caliper (jaws closed gently, without squashing), and divide by the number of blades |
 
 Thickness is measured because published values of blade thickness are not available for all seagrass species; together with length and width, it allows a correction for blade flexibility in the models (see [Notes for modelling](#notes-for-modelling)).
 
 ### In the lab
 
 - Count the shoots inside the frame on each Photo 2 → shoots per 25 cm × 25 cm → **shoots per m²** (× 16).
+- For each position (front, centre, back), report the **mean and spread of the three replicates** for density, canopy height, blades per shoot, blade length, width and thickness.
 - Estimate **percent cover** from the photos taken every 2 m along the tape.
+
+---
+
+## Workflow for two snorkellers
+
+The survey is designed for **two snorkellers** working together. Snorkeller A is the **recorder**: depths, shoot measurements and the slate. Snorkeller B is the **photographer**: frames, photos, canopy height and blade thickness. Two quadrat frames are used, so that B can prepare the next quadrat while A is measuring the current one.
+
+| Step | Snorkeller A (recorder) | Snorkeller B (photographer) | Time |
+| --- | --- | --- | --- |
+| 1. Set-up | Lay the tape from sensor 1 to sensor 2 and on for 5–10 m; write the header of the slate (site, transect, date, sensor positions) | Hold the 0 m end; note GPS position and bearing (from the boat or the surface) | ~10 min |
+| 2. Depth and cover | Swim along the tape; every 2 m read the depth (stick or gauge) and write depth and time | Follow A and take the vertical photo at each stop, tape in view | ~15–20 min |
+| 3. Quadrats (front, centre, back) | At each quadrat: measure 5 shoots (blades, length, width) and write them on the slate; then move to the next frame | Place the frame; read canopy height (3 points); take Photo 1 and Photo 2; measure one thickness stack and call it to A; place the second frame at the next quadrat | ~5 min per quadrat, ~45–50 min for 9 |
+| 4. Check and recover | Check that the slate is complete (9 quadrats, all stops) | Check on the camera that all photos are there and sharp; recover frames | ~5 min |
+| | Recover the tape together | | ~5 min |
+
+**In total, about 1.5 hours in the water per transect** for two snorkellers, in good conditions (good visibility, little current, 1–2 m depth). Allow more in strong current or poor visibility, and plan no more than two transects per day for the same pair.
+
+One seagrass transect is surveyed **per corridor**, and each study area (Belize, Seychelles, Fiji) has **6 corridors**: about **9 hours in the water per study area**, i.e. **3–4 field days for one pair**, plus travel between corridors and weather days. The survey is done once per transect, not at every sensor deployment.
 
 ---
 
@@ -80,7 +104,7 @@ Seagrass is usually represented as a single vegetation section in XBeach, with:
 | Stem width (bv) | Mean blade width |
 | Density (N, per m²) | Shoots per m² (from Photo 2) × mean number of blades per shoot |
 
-Within each zone along the transect, the density is scaled by the **cover** from the photos every 2 m, so that bare and patchy stretches are not given the density of the quadrats. The front, centre and back quadrats give the values for the corresponding parts of the transect.
+Within each zone along the transect, the density is scaled by the **cover** from the photos every 2 m, so that bare and patchy stretches are not given the density of the quadrats. The mean of the three replicate quadrats at the front, centre and back gives the values for the corresponding parts of the transect; the spread between replicates shows how uncertain they are.
 
 ### Flexibility
 
@@ -108,15 +132,16 @@ Shoot density from photos can differ from density counted by hand. Use the same 
 | ☐ | **Data:** tape positions where the meadow changes (cover, dominant species) |
 | ☐ | Depth + time + vertical photo every 2 m, from 0 m to 5–10 m beyond the 30 m mark, and at each sensor |
 
-### Each quadrat (front 2.5 m, centre 15 m, back 27.5 m)
+### Each quadrat (left, centre and right at front 2.5 m, centre 15 m, back 27.5 m: 9 quadrats)
 
 | ☐ | Item |
 |---|------|
-| ☐ | **Data:** canopy height at 5 points |
+| ☐ | **Data:** quadrat position along the tape, replicate (left, centre, right) and distance moved to reach seagrass, if any |
+| ☐ | **Data:** canopy height at 3 points |
 | ☐ | Photo 1: canopy, straight down, frame in view |
 | ☐ | Photo 2: shoot bases with leaves pushed aside, whole frame visible |
-| ☐ | **Data:** on 10–15 shoots of the dominant species, measured in place: number of blades, length and width of the longest blade |
-| ☐ | **Data:** on 3–5 shoots, thickness of the stack of blades at mid-length and number of blades in the stack |
+| ☐ | **Data:** on 5 shoots of the dominant species, measured in place: number of blades, length and width of the longest blade |
+| ☐ | **Data:** on one shoot, thickness of the stack of blades at mid-length and number of blades in the stack |
 | ☐ | **Data:** other species present |
 
 ### After the survey
