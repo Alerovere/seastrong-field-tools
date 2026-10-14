@@ -55,7 +55,8 @@ The documentation has three parts:
 | [Underwater photogrammetry](underwater_photogrammetry.md) | Reef structure with a two-camera rig | T1.2, T1.3, T2.2, T5.1 |
 | [Mangroves](mangroves.md) | Mangrove structure and topographic profile | T1.2, T4.5 |
 | [Seagrass](seagrass.md) | Seagrass structure from quadrats, and depth profile | T1.2, T4.5 |
-| [Wave attenuation](wave_attenuation.md) | Pressure-sensor deployment, calibration and field validation | T1.2, T4.5 |
+| [Wave attenuation](wave_attenuation.md) | Pressure sensors: where to place them, how to fix them, download schedule | T1.2, T4.5 |
+| [Pressure sensor calibration](pressure_sensor_calibration.md) | Calibration, barometric reference and checks of the pressure sensors | T1.2, T4.5 |
 
 **Field resources:** [field forms, naming rules and equipment list](field_resources.md).
 

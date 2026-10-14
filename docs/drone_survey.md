@@ -52,9 +52,11 @@ Without RTK, the maps are positioned by the drone's GNSS. To check and improve t
 
 ---
 
-## Field record
+## Field form and post-site report
 
-For each flight, note: survey ID (e.g. `BZ150327C1drone`), date, start and end time, tide, weather and wind, altitude, overlap, number of photos, and positions of the ground targets. Name the photo folders with the survey ID (see [Field resources](field_resources.md#naming-rules)).
+One form per survey (one corridor, one day), with the survey ID (e.g. `BZ150327C1drone`), conditions, one row per flight (start and end time, altitude, overlap, number of photos), the positions of the ground targets and the post-site report: {download}`Drone field form, v1.0 (PDF) <_static/forms/drone_field_form_v1.0.pdf>`.
+
+Fill it in with **Adobe Acrobat Reader** (free, [download it here](https://get.adobe.com/reader/)), so that the survey ID is filled in automatically and the form is saved correctly. Name the photo folders with the survey ID (see [Field resources](field_resources.md#naming-rules)).
 
 ---
 

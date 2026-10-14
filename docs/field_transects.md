@@ -31,7 +31,7 @@ The sensor deployment is described on the [wave attenuation](wave_attenuation.md
 | ☐ | Cameras labelled A and B (camera and housing) |
 | ☐ | Bar list prepared: target codes and measured centre-to-centre distance of each scale bar |
 | ☐ | Slates prepared with the field sheet of each habitat |
-| ☐ | Equipment checked against the [purchase list](field_resources.md#equipment) |
+| ☐ | Equipment checked and packed |
 | ☐ | Field forms printed (see [Field resources](field_resources.md#field-forms)) |
 
 Times of depth readings are written from a watch or phone; note the time zone on the slate, so that depths can be corrected for the tide with the pressure-sensor record.

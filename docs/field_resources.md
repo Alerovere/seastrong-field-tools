@@ -11,6 +11,7 @@ One fillable form per survey, with the field data sheets and the post-site repor
 | Survey | Form |
 | --- | --- |
 | Depth and bottom photos | {download}`Depth and bottom photos field form, v1.1 <_static/forms/depth_photos_field_form_v1.1.pdf>` |
+| Drone survey | {download}`Drone field form, v1.0 <_static/forms/drone_field_form_v1.0.pdf>` |
 | Reef photogrammetry | {download}`Reef photogrammetry field form, v1.0 <_static/forms/reef_photogrammetry_field_form_v1.0.pdf>` |
 | Mangrove structure and topography | {download}`Mangrove field form, v1.0 <_static/forms/mangrove_field_form_v1.0.pdf>` |
 | Seagrass structure and bathymetry | {download}`Seagrass field form, v1.0 <_static/forms/seagrass_field_form_v1.0.pdf>` |
@@ -44,9 +45,3 @@ Start every file and folder name with the survey ID, then the item: `<surveyID>_
 
 - In forms and field sheets, dates are written as **mm/dd/yyyy**; in the survey ID the date is **DDMMYY**.
 - Note the **time zone** of the watch or phone used for the times written in the field.
-
----
-
-## Equipment
-
-The {download}`equipment purchase list <_static/resources/SEASTRONG_field_equipment_purchase_list.xlsx>` covers the reef, mangrove and seagrass transect surveys, with quantities per field team and columns for price, supplier and purchase status. Pressure sensors and barometric loggers (wave attenuation), the depth and bottom photos survey and drones are not included.

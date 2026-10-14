@@ -25,6 +25,7 @@ SEASTRONG Field Processing Tools
    mangroves
    seagrass
    wave_attenuation
+   pressure_sensor_calibration
 
 .. toctree::
    :maxdepth: 2
