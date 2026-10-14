@@ -32,7 +32,7 @@ The sensor deployment is described on the [wave attenuation](wave_attenuation.md
 | ☐ | Bar list prepared: target codes and measured centre-to-centre distance of each scale bar |
 | ☐ | Slates prepared with the field sheet of each habitat |
 | ☐ | Equipment checked against the purchase list |
-| ☐ | Field forms printed: {download}`reef <_static/forms/reef_photogrammetry_field_form_v1.0.pdf>`, {download}`mangrove <_static/forms/mangrove_field_form_v1.0.pdf>` |
+| ☐ | Field forms printed: {download}`reef <_static/forms/reef_photogrammetry_field_form_v1.0.pdf>`, {download}`mangrove <_static/forms/mangrove_field_form_v1.0.pdf>`, {download}`seagrass <_static/forms/seagrass_field_form_v1.0.pdf>` |
 
 Times of depth readings are written from a watch or phone; note the time zone on the slate, so that depths can be corrected for the tide with the pressure-sensor record.
 

@@ -119,34 +119,14 @@ Shoot density from photos can differ from density counted by hand. Use the same 
 
 ---
 
-## Field checklist
+## Field form and post-site report
 
-### Transect
+The header, the depth and cover sheet, the sheets for the 9 quadrats and the post-site report are in one form: {download}`Seagrass field form, v1.0 (PDF) <_static/forms/seagrass_field_form_v1.0.pdf>`.
 
-| ☐ | Item |
-|---|------|
-| ☐ | **Data:** [common header](field_transects.md#on-every-transect) (incl. sensor positions, GPS of 0 m end, bearing) |
-| ☐ | **Data:** tape positions where the meadow changes (cover, dominant species) |
-| ☐ | Depth + time + vertical photo every 2 m, from 0 m to 5–10 m beyond the 30 m mark, and at each sensor |
-
-### Each quadrat (left, centre and right at front 2.5 m, centre 15 m, back 27.5 m: 9 quadrats)
-
-| ☐ | Item |
-|---|------|
-| ☐ | **Data:** quadrat position along the tape, replicate (left, centre, right) and distance moved to reach seagrass, if any |
-| ☐ | **Data:** canopy height at 3 points |
-| ☐ | Photo 1: canopy, straight down, frame in view |
-| ☐ | Photo 2: shoot bases with leaves pushed aside, whole frame visible |
-| ☐ | **Data:** on 5 shoots of the dominant species, measured in place: number of blades, length and width of the longest blade |
-| ☐ | **Data:** on one shoot, thickness of the stack of blades at mid-length and number of blades in the stack |
-| ☐ | **Data:** other species present |
-
-### After the survey
-
-| ☐ | Item |
-|---|------|
-| ☐ | Slate photographed and copied into the field sheet |
-| ☐ | Photos downloaded and named as on the [Field transects](field_transects.md#file-names) page (station or quadrat as item, e.g. `Q05_photo2`) |
+- **In the water:** print pages 1–5 on waterproof paper, or copy them onto the slate. Each quadrat has its own block (front, centre and back, each with left, centre and right).
+- **After the survey:** type the data and the post-site report (page 6) into the same PDF, the same day.
+- **Fill it in with Adobe Acrobat Reader** (free, [download it here](https://get.adobe.com/reader/)). In Acrobat Reader the **Transect ID** is filled in automatically from study area, date and corridor, and appears on every page, and the form fields are saved correctly. Other viewers (Mac Preview, browsers, phone apps) may not fill in the Transect ID or may not save the fields.
+- Save the filled form with the data, named `<transectID>_field_form.pdf`, and put the data download link in section B of the report.
 
 ---
 
