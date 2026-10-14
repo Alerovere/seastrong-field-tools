@@ -40,7 +40,11 @@ It hosts field data processing tools developed to support SEASTRONG fieldwork. E
 |------|-------------|-------------------|
 | [Echosounder bathymetry](echosounder_bathymetry.md) | Process depth data from a Deeper Pro echosounder and apply tide corrections | T1.2, T4.5 |
 | [Photo geotagging](photo_geotagging.md) | Geotag time-lapse bottom photos using a GPX track | T1.2, T1.3 |
-| [Underwater photogrammetry](underwater_photogrammetry.md) | Two-camera GoPro rig for SfM surveys on coral reefs and seagrass beds | T1.3, T2.2, T5.1 |
+| [Field transects](field_transects.md) | Common layout, header, file names, effort and safety for the reef, seagrass and mangrove transects | T1.2, T4.5 |
+| [Underwater photogrammetry](underwater_photogrammetry.md) | Two-camera GoPro rig for SfM surveys on coral reefs | T1.2, T1.3, T2.2, T5.1 |
+| [Mangroves](mangroves.md) | Mangrove structure (photogrammetry, tree-by-tree or manual) and topographic profile | T1.2, T4.5 |
+| [Seagrass](seagrass.md) | Seagrass structure from quadrats and depth profile | T1.2, T4.5 |
+| [Wave attenuation](wave_attenuation.md) | Pressure-sensor deployment, calibration and field validation | T1.2, T4.5 |
 
 ## Consortium
 

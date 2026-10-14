@@ -2,18 +2,18 @@
 
 ## Overview
 
-This page describes the field setup and procedure for Structure-from-Motion (SfM) photogrammetric surveys of shallow coral reefs and seagrass beds using a pair of action cameras (e.g. GoPro) mounted on a simple rig. The survey covers the stretch of seabed between the two pressure sensors of a wave-attenuation transect, so that the 3D structure of the habitat can be linked to the wave-height decay measured between them. Photos are colour-corrected in **DaVinci Resolve** and processed in **Agisoft Metashape** to produce scaled 3D models, orthomosaics and structural complexity metrics.
+This page describes the field setup and procedure for Structure-from-Motion (SfM) photogrammetric surveys of shallow coral reefs using a pair of action cameras (e.g. GoPro) mounted on a simple rig. The layout, header, file names, safety and effort common to all habitats are on the [Field transects](field_transects.md) page. The survey covers the stretch of seabed between the two pressure sensors of a wave-attenuation transect, so that the 3D structure of the habitat can be linked to the wave-height decay measured between them. Photos are colour-corrected in **DaVinci Resolve** and processed in **Agisoft Metashape** to produce scaled 3D models, orthomosaics and structural complexity metrics.
 
 **Source code:** [github.com/Alerovere/seastrong-field-tools](https://github.com/Alerovere/seastrong-field-tools/tree/main/underwater_photogrammetry)
 
 ---
 
-## Site layout
+## Transect layout
 
-- **Location:** the survey runs between the **two pressure sensors** placed at the two ends of the reef section (seaward and landward). See the [wave attenuation](wave_attenuation.md) page for the sensor deployment.
-- **Orientation:** the transect is laid **cross-shore**, from one sensor to the other.
-- **Depth and slope:** choose a broadly **planar** area with a maximum depth of **3 m**.
-- **Length and width:** a **30 m** tape is laid along the bottom between the sensors. The surveyed corridor extends **about 3 m on each side** of the tape.
+The transect follows the [common layout](field_transects.md#transect-layout-all-habitats): a **30 m** tape laid cross-shore from **sensor 1 (0 m, seaward)** to **sensor 2 (30 m, landward)**. On reefs:
+
+- choose a broadly **planar** area with a maximum depth of **3 m**;
+- the surveyed corridor extends **about 3 m on each side** of the tape.
 
 ### Survey conditions
 
@@ -46,7 +46,7 @@ Keep the same height for the whole survey, and choose the camera spacing for tha
 - **Depth gauge or dive computer** (preferably with 0.1 m resolution or better; always use the same instrument for all targets of a transect)
 - **Phone or handheld GPS** for the location of the transect, and a **compass** for its bearing
 - **Underwater slate** and pencil, prepared with the field sheet (see the checklist below)
-- **Watch** set to the same time as the cameras and sensors
+- **Watch** set to UTC, like the cameras and sensors (see [Before the trip](field_transects.md#before-the-trip))
 - **Colour reference tab** (optional), placed at the start of the transect for colour calibration in DaVinci Resolve
 - Weights or pegs to keep the tape and targets in place in current or surge
 
@@ -59,7 +59,7 @@ Two scale-bar targets placed on either side of the transect tape. Each bar carri
 
 ### Clocks
 
-Before the trip, set the clocks of **both cameras, the depth gauge, the watch and the pressure sensors to the same time (UTC)**. Exact camera synchronisation is done in post-processing, but the clocks must agree to within a few seconds so that target depths can be corrected for the tide using the pressure-sensor record, and photos can be matched to the wave measurements.
+All clocks are set to the same time (UTC) before the trip, as described on the [Field transects](field_transects.md#before-the-trip) page.
 
 ### Camera settings
 
@@ -108,10 +108,10 @@ Fix the cameras at the chosen spacing before entering the water and write the me
 
 A team of **two people** is enough; three makes the layout faster:
 
-- **Operator 1:** lays the tape, places the scale bars, takes depths and fills in the slate.
+- **Operator 1:** lays the tape, places the scale bars, takes target depths and the depth profile, and fills in the slate.
 - **Operator 2:** prepares and starts the cameras, swims the three passes, and checks the photos afterwards.
 
-Allow roughly **45–60 minutes in the water per transect**: about 20 minutes for layout and depths, 10–15 minutes for the three passes, and 10 minutes for checks and recovery. The surface support person (boat or shore) keeps track of time and of the swimmers.
+Allow roughly **1–1.25 hours in the water per transect**: about 20 minutes for layout and target depths, 10–15 minutes for the depth profile, 10–15 minutes for the three passes, and 10 minutes for checks and recovery. The surface support person (boat or shore) keeps track of time and of the swimmers.
 
 ---
 
@@ -127,8 +127,9 @@ Data collection at a reef transect. (A) The 30 m tape is laid cross-shore betwee
 ### 1. Lay out the transect
 
 1. Lay the **30 m tape** along the bottom, **cross-shore**, between the two pressure sensors. Keep it as straight and taut as possible and secure both ends.
-2. Note on the slate which end of the tape (0 m) is seaward, and the **position of each pressure sensor along the tape** (e.g. "sensor 1 at −1 m, sensor 2 at 31 m").
+2. The **0 m end is at sensor 1, seaward**. Note on the slate the **position of each pressure sensor along the tape** (e.g. "sensor 1 at −1 m, sensor 2 at 31 m").
 3. **Location and bearing:** at the surface above the 0 m end, take the GPS position with a phone or handheld GPS (approximate is enough), and take the **compass bearing** of the tape from the 0 m end towards the 30 m end.
+4. Fill in the [slate header](field_transects.md#on-every-transect), common to all habitats.
 
 ### 2. Place the scale-bar targets
 
@@ -138,10 +139,11 @@ Data collection at a reef transect. (A) The 30 m tape is laid cross-shore betwee
 4. Make sure the targets are flat, stable, fully visible and not shaded by overhanging structures. **Do not break, scrape or press on live coral** to place them; use sand, rubble or dead substrate where possible.
 5. On the slate, record the **target codes** of each bar, its position along the tape (m) and its side (left or right, looking landward).
 
-### 3. Measure target depths
+### 3. Measure depths
 
 1. At the **centre of each target** (each ground control point), hold the depth gauge sensor at the target centre and read the **depth**. Take **three readings** a few seconds apart and write them all down (they are averaged in post-processing to smooth out the effect of waves).
 2. Write each set of readings on the slate next to its **target code**, together with the **time**. The time allows the depths to be corrected for the tide using the pressure-sensor record.
+3. **Depth profile:** read the depth and time **every 2 m** along the tape, at each sensor, and on for **5–10 m beyond the 30 m mark** (see [Bed profile](field_transects.md#bed-profile-and-vertical-datum)). Inside the 30 m the 3D model gives the detailed bed; these readings reference it and extend it to the model boundary.
 
 ### 4. Start the cameras
 
@@ -169,17 +171,13 @@ At the end, stop both cameras and note the end time on the slate.
 
 1. Recover the targets and the tape. Check that no target is left behind (count them against the bar list).
 2. Photograph the slate before it is wiped.
-3. In the evening, copy the slate into the digital field sheet and download the photos (see the checklist).
+3. In the evening, copy the slate into the digital field sheet and download the photos, named as on the [Field transects](field_transects.md#file-names) page.
 
 ---
 
 ## Safety and reef care
 
-- Never survey alone: always work in a buddy pair with surface support (boat or shore) and agree on signals before entering the water.
-- Check the weather, tide and current before going out, and abort if conditions get worse.
-- Wear sun protection and a rash vest or wetsuit, and drink water between transects.
-- Avoid touching, kneeling on or finning against coral. Keep the rig and tape away from fragile colonies.
-- Follow the conditions of the research permit for the site.
+See [Safety and care of the habitat](field_transects.md#safety-and-care-of-the-habitat). On reefs in particular: avoid touching, kneeling on or finning against coral, and keep the rig and tape away from fragile colonies.
 
 ---
 
@@ -189,11 +187,7 @@ Print this section, or copy it onto the slate, so that nothing is forgotten. Eve
 
 ### Before the trip
 
-| ☐ | Item |
-|---|------|
-| ☐ | Clocks of both cameras, depth gauge, watch and pressure sensors set to the same time (UTC) |
-| ☐ | Bar list prepared: target codes and measured centre-to-centre distance of each scale bar |
-| ☐ | Cameras labelled A and B on camera and housing |
+See the [common checklist](field_transects.md#before-the-trip) (clocks in UTC, cameras labelled, bar list).
 
 ### Before going in the water
 
@@ -203,7 +197,7 @@ Print this section, or copy it onto the slate, so that nothing is forgotten. Eve
 | ☐ | Rig assembled for the planned swimming height; **data:** measured camera spacing (cm) |
 | ☐ | At least 6 scale bars, 30 m tape, depth gauge, GPS (phone), compass, slate and pencil, weights or pegs, colour reference tab (if used) |
 | ☐ | Conditions OK: visibility, waves and surge, tide, light |
-| ☐ | **Data:** site name, transect ID, date, names of operators, snorkel or scuba |
+| ☐ | **Data:** [slate header](field_transects.md#on-every-transect); snorkel or scuba |
 | ☐ | **Data:** IDs of the two pressure sensors at the ends of the transect |
 
 ### Layout (in the water)
@@ -211,11 +205,12 @@ Print this section, or copy it onto the slate, so that nothing is forgotten. Eve
 | ☐ | Item |
 |---|------|
 | ☐ | Tape laid cross-shore between the two sensors, straight and secured at both ends |
-| ☐ | **Data:** which end of the tape (0 m) is seaward, and position of each sensor along the tape |
+| ☐ | **Data:** position of each sensor along the tape (0 m at sensor 1, seaward) |
 | ☐ | **Data:** approximate GPS position of the 0 m end and compass bearing from 0 m to 30 m |
 | ☐ | At least 6 scale bars on **both sides**, within ~2 m of the tape, varied orientation, **different elevations** |
 | ☐ | **Data:** for each bar, its target codes, position along the tape (m) and side (L/R, looking landward) |
 | ☐ | **Data:** three depth readings at the **centre of every target**, and the time |
+| ☐ | **Data:** depth + time every 2 m, at each sensor and 5–10 m beyond the 30 m mark |
 
 ### Photo survey
 
@@ -235,12 +230,14 @@ Print this section, or copy it onto the slate, so that nothing is forgotten. Eve
 |---|------|
 | ☐ | All targets (checked against the bar list) and the tape recovered |
 | ☐ | Slate photographed before it is wiped |
-| ☐ | Photos downloaded into one folder per camera: `<site>_<transectID>_<YYYYMMDD>_camA` and `..._camB` |
+| ☐ | Photos downloaded into one folder per camera, e.g. `FJ_C1_RF_20270602_camA` and `..._camB` |
 | ☐ | Slate copied into the digital field sheet; slate photo and field sheet saved next to the photo folders |
 
 ### Slate template
 
-**Header:** site · transect ID · date · operators · snorkel/scuba · sensor IDs (seaward/landward) · sensor positions along tape · 0 m end (seaward/landward) · GPS of 0 m end · bearing 0→30 m · camera spacing · camera start/end time · conditions (visibility, waves, cloud)
+**Header:** the [common header](field_transects.md#on-every-transect), plus snorkel/scuba · camera spacing · camera start/end time
+
+**Depth profile:** distance along tape (m) · depth (m) · time, every 2 m to 5–10 m beyond the 30 m mark
 
 **Target depths:**
 

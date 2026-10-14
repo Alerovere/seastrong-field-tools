@@ -20,13 +20,13 @@ In **WP4 — Task 4.5 (D4.5)**, the same data is used to calibrate the hydrodyna
 
 | Parameter | Value |
 |---|---|
-| Transect length | 20 m per ecosystem, per corridor |
+| Transect length | 30 m per ecosystem, per corridor, cross-shore, 0 m at the seaward sensor (see [Field transects](field_transects.md)) |
 | Sensors per transect | 2 (seaward end + landward end) |
 | What that gives you | Bulk incoming vs. outgoing significant wave height (Hs-in vs. Hs-out) across the segment — enough to fit one lumped roughness/drag coefficient per habitat, not to resolve the full decay curve along the transect |
 | Deployments per ecosystem, per corridor | 2–3, roughly 2 days each |
 | Why 2-day deployments | Long enough to span multiple full tidal cycles (flood/ebb/slack) within a single deployment — the repeat deployments are mainly there to sample different weather/swell windows during the field trip, not to add tidal coverage |
 | Sensor inventory | 10 pressure sensors → up to 5 transects can run in parallel |
-| Paired data | Structural photogrammetry (canopy/stem/rugosity) at each transect, to parameterize habitat-specific drag alongside the wave data |
+| Paired data | Habitat structure and bed profile at each transect, to parameterize habitat-specific drag alongside the wave data: photogrammetry on reefs, quadrats on seagrass, photogrammetry or tree measurements in mangroves (see [Field transects](field_transects.md)) |
 
 Corridors are chosen to be as structurally homogeneous as possible, to reduce confounding in the per-corridor roughness estimate. If the full deployment count can't be reached everywhere, a smaller set of corridors (spanning the structural/exposure gradient) gets the complete protocol as a calibration set, and the rest are predicted from the fitted structure-to-roughness relationship plus literature values — see the project's Task 1.2 decision log for the full fallback design.
 

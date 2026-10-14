@@ -4,6 +4,8 @@
 
 This page describes how to measure the **structure** and **topography** of the mangrove forest along the wave-attenuation transects. The structure is used to parameterise mangrove drag in the XBeach models; the topography gives the bed profile along which wave attenuation is measured.
 
+The layout, header, file names, safety and effort common to all habitats are on the [Field transects](field_transects.md) page.
+
 Mangrove forests range from open stands with pneumatophores to dense stands of prop-rooted trees, so the method for the structure is chosen in the field according to forest density. **Topography is always measured, whatever method is used for the structure.**
 
 **Source code:** [github.com/Alerovere/seastrong-field-tools](https://github.com/Alerovere/seastrong-field-tools/tree/main/Mangroves_topography)
@@ -12,11 +14,11 @@ Mangrove forests range from open stands with pneumatophores to dense stands of p
 
 ## Transect layout
 
-- The transect is **cross-shore**, between the two pressure sensors of the wave-attenuation deployment: **sensor 1 at the front** (seaward edge of the forest) and **sensor 2 at the back**. See the [wave attenuation](wave_attenuation.md) page for the sensor deployment.
-- A **30 m tape** is laid along the transect, from the 0 m mark (front) to the 30 m mark (back). The 0 m mark is always at sensor 1, at the forest edge.
-- Record on the field sheet: site, transect ID, date, operators, sensor IDs and their position along the tape, approximate GPS position of the 0 m end, and the compass bearing from 0 m to 30 m.
-- Note the tape positions where the vegetation type or density visibly changes (e.g. "pneumatophores only from 0 to 6 m, dense prop roots from 6 to 30 m"), and briefly describe the vegetation in the 5–10 m beyond the 30 m mark.
-- Work at **low tide**, when the forest floor is exposed, and in the same field campaign as the sensor deployments.
+The transect follows the [common layout](field_transects.md#transect-layout-all-habitats): a **30 m** tape from **sensor 1 (0 m)** to **sensor 2 (30 m)**. In the mangrove:
+
+- the 0 m mark (sensor 1) is at the **forest edge**;
+- fill in the [common header](field_transects.md#on-every-transect), and note the tape positions where the vegetation type or density changes (e.g. "pneumatophores only from 0 to 6 m, dense prop roots from 6 to 30 m"), and the vegetation in the 5–10 m beyond the 30 m mark;
+- work at **low tide**, when the forest floor is exposed.
 
 ---
 
@@ -213,6 +215,19 @@ with the density in trees (or pneumatophores) per m² and diameters in m, so tha
 
 Each height represents the layer just below it (25 cm → 0–25 cm, 50 cm → 25–50 cm, and so on up to 150 cm → 100–150 cm); see [Notes for modelling](#notes-for-modelling).
 
+## Workflow and time
+
+For a team of **two people**, rough times per transect (to be checked in the first days of fieldwork):
+
+| Step | Person 1 | Person 2 | Time |
+| --- | --- | --- | --- |
+| Set-up | Lays the tape, fills in the header | GPS position, bearing, overview photos | ~15 min |
+| Topography | Reads distance and inclination, writes the readings | Moves the board and clinometer from station to station | ~45–60 min |
+| Structure, method A | Places the scale bars and records them | Walks the three camera passes | ~1 h |
+| Structure, method C | Writes the data; counts and DBH of trees; pneumatophore quadrat | Measures roots and trunk on the sample trees at the five heights | ~3–4 h (about 1 h for density, 10–15 min per sample tree) |
+
+With method C, one transect takes most of a field day (~4–5 h with topography), so plan **about one transect per day**. Method B is similar to method C in time. Method A is faster, about 2–2.5 h with topography.
+
 ---
 
 ## Notes for modelling
@@ -250,15 +265,9 @@ The three methods do not measure exactly the same quantity: summing diameters (m
 
 Structure is measured up to 1.5 m. For storm scenarios with deeper water, the upper layers are built from the crown-base height and the trunk diameter, assuming a constant trunk diameter up to the crown base.
 
-### Vertical datum and model domain
+### Vertical datum, model domain and timing
 
-- The bed, the sensor water levels and the boundary tide must be on the same vertical datum. The sensors tie the profile to the measured water levels (their stations are in the profile and their height above the bed is logged); the RTK fix or benchmark tie (at least once per site) links it to the tide used at the model boundary.
-- The profile extends 5–10 m beyond the 30 m mark, so that the landward model boundary is not at sensor 2.
-- Vegetation zones in the 1D model follow the vegetation boundaries noted along the tape, not only the plot positions.
-
-### Timing
-
-Do the structure and topography surveys in the same field campaign as the sensor deployments, so that the vegetation and the bed do not change in between.
+See the [common notes for modelling](field_transects.md#notes-for-modelling-all-habitats) and [Bed profile and vertical datum](field_transects.md#bed-profile-and-vertical-datum). On mangrove transects, the sensors tie the topographic profile to the measured water levels (their stations are in the profile and their height above the bed is logged), and vegetation zones in the 1D model follow the vegetation boundaries noted along the tape, not only the plot positions.
 
 ---
 
@@ -270,9 +279,7 @@ Print this section so that nothing is forgotten.
 
 | ☐ | Item |
 |---|------|
-| ☐ | **Data:** site, transect ID, date, operators, tide time |
-| ☐ | **Data:** sensor IDs and position along the tape |
-| ☐ | **Data:** approximate GPS position of the 0 m end and compass bearing from 0 m to 30 m |
+| ☐ | **Data:** [common header](field_transects.md#on-every-transect) (incl. sensor positions, GPS of 0 m end, bearing), and tide time |
 | ☐ | **Data:** method used (A, B or C), and between which tape marks if more than one |
 | ☐ | **Data:** dominant species and general description of the forest (open/dense, pneumatophores/prop roots) |
 | ☐ | **Data:** tape positions where the vegetation type or density changes; vegetation beyond the 30 m mark |
@@ -307,7 +314,7 @@ Print this section so that nothing is forgotten.
 | ☐ | 3–5 sample trees per plot, covering the range of sizes |
 | ☐ | **Data per sample tree, at 25, 50, 75, 100 and 150 cm:** number of roots crossing, their diameters, trunk diameter |
 | ☐ | **Data per sample tree:** Hroot, crown-base height and tree height |
-| ☐ | Photos of each plot and sample tree, with scale |
+| ☐ | Photos of each plot and sample tree, with scale; files named as on the [Field transects](field_transects.md#file-names) page |
 
 ---
 

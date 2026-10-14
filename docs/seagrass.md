@@ -4,19 +4,18 @@
 
 This page describes how to measure the **structure** of seagrass meadows and the **depth profile** along the wave-attenuation transects. The structure is used to parameterise seagrass drag in the XBeach models; the depth profile gives the bed along which wave attenuation is measured.
 
-The method is **non-destructive** (nothing is collected) and designed to be quick in the water: shoots are counted afterwards from photos, and blade measurements are taken in place.
+The layout, header, file names, safety and effort common to all habitats are on the [Field transects](field_transects.md) page.
 
-**Source code:** [github.com/Alerovere/seastrong-field-tools](https://github.com/Alerovere/seastrong-field-tools)
+The method is **non-destructive** (nothing is collected) and designed to be quick in the water: shoots are counted afterwards from photos, and blade measurements are taken in place.
 
 ---
 
 ## Transect layout
 
-- The transect is **cross-shore**, between the two pressure sensors of the wave-attenuation deployment: **sensor 1 at the seaward end** and **sensor 2 at the landward end**. See the [wave attenuation](wave_attenuation.md) page for the sensor deployment.
-- A **30 m tape** is laid on the bottom from the 0 m mark (sensor 1) to the 30 m mark (sensor 2).
-- Record on the field sheet: site, transect ID, date, operators, sensor IDs and their position along the tape, approximate GPS position of the 0 m end, and the compass bearing from 0 m to 30 m.
-- Note the tape positions where the meadow visibly changes (e.g. bare sand, patchy, continuous; change of dominant species).
-- Work by snorkelling, preferably around **slack water**, when the leaves stand more upright and the depth changes slowly. Do the survey in the same field campaign as the sensor deployments.
+The transect follows the [common layout](field_transects.md#transect-layout-all-habitats): a **30 m** tape laid on the bottom from **sensor 1 (0 m, seaward)** to **sensor 2 (30 m, landward)**. On seagrass:
+
+- fill in the [common header](field_transects.md#on-every-transect), and note the tape positions where the meadow visibly changes (bare sand, patchy, continuous; change of dominant species);
+- work by snorkelling, preferably around **slack water**, when the leaves stand more upright and the depth changes slowly.
 
 ```{figure} _static/seagrass_transect.svg
 :width: 100%
@@ -29,7 +28,7 @@ Seagrass data collection. (A) Depth and a vertical photo every 2 m along the tap
 
 ## Depth profile and cover (every 2 m)
 
-Swim along the tape and stop **every 2 m**, from 0 m to the 30 m mark and then **5–10 m beyond it** (so that the landward boundary of the model is not at sensor 2). Always include a stop at each sensor. At each stop:
+This is the [common bed profile](field_transects.md#bed-profile-and-vertical-datum), with a cover photo added. Swim along the tape and stop **every 2 m**, from 0 m to the 30 m mark and then **5–10 m beyond it**. Always include a stop at each sensor. At each stop:
 
 1. Read the **water depth** with a depth gauge or a metered stick held vertically on the bottom, next to the tape.
 2. Note the **time** of the reading. The depths are later corrected for the tide using the pressure-sensor record.
@@ -88,7 +87,7 @@ The survey is designed for **two snorkellers** working together. Snorkeller A is
 
 **In total, about 1.5 hours in the water per transect** for two snorkellers, in good conditions (good visibility, little current, 1–2 m depth). Allow more in strong current or poor visibility, and plan no more than two transects per day for the same pair.
 
-One seagrass transect is surveyed **per corridor**, and each study area (Belize, Seychelles, Fiji) has **6 corridors**: about **9 hours in the water per study area**, i.e. **3–4 field days for one pair**, plus travel between corridors and weather days. The survey is done once per transect, not at every sensor deployment.
+With 6 corridors per study area, this is about **9 hours in the water per study area**, i.e. **3–4 field days for one pair** (see [Effort per study area](field_transects.md#effort-per-study-area)).
 
 ---
 
@@ -100,7 +99,7 @@ Seagrass is usually represented as a single vegetation section in XBeach, with:
 
 | XBeach input | From the field data |
 | --- | --- |
-| Vegetation height (ah) | Canopy height (mean of the 5 readings), or an effective blade length that accounts for flexibility (see below) |
+| Vegetation height (ah) | Canopy height (mean of the 3 readings per quadrat), or an effective blade length that accounts for flexibility (see below) |
 | Stem width (bv) | Mean blade width |
 | Density (N, per m²) | Shoots per m² (from Photo 2) × mean number of blades per shoot |
 
@@ -112,7 +111,7 @@ XBeach's vegetation module treats stems as rigid, whereas seagrass blades bend u
 
 ### Depth relative to canopy
 
-Wave attenuation by seagrass depends strongly on the ratio between canopy height and water depth. Depths along the transect must be corrected for the tide (with the time of each reading and the pressure-sensor record) and referred to the same vertical datum as the sensors and the tide used at the model boundary.
+Wave attenuation by seagrass depends strongly on the ratio between canopy height and water depth. Depths along the transect must be corrected for the tide and referred to the common vertical datum (see [Bed profile and vertical datum](field_transects.md#bed-profile-and-vertical-datum)). The other notes common to all habitats are on the [Field transects](field_transects.md#notes-for-modelling-all-habitats) page.
 
 ### Consistency
 
@@ -126,9 +125,7 @@ Shoot density from photos can differ from density counted by hand. Use the same 
 
 | ☐ | Item |
 |---|------|
-| ☐ | **Data:** site, transect ID, date, operators, time |
-| ☐ | **Data:** sensor IDs and position along the tape |
-| ☐ | **Data:** approximate GPS position of the 0 m end and compass bearing from 0 m to 30 m |
+| ☐ | **Data:** [common header](field_transects.md#on-every-transect) (incl. sensor positions, GPS of 0 m end, bearing) |
 | ☐ | **Data:** tape positions where the meadow changes (cover, dominant species) |
 | ☐ | Depth + time + vertical photo every 2 m, from 0 m to 5–10 m beyond the 30 m mark, and at each sensor |
 
@@ -149,7 +146,7 @@ Shoot density from photos can differ from density counted by hand. Use the same 
 | ☐ | Item |
 |---|------|
 | ☐ | Slate photographed and copied into the field sheet |
-| ☐ | Photos downloaded and named with site, transect, station or quadrat |
+| ☐ | Photos downloaded and named as on the [Field transects](field_transects.md#file-names) page (station or quadrat as item, e.g. `Q05_photo2`) |
 
 ---
 
