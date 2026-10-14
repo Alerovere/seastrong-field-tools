@@ -6,6 +6,13 @@ Drone imagery gives high-resolution maps of reef flats, seagrass beds and mangro
 
 Any consumer drone with a good camera can be used. Positions come from the **drone's own GNSS** (no RTK): the absolute position of the maps is accurate to a few metres, which is enough to compare them with satellite images and with the field data collected with handheld GNSS.
 
+```{figure} _static/drone_survey_flight.svg
+:alt: Parallel drone flight lines over a corridor with ground targets, photo overlap in side view, and low versus high sun angle
+:width: 100%
+
+**A** Parallel flight lines over the corridor, with take-off point and ground targets. **B** Altitude and overlap of consecutive photos. **C** Low sun reflects away from the camera; at midday the sun glint falls in the photos.
+```
+
 ---
 
 ## Before flying

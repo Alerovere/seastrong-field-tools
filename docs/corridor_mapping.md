@@ -6,8 +6,8 @@ In each corridor, SEASTRONG maps **bathymetry** and **habitats** at corridor sca
 
 | Dataset | Field method | Processing | Used for |
 | --- | --- | --- | --- |
-| Depth points | [Depth and bottom photos](depth_bottom_photos.md) (echosounder) | [Echosounder bathymetry](echosounder_bathymetry.md) | Calibration and validation of satellite-derived bathymetry; bathymetry of the hydrodynamic models |
-| Geotagged bottom photos | [Depth and bottom photos](depth_bottom_photos.md) (downward camera) | [Photo geotagging](photo_geotagging.md) | Ground truth for habitat maps; record of habitat condition |
+| Depth points | [Depth and bottom photos](depth_bottom_photos.md) (echosounder) | [Processing, part 1](depth_photos_processing.md#1-depth-points-tide-correction) | Calibration and validation of satellite-derived bathymetry; bathymetry of the hydrodynamic models |
+| Geotagged bottom photos | [Depth and bottom photos](depth_bottom_photos.md) (downward camera) | [Processing, part 2](depth_photos_processing.md#2-bottom-photos-geotagging) | Ground truth for habitat maps; record of habitat condition |
 | Drone imagery | [Drone survey](drone_survey.md) | Orthomosaic and surface model | High-resolution habitat maps of reef flats, seagrass and mangroves; link between transects and satellite maps |
 
 The transect surveys (habitat structure and wave attenuation, see [Field transects](field_transects.md)) are a separate operation at a much smaller scale. They are usually done in the same corridors and the same field campaign.

@@ -14,8 +14,7 @@ SEASTRONG Field Processing Tools
    corridor_mapping
    depth_bottom_photos
    drone_survey
-   echosounder_bathymetry
-   photo_geotagging
+   depth_photos_processing
 
 .. toctree::
    :maxdepth: 2

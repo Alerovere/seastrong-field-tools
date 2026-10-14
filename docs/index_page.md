@@ -45,8 +45,7 @@ The documentation has three parts:
 | [Corridor mapping](corridor_mapping.md) | Overview: which field data calibrate and validate the satellite bathymetry and habitat maps, and how to plan a corridor | T1.2 |
 | [Depth and bottom photos](depth_bottom_photos.md) | Field method: depth points and bottom photos with an echosounder and a camera on a kickboard | T1.2, T1.3, T4.5 |
 | [Drone survey](drone_survey.md) | Field method: drone imagery of reef flats, seagrass and mangroves | T1.2 |
-| [Echosounder bathymetry](echosounder_bathymetry.md) | Processing: tide correction of the depth points, calibration and validation sets | T1.2, T4.5 |
-| [Photo geotagging](photo_geotagging.md) | Processing: geotagging of the bottom photos with the GPS track | T1.2, T1.3 |
+| [Depth and bottom photos: processing](depth_photos_processing.md) | Processing: tide correction of the depth points (calibration and validation sets) and geotagging of the bottom photos | T1.2, T1.3, T4.5 |
 
 **Habitat structure and wave attenuation** (transect scale)
 

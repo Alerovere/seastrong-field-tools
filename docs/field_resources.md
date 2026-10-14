@@ -10,7 +10,7 @@ One fillable form per survey, with the field data sheets and the post-site repor
 
 | Survey | Form |
 | --- | --- |
-| Depth and bottom photos | {download}`Depth and bottom photos field form, v1.0 <_static/forms/depth_photos_field_form_v1.0.pdf>` |
+| Depth and bottom photos | {download}`Depth and bottom photos field form, v1.1 <_static/forms/depth_photos_field_form_v1.1.pdf>` |
 | Reef photogrammetry | {download}`Reef photogrammetry field form, v1.0 <_static/forms/reef_photogrammetry_field_form_v1.0.pdf>` |
 | Mangrove structure and topography | {download}`Mangrove field form, v1.0 <_static/forms/mangrove_field_form_v1.0.pdf>` |
 | Seagrass structure and bathymetry | {download}`Seagrass field form, v1.0 <_static/forms/seagrass_field_form_v1.0.pdf>` |

@@ -6,7 +6,14 @@ Depth points and bottom photos are collected **in the same operation**, by one s
 
 **Video tutorial:** [Watch on YouTube](https://youtu.be/1o9oEFoXRG4?si=4JF5xB074aj_Nsrq)
 
-The data are processed with two tools: [Echosounder bathymetry](echosounder_bathymetry.md) (depth points) and [Photo geotagging](photo_geotagging.md) (bottom photos).
+The processing of the depth points and the photos is described in [Depth and bottom photos: processing](depth_photos_processing.md).
+
+```{figure} _static/depth_bottom_photos.svg
+:alt: Kickboard with echosounder and downward camera, survey tracks across a corridor, and the reference photo of the phone clock
+:width: 100%
+
+**A** Side view: the snorkeller pushes the kickboard; the echosounder records depth and position, the camera takes bottom photos. **B** Plan view: cross-shore tracks from deep water to the shore, plus a few alongshore tracks at different depths, covering all bottom types. **C** Reference photo of the phone GPS time, taken at the start and at the end, to compute the offset between the camera clock and the phone.
+```
 
 ---
 
@@ -35,7 +42,7 @@ The data are processed with two tools: [Echosounder bathymetry](echosounder_bath
 2. **Start recording:** start the scan in the Deeper app (with GPS on), then start the camera.
 3. **Reference photo:** at the start, hold the **phone screen showing the GPS time** under the camera and let it take a photo. The camera and the phone have independent clocks: this photo is used in processing to compute the time offset between them. Take a second reference photo at the end of the survey as a check.
 4. **Swim the tracks** planned for the corridor (see [Planning a corridor](corridor_mapping.md#planning-a-corridor)), pushing the board slowly and steadily, keeping it flat and the camera pointing down.
-5. **Note the start and end time** of each track, and any interruption.
+5. **Note the start and end time** of the survey, and any interruption.
 6. **At the end:** stop the camera and the scan, take the second reference photo, and check that the scan contains GPS positions.
 7. **Export** the scan from the Deeper app (CSV) and the GPS track (GPX), and download the photos. Name all files with the survey ID (see [Field resources](field_resources.md#naming-rules)).
 
@@ -51,7 +58,7 @@ The data are processed with two tools: [Echosounder bathymetry](echosounder_bath
 
 ## Field form and post-site report
 
-The set-up checklist, the reference-photo times, the track sheet and the post-site report are in one form: {download}`Depth and bottom photos field form, v1.0 (PDF) <_static/forms/depth_photos_field_form_v1.0.pdf>`.
+The set-up checklist, the reference-photo times, the survey times and the post-site report are in one form: {download}`Depth and bottom photos field form, v1.1 (PDF) <_static/forms/depth_photos_field_form_v1.1.pdf>`.
 
 - **In the field:** print pages 1–2, or copy them onto the slate.
 - **After the survey:** type the data and the post-site report (page 3) into the same PDF, the same day.

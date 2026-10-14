@@ -11,7 +11,7 @@ from reportlab.platypus import Paragraph, Spacer, PageBreak
 from reportlab.lib.units import mm
 from formlib import Form, H1, H2, SUB, S, W, COMMON_HELP, COMMON_CHOICES
 
-VERSION = "1.0"
+VERSION = "1.1"
 VERSION_DATE = "2026-10-14"
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "..", "docs", "_static", "forms", f"depth_photos_field_form_v{VERSION}.pdf")
@@ -27,8 +27,10 @@ HELP.update({
     "Tide during the survey": "Rising, falling, high or low",
     "Water clarity": "Clear, moderate or turbid",
     "Start reference photo: GPS time shown": "Time on the phone screen in the photo (hh:mm:ss)",
+    "Survey start time": "Time (phone) when the scan was started",
+    "Survey end time": "Time (phone) when the scan was stopped",
     "End reference photo: GPS time shown": "Time on the phone screen in the photo (hh:mm:ss)",
-    "Survey complete (Y / N)": "All planned tracks swum",
+    "Survey complete (Y / N)": "Whole corridor covered as planned",
     "Time in the water (h)": "From entering to leaving the water",
     "Waves": "Calm, moderate or strong",
     "Current": "None, weak or strong",
@@ -45,7 +47,7 @@ story = []
 
 # ---------- page 1 ----------
 story += [Paragraph("Depth and bottom photos: field form", H1),
-          Paragraph("One form per survey. Pages 1–2 are used in the field; page 3 is the post-site report, filled in the same day. "
+          Paragraph("One form per survey. Page 1 is used in the field; page 2 is the post-site report, filled in the same day. "
                     "Fill it in with Adobe Acrobat Reader (free): the Survey ID is then filled in automatically and the form is "
                     "saved correctly. Method: Depth and bottom photos page of the SEASTRONG Field Processing Tools documentation.", SUB)]
 story.append(Paragraph("1. Survey header", H2))
@@ -63,20 +65,14 @@ story.append(Paragraph("Hold the phone screen showing the GPS time under the cam
                        "of the survey. Write the time shown on the screen.", S))
 story.append(Spacer(1, 3))
 story.append(f.fields(["Start reference photo: GPS time shown", "End reference photo: GPS time shown"]))
+story.append(Paragraph("4. Survey times and notes", H2))
+story.append(f.fields(["Survey start time", "Survey end time"]))
+story.append(Spacer(1, 4))
+story.append(Paragraph("Notes: interruptions, problems, anything unusual.", S))
+story.append(f.notes("notes_field", 35 * mm))
 story.append(PageBreak())
 
-# ---------- page 2: tracks ----------
-story.append(Paragraph("4. Tracks", H2))
-story.append(Paragraph("One row per track. <b>Start / end</b>: time (phone). <b>From / to</b>: short description of the start and end "
-                       "of the track (e.g. reef crest, channel, shore). <b>Notes</b>: interruptions, problems, habitats crossed.", S))
-story.append(Spacer(1, 3))
-head = ["Track", "Start", "End", "From", "To", "Notes"]
-story.append(f.grid(head, 24, [0.07, 0.1, 0.1, 0.2, 0.2, 0.33], "track",
-                    prefill=[[str(i + 1)] + [None] * 5 for i in range(24)], rh=8.5 * mm,
-                    example=["e.g.", "09:12", "09:31", "reef crest", "shore", "crossed seagrass 09:20–09:26"]))
-story.append(PageBreak())
-
-# ---------- page 3: post-site report ----------
+# ---------- page 2: post-site report ----------
 story.append(Paragraph("Post-site report", H1))
 story.append(Paragraph("Filled in the same day, after downloading the data. Send it with the data to the data manager.", SUB))
 story.append(Paragraph("A. Survey", H2))
