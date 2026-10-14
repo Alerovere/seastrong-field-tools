@@ -12,7 +12,7 @@ SEASTRONG Field Processing Tools
    :caption: Bathymetry and habitat mapping
 
    corridor_mapping
-   kickboard_survey
+   depth_bottom_photos
    drone_survey
    echosounder_bathymetry
    photo_geotagging

@@ -1,4 +1,4 @@
-# Kickboard Survey: Depth and Bottom Photos
+# Depth and Bottom Photos
 
 ## Overview
 
@@ -49,13 +49,11 @@ The data are processed with two tools: [Echosounder bathymetry](echosounder_bath
 
 ---
 
-## Checklist
+## Field form and post-site report
 
-| ☐ | Item |
-|---|------|
-| ☐ | Phone charged, Deeper app connected, GPS fixed |
-| ☐ | Camera charged, memory card empty, timelapse mode, pointing down |
-| ☐ | **Data:** survey ID, date, operator, time zone of the phone |
-| ☐ | Reference photo of the phone GPS time at the start (and at the end) |
-| ☐ | **Data:** start and end time of each track |
-| ☐ | Scan exported (CSV), GPS track exported (GPX), photos downloaded, all named with the survey ID |
+The set-up checklist, the reference-photo times, the track sheet and the post-site report are in one form: {download}`Depth and bottom photos field form, v1.0 (PDF) <_static/forms/depth_photos_field_form_v1.0.pdf>`.
+
+- **In the field:** print pages 1–2, or copy them onto the slate.
+- **After the survey:** type the data and the post-site report (page 3) into the same PDF, the same day.
+- **Fill it in with Adobe Acrobat Reader** (free, [download it here](https://get.adobe.com/reader/)): the **Survey ID** is then filled in automatically from study area, date and corridor, and the form fields are saved correctly.
+- Save the filled form with the data, named `<surveyID>_field_form.pdf`, and put the data download link in section B of the report.

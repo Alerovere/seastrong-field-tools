@@ -12,7 +12,7 @@ This tool processes depth data collected with a **Deeper Pro** echosounder and a
 
 ## Field data
 
-The depth points are collected with the [kickboard survey](kickboard_survey.md), together with the bottom photos. This page covers the processing only.
+The depth points are collected with the [depth and bottom photos survey](depth_bottom_photos.md), together with the bottom photos. This page covers the processing only.
 
 ### Calibration and validation
 

@@ -6,8 +6,8 @@ In each corridor, SEASTRONG maps **bathymetry** and **habitats** at corridor sca
 
 | Dataset | Field method | Processing | Used for |
 | --- | --- | --- | --- |
-| Depth points | [Kickboard survey](kickboard_survey.md) (echosounder) | [Echosounder bathymetry](echosounder_bathymetry.md) | Calibration and validation of satellite-derived bathymetry; bathymetry of the hydrodynamic models |
-| Geotagged bottom photos | [Kickboard survey](kickboard_survey.md) (downward camera) | [Photo geotagging](photo_geotagging.md) | Ground truth for habitat maps; record of habitat condition |
+| Depth points | [Depth and bottom photos](depth_bottom_photos.md) (echosounder) | [Echosounder bathymetry](echosounder_bathymetry.md) | Calibration and validation of satellite-derived bathymetry; bathymetry of the hydrodynamic models |
+| Geotagged bottom photos | [Depth and bottom photos](depth_bottom_photos.md) (downward camera) | [Photo geotagging](photo_geotagging.md) | Ground truth for habitat maps; record of habitat condition |
 | Drone imagery | [Drone survey](drone_survey.md) | Orthomosaic and surface model | High-resolution habitat maps of reef flats, seagrass and mangroves; link between transects and satellite maps |
 
 The transect surveys (habitat structure and wave attenuation, see [Field transects](field_transects.md)) are a separate operation at a much smaller scale. They are usually done in the same corridors and the same field campaign.
@@ -22,13 +22,12 @@ The transect surveys (habitat structure and wave attenuation, see [Field transec
   - depth points can be collected at any tide, because they are tide-corrected in processing; note the times;
   - bottom photos need clear water and are best in the middle of the day with low waves;
   - drone flights need low tide, calm water and a low sun (see [Drone survey](drone_survey.md)).
-- **Combine with the transects** where possible: run at least one kickboard track along each transect of the corridor, so that the transect data and the corridor maps can be compared.
 
 ---
 
 ## Survey IDs and file names
 
-Each mapping survey gets an ID built like the transect IDs: **area + date (DDMMYY) + corridor + survey type**, with survey type `bathy` for the kickboard survey (depth and photos) and `drone` for the drone survey. For example: `BZ140327C1bathy`, `BZ150327C1drone`. If more than one survey of the same type is done in a corridor on the same day, add a letter: `BZ140327C1bathyB`.
+Each mapping survey gets an ID made of **area + date (DDMMYY) + corridor + survey type**, with survey type `bathy` for the depth and bottom photos survey and `drone` for the drone survey. For example: `BZ140327C1bathy`, `BZ150327C1drone`. If more than one survey of the same type is done in a corridor on the same day, add a letter: `BZ140327C1bathyB`.
 
 All files and folders start with the survey ID; see [Field resources](field_resources.md#naming-rules).
 

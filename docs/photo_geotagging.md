@@ -12,7 +12,7 @@ This tool geotags time-lapse photos taken during fieldwork by matching each imag
 
 ## Field data
 
-The bottom photos are collected with the [kickboard survey](kickboard_survey.md), together with the depth points; the GPS track of the echosounder (GPX) is used to geotag them. This page covers the processing only.
+The bottom photos are collected with the [depth and bottom photos survey](depth_bottom_photos.md), together with the depth points; the GPS track of the echosounder (GPX) is used to geotag them. This page covers the processing only.
 
 ### Clock synchronisation
 

@@ -50,8 +50,10 @@ class Field(Flowable):
                         fieldFlags="multiline" if self.multiline else "", relative=True)
 
 class Form:
-    def __init__(self, title, habitat_word, help=None, choices=None):
+    def __init__(self, title, habitat_word, help=None, choices=None, id_label="Transect ID"):
         self.title = title; self.habitat = habitat_word
+        self.id_label = id_label
+        self.id_name = re.sub(r"[^A-Za-z0-9_]+", "_", id_label).strip("_").lower()
         self.help = help or {}; self.choices = choices or {}
 
     def label(self, f):
@@ -119,7 +121,7 @@ class Form:
             c.saveState(); c.setFont("Helvetica", 7.5); c.setFillColor(colors.HexColor(MUTE))
             c.drawString(15 * mm, 10 * mm, f"SEASTRONG · {self.title} · v{version} ({version_date})")
             c.drawRightString(A4[0] - 15 * mm, 10 * mm, f"page {doc.page}")
-            c.drawRightString(A4[0] - 15 * mm - 62 * mm, 10 * mm, "Transect ID:")
+            c.drawRightString(A4[0] - 15 * mm - 62 * mm, 10 * mm, f"{self.id_label}:")
             c.acroForm.textfield(name=f"footer_tid_{doc.page}", x=A4[0] - 15 * mm - 60 * mm, y=8.6 * mm,
                                  width=45 * mm, height=4.6 * mm, fontSize=7.5, borderWidth=0,
                                  fillColor=colors.white, textColor=INK)
@@ -138,7 +140,7 @@ class Form:
         kids = ArrayObject(); keep = ArrayObject(); da = None
         for ref in af["/Fields"]:
             o = ref.get_object(); t = str(o.get("/T", ""))
-            if t == "transect_id" or t.startswith("transect_id_") or t.startswith("footer_tid_"):
+            if t == self.id_name or t.startswith(self.id_name + "_") or t.startswith("footer_tid_"):
                 kids.append(ref); da = da or o.get("/DA")
             else:
                 keep.append(ref)
@@ -148,11 +150,11 @@ class Form:
                 'if(a&&c&&p.length==3){var mm=("0"+p[0]).slice(-2),dd=("0"+p[1]).slice(-2),yy=p[2].slice(-2);'
                 f'event.value=a+dd+mm+yy+c+"{self.habitat}";}}else{{event.value="will autocompile";}}')
         parent = DictionaryObject()
-        parent[NameObject("/FT")] = NameObject("/Tx"); parent[NameObject("/T")] = TextStringObject("transect_id")
+        parent[NameObject("/FT")] = NameObject("/Tx"); parent[NameObject("/T")] = TextStringObject(self.id_name)
         parent[NameObject("/V")] = TextStringObject("will autocompile")
         if da: parent[NameObject("/DA")] = da
         parent[NameObject("/TU")] = TextStringObject(
-            f"Transect ID: area + DDMMYY + corridor + {self.habitat} (automatic in Adobe Acrobat Reader)")
+            f"{self.id_label}: area + DDMMYY + corridor + {self.habitat} (automatic in Adobe Acrobat Reader)")
         js = DictionaryObject(); js[NameObject("/S")] = NameObject("/JavaScript"); js[NameObject("/JS")] = TextStringObject(calc)
         aa = DictionaryObject(); aa[NameObject("/C")] = js; parent[NameObject("/AA")] = aa
         pref = w._add_object(parent)

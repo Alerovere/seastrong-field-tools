@@ -8,6 +8,7 @@ Scripts that generate the printable and fillable PDF field forms published in th
 | Reef photogrammetry | `reef_photogrammetry_field_form.py` | v1.0 |
 | Mangrove structure and topography | `mangrove_field_form.py` | v1.0 |
 | Seagrass structure and bathymetry | `seagrass_field_form.py` | v1.0 |
+| Depth and bottom photos | `depth_photos_field_form.py` | v1.0 |
 
 ## Updating a form
 
@@ -21,5 +22,5 @@ The version is in the file name so that browsers and the docs site never show a 
 older copy. It is also printed in the footer of every page.
 
 `formlib.py` holds the building blocks shared by the forms (fields, tables, footer, and the
-automatic Transect ID). The reef form script predates it and is self-contained; the mangrove and
-seagrass forms use `formlib.py`.
+automatic Transect ID). The reef form script predates it and is self-contained; the other forms
+use `formlib.py`.
