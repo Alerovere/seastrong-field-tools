@@ -87,8 +87,6 @@ The survey is designed for **two snorkellers** working together. Snorkeller A is
 
 **In total, about 1.5 hours in the water per transect** for two snorkellers, in good conditions (good visibility, little current, 1–2 m depth). Allow more in strong current or poor visibility, and plan no more than two transects per day for the same pair.
 
-With 6 corridors per study area, this is about **9 hours in the water per study area**, i.e. **3–4 field days for one pair** (see [Effort per study area](field_transects.md#effort-per-study-area)).
-
 ---
 
 ## Notes for modelling

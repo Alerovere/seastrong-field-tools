@@ -64,12 +64,17 @@ Survey IDs, file names and date formats follow the [naming rules](field_resource
 
 ---
 
-## Effort per study area
+## Time per transect
 
 Rough times for a team of two, in good conditions. They are first estimates and should be checked in the first days of fieldwork.
 
-| Habitat | Time per transect | 6 transects (one study area) |
-| --- | --- | --- |
+| Habitat | Time per transect |
+| --- | --- |
+| Coral reef | ~1–1.25 h in the water |
+| Seagrass | ~1.5 h in the water |
+| Mangrove | ~4–5 h (topography + method C); less with method A |
+
+--- | --- | --- |
 | Coral reef | ~1–1.25 h in the water | ~6–8 h, 2–3 field days |
 | Seagrass | ~1.5 h in the water | ~9 h, 3–4 field days |
 | Mangrove | ~4–5 h (topography + method C); less with method A | ~25–30 h, 6 field days |

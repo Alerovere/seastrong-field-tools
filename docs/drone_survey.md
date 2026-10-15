@@ -2,15 +2,21 @@
 
 ## Overview
 
-Drone imagery gives high-resolution maps of reef flats, seagrass beds and mangrove canopy, between the scale of the transects and that of the satellite images. From the photos, an **orthomosaic** (a georeferenced image of the whole area) and a **surface model** are produced. They are used to map habitats in detail, to link the transects to the satellite maps, and, in mangroves, to describe the canopy and the exposed intertidal areas.
+The drone is used in two ways, which can be combined in the same survey:
 
-Any consumer drone with a good camera can be used. Positions come from the **drone's own GNSS** (no RTK): the absolute position of the maps is accurate to a few metres, which is enough to compare them with satellite images and with the field data collected with handheld GNSS.
+| | 1. Mapping flight | 2. Spot photos |
+| --- | --- | --- |
+| What | **Continuous photos** along parallel flight lines, with large overlap | **Single geotagged photos** taken while hovering over chosen points |
+| Product | **Orthomosaic**: one georeferenced image of the whole area | A set of photos, each showing **what is on the bottom (or the ground) at a known point** |
+| Used for | Detailed habitat maps of reef flats, seagrass and mangrove fringe; link between the transects and the satellite maps | Ground truth for the habitat maps, at points that are hard to reach by swimming or where the satellite classes are uncertain |
 
-```{figure} _static/drone_survey_flight.svg
-:alt: Parallel drone flight lines over a corridor with ground targets, photo overlap in side view, and low versus high sun angle
+Only the orthomosaic is produced from the mapping flight; no elevation model is made, so **no ground control points are needed**. Any consumer drone with a good camera can be used. Positions come from the **drone's own GNSS** (no RTK), accurate to a few metres, which is enough to compare the products with the satellite images and with the field data.
+
+```{figure} _static/drone_survey_flight_v2.svg
+:alt: Mapping flight lines and spot photo points over a corridor, photo overlap of the mapping flight in side view, and low versus high sun angle
 :width: 100%
 
-**A** Parallel flight lines over the corridor, with take-off point and ground targets. **B** Altitude and overlap of consecutive photos. **C** Low sun reflects away from the camera; at midday the sun glint falls in the photos.
+**A** 1) Mapping flight along parallel lines, for the orthomosaic; 2) spot photos taken while hovering over chosen points. **B** Altitude and overlap of consecutive photos in the mapping flight. **C** Low sun reflects away from the camera; at midday the sun glint falls in the photos.
 ```
 
 ---
@@ -25,12 +31,23 @@ Any consumer drone with a good camera can be used. Positions come from the **dro
 
 ## Flight planning
 
+### 1. Mapping flight
+
 | Parameter | Guidance |
 | --- | --- |
 | Altitude | Typically 60–100 m above take-off: a lower altitude gives finer detail but more photos and battery |
 | Overlap | At least 75% along track and 70% across track; over water use **at least 80% / 80%**, because the image matching is harder on water |
 | Camera | Pointing straight down (nadir); exposure and white balance fixed if the drone allows it |
 | Flight lines | Parallel lines, planned with the drone's mission app |
+
+### 2. Spot photos
+
+| Parameter | Guidance |
+| --- | --- |
+| Points | Chosen before the flight on the satellite image: each habitat type of the corridor, the boundaries between habitats, and areas where the habitat is uncertain |
+| Altitude | Low enough to see the bottom in detail, and the same for all points of a survey (e.g. 20–30 m); note it in the field form |
+| Camera | Pointing straight down (nadir); one or two photos per point, with GPS position saved in the photo (check that geotagging is on) |
+| Flight | Fly to each point, hover until the drone is stable, take the photo; note the point number and photo number |
 
 ---
 
@@ -43,18 +60,9 @@ Any consumer drone with a good camera can be used. Positions come from the **dro
 
 ---
 
-## Ground control (without RTK)
-
-Without RTK, the maps are positioned by the drone's GNSS. To check and improve the alignment with the other datasets:
-
-- where there is dry land or emergent reef, place **4–5 visible targets** (e.g. large printed boards) spread across the area, and record their position with a handheld GNSS (averaging the position for a minute);
-- otherwise, the orthomosaic can be aligned in processing to recognisable features in the satellite images.
-
----
-
 ## Field form and post-site report
 
-One form per survey (one corridor, one day), with the survey ID (e.g. `BZ150327C1drone`), conditions, one row per flight (start and end time, altitude, overlap, number of photos), the positions of the ground targets and the post-site report: {download}`Drone field form, v1.0 (PDF) <_static/forms/drone_field_form_v1.0.pdf>`.
+One form per survey (one corridor, one day), with the survey ID (e.g. `BZ150327C1drone`), conditions, one row per flight (type, start and end time, altitude, overlap, number of photos), the list of spot photos and the post-site report: {download}`Drone field form, v1.1 (PDF) <_static/forms/drone_field_form_v1.1.pdf>`.
 
 Fill it in with **Adobe Acrobat Reader** (free, [download it here](https://get.adobe.com/reader/)), so that the survey ID is filled in automatically and the form is saved correctly. Name the photo folders with the survey ID (see [Field resources](field_resources.md#naming-rules)).
 

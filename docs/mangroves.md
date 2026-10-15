@@ -16,7 +16,7 @@ Mangrove forests range from open stands with pneumatophores to dense stands of p
 
 The transect follows the [common layout](field_transects.md#transect-layout-all-habitats): a **30 m** tape from **sensor 1 (0 m)** to **sensor 2 (30 m)**. In the mangrove:
 
-- the 0 m mark (sensor 1) is at the **forest edge**;
+- the 0 m mark (sensor 1) is at the **forest edge**, i.e. the end of the transect **closest to the sea**; the tape runs from there into the forest;
 - fill in the [common header](field_transects.md#on-every-transect), and note the tape positions where the vegetation type or density changes (e.g. "pneumatophores only from 0 to 6 m, dense prop roots from 6 to 30 m"), and the vegetation in the 5–10 m beyond the 30 m mark;
 - work at **low tide**, when the forest floor is exposed.
 
