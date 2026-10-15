@@ -22,7 +22,7 @@ All outputs are CSV, GeoJSON or geotagged JPG files that open directly in QGIS o
 | File | From | Used for |
 | --- | --- | --- |
 | Deeper scan (CSV) | Deeper app | Depths |
-| GPS track (GPX) | Deeper app | Photo positions |
+| GPS track (GPX) | Handheld GNSS | Photo positions |
 | Bottom photos (JPG) | Camera | Photos |
 | Reference photo and the GPS time shown in it | Camera; time written in the field form | Photo clock offset |
 | Water level record (CSV) | Reference tide gauge | Tide correction of depths |
@@ -58,13 +58,13 @@ Both notebooks run in **Google Colab**: no local Python installation is needed.
 
 ## 2. Bottom photos: geotagging
 
-The camera clock and the phone clock are not synchronised. The notebook computes the offset between them from the reference photo (see [Field procedure](depth_bottom_photos.md#field-procedure)), applies it to all photos, and gives each photo the position of the GPS track at the same time.
+The camera clock and the GNSS clock are not synchronised. The notebook computes the offset between them from the reference photo (see [Field procedure](depth_bottom_photos.md#field-procedure)), applies it to all photos, and gives each photo the position of the GPS track at the same time.
 
 | Step | What happens |
 | --- | --- |
 | 1–3 | Install libraries, connect Google Drive, load the functions, set the paths to the photos and the GPX track |
 | 4 | Load the photos and the GPS track |
-| 5–6 | Display the reference photo, type the GPS time shown on the phone screen, and compute the clock offset |
+| 5–6 | Display the reference photo, type the time shown on the GNSS screen, and compute the clock offset |
 | 7 | Match each photo to the closest GPS position, within a **maximum time difference**. The notebook has a table to choose this value from the logging interval of the GPS |
 | 8 | Write the position into the photo metadata (EXIF), in a copy of the photos or in the originals |
 | 9–10 | Export the photo positions as GeoJSON and show them on an interactive map |

@@ -93,4 +93,8 @@ SEASTRONG brings together 15 partner institutions across 10 countries:
 
 This project has received funding from the European Union's Horizon Europe research and innovation programme under grant agreement HORIZON-CL6-2025-01-BIODIV-07. Views and opinions expressed are those of the authors only and do not necessarily reflect those of the European Union or the European Research Executive Agency. Neither the European Union nor the granting authority can be held responsible for them.
 
-![EU Flag](_static/Eu_flag.png)
+```{image} _static/EU_funded_by.png
+:alt: Funded by the European Union
+:width: 320px
+:align: center
+```

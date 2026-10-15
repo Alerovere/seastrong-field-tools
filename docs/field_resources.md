@@ -10,7 +10,7 @@ One fillable form per survey, with the field data sheets and the post-site repor
 
 | Survey | Form |
 | --- | --- |
-| Depth and bottom photos | {download}`Depth and bottom photos field form, v1.1 <_static/forms/depth_photos_field_form_v1.1.pdf>` |
+| Depth and bottom photos | {download}`Depth and bottom photos field form, v1.2 <_static/forms/depth_photos_field_form_v1.2.pdf>` |
 | Drone survey | {download}`Drone field form, v1.0 <_static/forms/drone_field_form_v1.0.pdf>` |
 | Wave sensors | {download}`Wave sensor field form, v1.0 <_static/forms/wave_sensor_field_form_v1.0.pdf>` |
 | Reef photogrammetry | {download}`Reef photogrammetry field form, v1.0 <_static/forms/reef_photogrammetry_field_form_v1.0.pdf>` |

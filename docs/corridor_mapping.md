@@ -25,14 +25,8 @@ The transect surveys (habitat structure and wave attenuation, see [Field transec
 
 ---
 
-## Survey IDs and file names
+## Field forms, survey IDs and data
 
-Each mapping survey gets an ID made of **area + date (DDMMYY) + corridor + survey type**, with survey type `bathy` for the depth and bottom photos survey and `drone` for the drone survey. For example: `BZ140327C1bathy`, `BZ150327C1drone`. If more than one survey of the same type is done in a corridor on the same day, add a letter: `BZ140327C1bathyB`.
+Each survey has its own **field form with a post-site report** (fillable PDF, see [Field resources](field_resources.md#field-forms)). The form is filled in during the survey and completed the same day; it is then **uploaded to the project's data repository together with the data** of that survey, so that every dataset comes with its record of how, when and where it was collected.
 
-All files and folders start with the survey ID; see [Field resources](field_resources.md#naming-rules).
-
----
-
-## Why we do this in SEASTRONG
-
-In **WP1, Task 1.2** (mapping the physical environment within corridors), bathymetry and habitat maps are core deliverables; they are produced mainly from satellite imagery, which needs field data for calibration and validation. In **WP4, Task 4.5**, the bathymetry is also used to set up the hydrodynamic models (XBeach).
+Each survey gets an ID made of **area + date (DDMMYY) + corridor + survey type**, with survey type `bathy` for the depth and bottom photos survey and `drone` for the drone survey. For example: `BZ140327C1bathy`, `BZ150327C1drone`. The ID is filled in automatically in the field form, and all files and folders start with it; see [Field resources](field_resources.md#naming-rules).

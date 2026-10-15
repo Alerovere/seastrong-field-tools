@@ -8,7 +8,7 @@ Scripts that generate the printable and fillable PDF field forms published in th
 | Reef photogrammetry | `reef_photogrammetry_field_form.py` | v1.0 |
 | Mangrove structure and topography | `mangrove_field_form.py` | v1.0 |
 | Seagrass structure and bathymetry | `seagrass_field_form.py` | v1.0 |
-| Depth and bottom photos | `depth_photos_field_form.py` | v1.1 |
+| Depth and bottom photos | `depth_photos_field_form.py` | v1.2 |
 | Drone survey | `drone_field_form.py` | v1.0 |
 | Wave sensors | `wave_sensor_field_form.py` | v1.0 |
 
