@@ -24,12 +24,12 @@ Python package behind the SEASTRONG WP1 Colab workflow (Earth Engine + Copernicu
 
 ## Use in Colab, from a folder in your Google Drive
 
-1. Download the repository (*Code → Download ZIP*), unzip it and upload `SDB_toolkit/` (or the whole repository)
-   anywhere in your Google Drive.
+1. Download **[SDB_toolkit.zip](https://github.com/Alerovere/seastrong-field-tools/releases/download/sdb-toolkit-latest/SDB_toolkit.zip)** (only this toolkit, latest released version), unzip it and upload the
+   `SDB_toolkit` folder anywhere in your Google Drive.
 2. Open `SDB_toolkit/notebooks/seastrong_toolkit_colab.ipynb` from Drive (*Open with → Google Colaboratory*).
 3. In the install cell set `TOOLKIT_DIR` to that folder. The code is imported from it, and every result goes to
    `SDB_toolkit/outputs/` (ignored by git). Nothing is fetched from GitHub while you work; `UPDATE_FROM_GITHUB = True`
-   replaces the code files with the latest version when you choose to (outputs are kept, old code is backed up).
+   replaces the code files with the latest released version when you choose to (outputs are kept, old code is backed up).
 
 All options are set **in the notebook**: every step has an explanation cell, an options cell listing every option
 with its default and a comment, a run cell and a report cell. The report summarises the results in plain language and
@@ -77,6 +77,14 @@ They are never written to code, notebooks or outputs.
 - Earth Engine finds export folders by name anywhere in Drive. If it writes to `My Drive/<folder>` instead, the toolkit
   moves the files into `outputs/<folder>`; keep no same-name folders at the top of My Drive (the project cell warns).
 - `st.<step>.run(ctx, force=True)` repeats a step anyway; `PROJECT['RUN_TAG']` forces new folders for everything.
+
+## Releasing a new version (maintainer)
+
+1. Raise `version` in `pyproject.toml` and `__version__` in `src/seastrong_toolkit/__init__.py`; commit and push.
+2. On GitHub: *Releases → Draft a new release*, new tag `sdb-toolkit-v<version>` (e.g. `sdb-toolkit-v0.9.0`), *Publish*.
+3. The workflow `.github/workflows/sdb_toolkit_release.yml` builds `SDB_toolkit.zip` (this folder without `tests/`),
+   attaches it to that release and to the rolling release `sdb-toolkit-latest`, which the download link above and the
+   notebook's update cell use. It stops if the tag does not match the version in `pyproject.toml`.
 
 ## Developing
 

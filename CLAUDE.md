@@ -151,7 +151,9 @@ are deliberately verbose (explanation / options / run / report per step). `core.
 module namespace. Drive workflow (0.9, user decision): the user downloads the repo into any Drive folder and opens the notebook
 from there; the install cell sets `TOOLKIT_DIR`, pip-installs only the dependencies (constraints file protecting
 Colab's google-* packages), puts `TOOLKIT_DIR/src` on `sys.path` (no clone, no pip install of the package) and
-`DRIVE_ROOT = TOOLKIT_DIR/outputs` (git-ignored). Updating from GitHub is an explicit opt-in (`UPDATE_FROM_GITHUB`).
+`DRIVE_ROOT = TOOLKIT_DIR/outputs` (git-ignored). Updating from GitHub is an explicit opt-in (`UPDATE_FROM_GITHUB`). Distribution: publishing a release tagged
+`sdb-toolkit-v<version>` runs `.github/workflows/sdb_toolkit_release.yml`, which zips `SDB_toolkit/` (no tests) and
+attaches `SDB_toolkit.zip` to it and to the rolling release `sdb-toolkit-latest` (the link used in README, docs, notebook).
 Earth Engine finds export folders by name anywhere in Drive: `core.task_files` also looks in `My Drive/<folder>` and
 moves files into the step folder; `setup` warns about same-name folders at the top of My Drive.
 Minimal Earth Engine use (0.9): Sentinel-2 tile metadata is read with `ee.data.computeFeatures` (`core.s2_tile_metadata`,

@@ -49,8 +49,8 @@ You also need the **area of interest (AOI)** as an Earth Engine table asset or a
 
 ## Running the toolkit
 
-1. **Put the toolkit in your Google Drive.** On [GitHub](https://github.com/Alerovere/seastrong-field-tools) click
-   *Code → Download ZIP*, unzip it and upload the `SDB_toolkit` folder (or the whole repository) anywhere in your Drive.
+1. **Put the toolkit in your Google Drive.** Download **[SDB_toolkit.zip](https://github.com/Alerovere/seastrong-field-tools/releases/download/sdb-toolkit-latest/SDB_toolkit.zip)** (only the toolkit, latest
+   released version), unzip it and upload the `SDB_toolkit` folder anywhere in your Drive.
 2. **Open the notebook from Drive**: `SDB_toolkit/notebooks/seastrong_toolkit_colab.ipynb` → *Open with → Google
    Colaboratory*.
 3. In the **install cell** set `TOOLKIT_DIR` to that folder and run it, then the import cell. The code is imported
@@ -63,7 +63,7 @@ You also need the **area of interest (AOI)** as an Earth Engine table asset or a
 
 ```{tip}
 **Updating.** A newer version is installed only when you ask for it: set `UPDATE_FROM_GITHUB = True` in the install
-cell and run it once. The code files are replaced (the old `src` folder is kept as `_backup_src_<date>`), `outputs`
+cell and run it once. The code files are replaced by those of the latest released `SDB_toolkit.zip` (the old `src` folder is kept as `_backup_src_<date>`), `outputs`
 and your notebook are not touched (the new notebook is saved as `…_NEW.ipynb`). Then *Runtime → Restart session*.
 ```
 

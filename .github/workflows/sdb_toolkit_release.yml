@@ -1,0 +1,59 @@
+# Builds SDB_toolkit.zip (only the SDB_toolkit folder, without tests) when a release with a tag
+# sdb-toolkit-v<version> is published, e.g. sdb-toolkit-v0.9.0, and attaches it:
+#   - to that release (a fixed version), and
+#   - to the rolling release 'sdb-toolkit-latest', so this link always gives the newest version:
+#     https://github.com/Alerovere/seastrong-field-tools/releases/download/sdb-toolkit-latest/SDB_toolkit.zip
+# The tag must match the version in SDB_toolkit/pyproject.toml.
+name: SDB toolkit zip
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing release tag to (re)build the zip for, e.g. sdb-toolkit-v0.9.0'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  zip:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'sdb-toolkit-v')
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.tag }}
+
+      - name: Check that the tag matches the package version
+        run: |
+          v=$(python3 -c "import tomllib; print(tomllib.load(open('SDB_toolkit/pyproject.toml','rb'))['project']['version'])")
+          if [ "$TAG" != "sdb-toolkit-v$v" ]; then
+            echo "::error::Tag $TAG does not match SDB_toolkit/pyproject.toml version $v (expected sdb-toolkit-v$v)"; exit 1
+          fi
+          echo "VERSION=$v" >> "$GITHUB_ENV"
+
+      - name: Build SDB_toolkit.zip
+        run: |
+          zip -r -q SDB_toolkit.zip SDB_toolkit \
+            -x 'SDB_toolkit/tests/*' 'SDB_toolkit/outputs/*' 'SDB_toolkit/_backup_src_*' \
+               '*/__pycache__/*' '*.egg-info/*' '*.DS_Store'
+          unzip -l SDB_toolkit.zip
+
+      - name: Attach to this release
+        run: gh release upload "$TAG" SDB_toolkit.zip --clobber
+
+      - name: Attach to the rolling release sdb-toolkit-latest
+        run: |
+          notes="SDB toolkit only (the SDB_toolkit folder of this repository), currently version $VERSION (release $TAG). Download SDB_toolkit.zip, unzip it into a folder of your Google Drive and open notebooks/seastrong_toolkit_colab.ipynb from there."
+          if gh release view sdb-toolkit-latest >/dev/null 2>&1; then
+            gh release edit sdb-toolkit-latest --title "SDB toolkit (latest: $VERSION)" --notes "$notes" --latest=false
+          else
+            gh release create sdb-toolkit-latest --target "$GITHUB_SHA" --title "SDB toolkit (latest: $VERSION)" --notes "$notes" --latest=false
+          fi
+          gh release upload sdb-toolkit-latest SDB_toolkit.zip --clobber
