@@ -30,6 +30,7 @@ seastrong-field-tools.readthedocs.io).
 | `underwater_photogrammetry/` | Two-camera GoPro SfM photogrammetry rig | `docs/underwater_photogrammetry.md` |
 | `Mangroves_topography/` | Transect topography reconstruction (`mangrove_transect_topography.ipynb`, `transect_demo.csv`) | **none yet** — see below |
 | `Wave_data_processing/` | Pressure-sensor calibration + OCEANLYZ wave processing (`pressure_calibrate_and_prepare.ipynb`, `run_oceanlyz.ipynb`) | **none yet** — see below |
+| `SDB_toolkit/` | Python package `seastrong_toolkit` (pip-installable, `src/` layout) + Colab runner `notebooks/seastrong_toolkit_colab.ipynb`: waves/ERA5, pre-screening of S2 months, S2 composite for Bathymetrix-AI, DEMs, habitats, transport tracers, ICESat-2 | `docs/sdb_toolkit.md` |
 
 **Known gap:** `Mangroves_topography/` and `Wave_data_processing/` aren't yet listed in
 `README.md`'s tools table or `docs/index.rst`'s toctree, and have no readthedocs page.
@@ -139,6 +140,16 @@ Full notebook design notes and CSV schema: `mangrove_transect_topography_noteboo
 in the Claude Project (note: that doc references a Drive-integrated variant,
 `mangrove_transect_topography_drive.ipynb`, for Colab use — check whether the copy in
 this repo's `Mangroves_topography/` is that version or the earlier two-point-only one).
+
+## SDB toolkit (`SDB_toolkit/`)
+
+Package `seastrong_toolkit`: settings in YAML (`src/seastrong_toolkit/defaults.yaml` + a project file); each step module
+(`waves`, `prescreen`, `s2`, `dem`, `habitats`, `transport`, `icesat2`) has `run(ctx)`; `core.bind()` injects settings into
+the module namespace. Each step writes to `<FOLDER_ROOT>__<NN>_<Name>__<settings-hash>` in Drive with `manifest.json`.
+Credentials only from Colab Secrets (`EE_PROJECT`, `CDS_KEY`, `CMEMS_USERNAME`, `CMEMS_PASSWORD`, optional
+`EE_SERVICE_ACCOUNT_JSON`). The Colab notebook installs with a constraints file protecting Colab's google-* packages.
+Offline tests with fake services: `python SDB_toolkit/tests/test_mock_run.py`. Full decision log:
+`sdb_bathymetrix_workflow_southern_belize.md` in the Claude Project.
 
 ## Project background
 

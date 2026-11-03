@@ -20,6 +20,7 @@ SEASTRONG Field Processing Tools
    depth_bottom_photos
    drone_survey
    depth_photos_processing
+   sdb_toolkit
 
 .. toctree::
    :maxdepth: 2
