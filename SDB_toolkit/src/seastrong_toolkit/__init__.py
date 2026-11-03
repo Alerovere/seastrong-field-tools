@@ -9,7 +9,7 @@ Typical use in Colab::
     ctx.set('prescreen', PRESCREEN); st.prescreen.run(ctx); st.prescreen.report(ctx)
     ctx.set('s2', S2); st.s2.run(ctx); st.s2.report(ctx)
 """
-__version__ = '0.7.0'
+__version__ = '0.7.1'
 
 from .core import setup, defaults, summary, manifest, MissingSecret
 from . import core, waves, prescreen, s2, dem, habitats, transport, icesat2, diagnostics

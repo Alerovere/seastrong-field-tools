@@ -126,6 +126,14 @@ def prescreen(ctx=None):
         if lowyear.usable_min < 3:
             R.say(f"\n! Even the best {L}-month window had a season with only {lowyear.usable_min:.0f} usable images: "
                   'a multi-year composite (several YEARS in the Sentinel-2 options) is needed to reach MIN_VALID observations per pixel.')
+    sc = pd.read_csv(_file(m, 'scenes_by_date')) if _file(m, 'scenes_by_date') else None
+    if sc is not None and 'cover_frac' in sc:
+        R.say('\nSentinel-2 / Landsat scenes (per date):')
+        for fam, g in sc.groupby('family'):
+            R.say(f"  {fam}: {len(g):,} dates; covering ≥ {P['COVER_MIN']:.0%} of AOI water: {(g.cover_frac >= P['COVER_MIN']).mean():.0%}; "
+                  f"median clear share of covered water: {g.clear_frac.median():.0%}; clear enough (≥ {P['CLEAR_MIN']:.0%}): {(g.clear_frac >= P['CLEAR_MIN']).mean():.0%}")
+            if (g.cover_frac >= P['COVER_MIN']).mean() < 0.5:
+                R.suggest("PRESCREEN['COVER_MIN']", 0.3, f'most {fam} dates cover only part of the AOI (check ORBIT: one orbit may see only part of it)')
     mon = pd.read_csv(_file(m, 'monthly_summary')) if _file(m, 'monthly_summary') else None
     if mon is not None and 'p_clear_S2' in mon:
         R.say('\nClear-sky chance per Sentinel-2 scene: ' + ', '.join(f"{MON3[int(r.month) - 1]} {r.p_clear_S2:.0%}" for r in mon.itertuples() if pd.notna(r.p_clear_S2)))

@@ -51,8 +51,16 @@ LABELS = {'hs': 'waves $H_s$', 'wind': 'wind', 'rain_era5': 'rain ERA5', 'rain_c
 
 
 # ------------------------------------------------------------------ Earth Engine scene statistics
-def _scene_feature(img, red, nir, swir, clear, sensor):
-    w = water.rename('w')
+def _aoi_water_px():
+    """Water pixels of the whole AOI at STAT_SCALE (outside Copernicus DEM tiles = open sea)."""
+    return water.unmask(1).rename('w').reduceRegion(reducer=ee.Reducer.sum(), geometry=roi, scale=P['STAT_SCALE'],
+                                                    maxPixels=1e10, tileScale=4).get('w')
+
+def _scene_feature(img, red, nir, swir, clear, sensor, n_aoi):
+    # only water INSIDE this image's footprint: a tile or path that covers part of the AOI must not count the
+    # rest of the AOI as cloudy (clear share = clear water / water seen by this image)
+    foot = red.mask().gt(0)
+    w = water.unmask(1).And(foot).rename('w')
     cw = w.And(clear)
     glint = cw.And(swir.gt(P['PIXEL_MAX_SWIR']))
     good = cw.And(glint.Not())
@@ -60,11 +68,12 @@ def _scene_feature(img, red, nir, swir, clear, sensor):
         reducer=ee.Reducer.sum(), geometry=roi, scale=P['STAT_SCALE'], maxPixels=1e10, tileScale=4)
     med = ee.Image.cat([red.rename('red'), nir.rename('nir')]).updateMask(good).reduceRegion(
         reducer=ee.Reducer.median(), geometry=roi, scale=P['STAT_SCALE'], maxPixels=1e10, tileScale=4)
-    return ee.Feature(None, {'time_ms': img.get('system:time_start'), 'sensor': sensor, 'n_water': counts.get('w'),
+    return ee.Feature(None, {'time_ms': img.get('system:time_start'), 'sensor': sensor, 'n_water_aoi': n_aoi,
+                             'n_water': counts.get('w'),
                              'n_clear': counts.get('c'), 'n_glint': counts.get('g'), 'red': med.get('red'),
                              'nir': med.get('nir')})
 
-SCENE_COLS = ['time_ms', 'sensor', 'n_water', 'n_clear', 'n_glint', 'red', 'nir']
+SCENE_COLS = ['time_ms', 'sensor', 'n_water_aoi', 'n_water', 'n_clear', 'n_glint', 'red', 'nir']
 
 def s2_scenes():
     y = P['YEARS']
@@ -73,32 +82,33 @@ def s2_scenes():
     if P['ORBIT'] is not None:
         col = col.filter(ee.Filter.eq('SENSING_ORBIT_NUMBER', P['ORBIT']))
     col = col.linkCollection(ee.ImageCollection('GOOGLE/CLOUD_SCORE_PLUS/V1/S2_HARMONIZED'), ['cs_cdf'])
+    n_aoi = _aoi_water_px()
     def f(img):
         b = lambda n: img.select(n).divide(10000)
-        return _scene_feature(img, b('B4'), b('B8'), b('B11'), img.select('cs_cdf').gte(P['CS_THRESHOLD']), 'S2')
+        return _scene_feature(img, b('B4'), b('B8'), b('B11'), img.select('cs_cdf').gte(P['CS_THRESHOLD']), 'S2', n_aoi)
     return ee.FeatureCollection(col.map(f))
 
 LS = [('LANDSAT/LT05/C02/T1_L2', 'SR_B3', 'SR_B4', 'SR_B5', 'L5'), ('LANDSAT/LE07/C02/T1_L2', 'SR_B3', 'SR_B4', 'SR_B5', 'L7'),
       ('LANDSAT/LC08/C02/T1_L2', 'SR_B4', 'SR_B5', 'SR_B6', 'L8'), ('LANDSAT/LC09/C02/T1_L2', 'SR_B4', 'SR_B5', 'SR_B6', 'L9')]
 
 def landsat_scenes():
-    y = P['LANDSAT_YEARS']; out = None
+    y = P['LANDSAT_YEARS']; out = None; n_aoi = _aoi_water_px()
     for cid, r, n, s, name in LS:
         def f(img, r=r, n=n, s=s, name=name):
             sr = lambda b: img.select(b).multiply(0.0000275).add(-0.2)
             clear = img.select('QA_PIXEL').bitwiseAnd(0b11110).eq(0)
-            return _scene_feature(img, sr(r), sr(n), sr(s), clear, name)
+            return _scene_feature(img, sr(r), sr(n), sr(s), clear, name, n_aoi)
         c = (ee.ImageCollection(cid).filterBounds(roi).filterDate(f'{y[0]}-01-01', f'{y[1] + 1}-01-01').map(f))
         out = c if out is None else out.merge(c)
     return ee.FeatureCollection(out)
 
 def hls_scenes():
-    y = P['YEARS']; out = None
+    y = P['YEARS']; out = None; n_aoi = _aoi_water_px()
     for cid, swir, name in (('NASA/HLS/HLSL30/v002', 'B6', 'HLS_L30'), ('NASA/HLS/HLSS30/v002', 'B11', 'HLS_S30')):
         def f(img, swir=swir, name=name):
             fm = img.select('Fmask')
             clear = fm.bitwiseAnd(0b1110).eq(0)
-            return _scene_feature(img, img.select('B4'), img.select('B5' if name == 'HLS_L30' else 'B8A'), img.select(swir), clear, name)
+            return _scene_feature(img, img.select('B4'), img.select('B5' if name == 'HLS_L30' else 'B8A'), img.select(swir), clear, name, n_aoi)
         c = ee.ImageCollection(cid).filterBounds(roi).filterDate(f'{y[0]}-01-01', f'{y[1] + 1}-01-01').map(f)
         out = c if out is None else out.merge(c)
     return ee.FeatureCollection(out)
@@ -200,11 +210,12 @@ def scenes_by_date(sc):
     sc = sc.copy()
     sc['family'] = np.where(sc.sensor.str.startswith('L'), 'LANDSAT', np.where(sc.sensor.str.startswith('HLS'), 'HLS', 'S2'))
     sc['date'] = pd.to_datetime(sc.time_ms, unit='ms').dt.normalize()
-    for k in ('n_water', 'n_clear', 'n_glint', 'red', 'nir'): sc[k] = pd.to_numeric(sc[k], errors='coerce')
+    for k in ('n_water_aoi', 'n_water', 'n_clear', 'n_glint', 'red', 'nir'): sc[k] = pd.to_numeric(sc[k], errors='coerce')
     sc['w_red'] = sc.red * sc.n_clear
-    g = sc.groupby(['family', 'date']).agg(n_water=('n_water', 'sum'), n_clear=('n_clear', 'sum'), n_glint=('n_glint', 'sum'),
+    g = sc.groupby(['family', 'date']).agg(n_water_aoi=('n_water_aoi', 'max'), n_water=('n_water', 'sum'), n_clear=('n_clear', 'sum'), n_glint=('n_glint', 'sum'),
                                            w_red=('w_red', 'sum'), sensors=('sensor', lambda s: ','.join(sorted(set(s))))).reset_index()
-    g['clear_frac'] = g.n_clear / g.n_water.replace(0, np.nan)
+    g['cover_frac'] = (g.n_water / g.n_water_aoi.replace(0, np.nan)).clip(upper=1)   # tiles overlap: sum capped at 1
+    g['clear_frac'] = g.n_clear / g.n_water.replace(0, np.nan)                         # within the footprint
     g['glint_frac'] = g.n_glint / g.n_clear.replace(0, np.nan)
     g['turb'] = g.w_red / g.n_clear.replace(0, np.nan)
     return g.drop(columns='w_red')
@@ -289,7 +300,7 @@ def run(ctx=None, force=False):
     SCENES['turb_rank'] = SCENES.groupby('family')['turb'].rank(pct=True) * 100
     turb_q = SCENES.groupby('family')['turb'].quantile(P['PCTL'].get('turbidity', 50) / 100).to_dict()
     SCENES['turb_ok'] = SCENES.apply(lambda r: (r.turb <= turb_q.get(r.family, np.inf)) if pd.notna(r.turb) else False, axis=1)
-    SCENES['clear_ok'] = SCENES.clear_frac >= P['CLEAR_MIN']
+    SCENES['clear_ok'] = (SCENES.clear_frac >= P['CLEAR_MIN']) & (SCENES.cover_frac >= P['COVER_MIN'])
     SCENES = SCENES.merge(DAILY[['good_day']], left_on='date', right_index=True, how='left')
     SCENES['usable'] = SCENES.clear_ok & SCENES.turb_ok & (SCENES.good_day == 1)
     s2 = SCENES[SCENES.family == 'S2']
@@ -399,7 +410,7 @@ def run(ctx=None, force=False):
     {tbl}
 
     Months compared (`COMPARE_MONTHS`) {P['COMPARE_MONTHS']}: {f"{cur.iloc[0].usable_mean:.1f} ± {cur.iloc[0].usable_std:.1f} usable images per season" if len(cur) else 'not a contiguous window'}.
-    Usable = good sea-state day + ≥ {P['CLEAR_MIN']:.0%} of AOI water cloud-free + turbidity at or below the Sentinel-2 P{P['PCTL'].get('turbidity', 50)}.
+    Usable = good sea-state day + image covers ≥ {P['COVER_MIN']:.0%} of AOI water + ≥ {P['CLEAR_MIN']:.0%} of the water it covers cloud-free + turbidity at or below the Sentinel-2 P{P['PCTL'].get('turbidity', 50)}.
     Sentinel-2 years {max(y[0], 2017)}–{y[1]}, relative orbit {P['ORBIT'] if P['ORBIT'] is not None else 'all'}.
 
     ## Thresholds (site percentiles over all months, capped)
@@ -409,7 +420,7 @@ def run(ctx=None, force=False):
     | File | Content |
     |---|---|
     | `{PREFIX}_prescreen_daily_conditions.csv` | per day: hs (max over {P['WAVE_WINDOW_H']} h), wind (mean over {P['WIND_WINDOW_H']} h), rain_era5 / rain_chirps ({P['RAIN_DAYS']} whole days before), ocean colour, good_day |
-    | `{PREFIX}_prescreen_scenes_by_date.csv` | per sensor family and date: clear-water share, glint share, turbidity (median red of clear water), ranks, usable |
+    | `{PREFIX}_prescreen_scenes_by_date.csv` | per sensor family and date: share of AOI water covered (cover_frac), clear share of the covered water, glint share, turbidity (median red of clear water), ranks, usable |
     | `{PREFIX}_prescreen_monthly_summary.csv` | per month: medians and ranks, probability of a good day, clear-scene probability, usable S2 images per year (mean, std, min, max) |
     | `{PREFIX}_prescreen_window_ranking.csv` | every window of {P['WINDOW_LENGTHS']} months: usable images per season (mean, std, min, max), good-day probability |
     | `{PREFIX}_Fig_prescreen_*.png/.pdf` | calendar of good days and month × variable heatmap; usable images per month, probabilities, best windows |

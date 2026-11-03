@@ -23,6 +23,10 @@ STEPS = {   # key: (folder number/name, upstream steps)
     'transport': ('04_Transport_overview', []),
     'icesat2': ('05_ICESat2', ['s2', 'dem']),
 }
+# Bumped when a step's method changes in a way that makes earlier results wrong, so they are not re-used.
+# 2026-11-03 prescreen 2: clear-sky share counted AOI water outside the image footprint as cloudy.
+CODE_VERSION = {'prescreen': 2}
+
 CMEMS_REGIONS = {
     'global': dict(datasets=['cmems_mod_glo_wav_my_0.2deg_PT3H-i', 'cmems_mod_glo_wav_anfc_0.083deg_PT3H-i'],
                    step_h=3, search_deg=0.3, start='1980-01-01',
@@ -80,8 +84,9 @@ def step_hash(cfg, step, _memo=None):
     _memo = {} if _memo is None else _memo
     if step in _memo: return _memo[step]
     proj = {k: v for k, v in cfg['project'].items() if k != 'DRIVE_ROOT'}
-    h = _hash(dict(project=proj, step=step, settings=cfg[step],
-                   upstream={u: step_hash(cfg, u, _memo) for u in STEPS[step][1]}))
+    d = dict(project=proj, step=step, settings=cfg[step], upstream={u: step_hash(cfg, u, _memo) for u in STEPS[step][1]})
+    if CODE_VERSION.get(step): d['code'] = CODE_VERSION[step]      # a corrected method gets new folders
+    h = _hash(d)
     _memo[step] = h
     return h
 

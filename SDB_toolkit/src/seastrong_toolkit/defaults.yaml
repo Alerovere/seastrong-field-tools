@@ -67,7 +67,8 @@ prescreen:
   PCTL: {hs: 75, wind: 75, rain_era5: 75, rain_chirps: 75, turbidity: 75}   # good if at/below this site percentile (all months);
                              # 75 = not among the worst 25 % of days. All four together are much stricter than any one.
   ABS_CAPS: {hs: 1.5, wind: 6.0, rain_era5: 25.0, rain_chirps: 25.0}       # and never above these limits (null = none)
-  CLEAR_MIN: 0.6             # a scene is usable if at least this share of AOI water is cloud-free
+  CLEAR_MIN: 0.6             # a scene is usable if at least this share of the water it covers is cloud-free ...
+  COVER_MIN: 0.5             # ... and it covers at least this share of the AOI water (partial tiles / swaths)
   SENSORS: [S2, LANDSAT]     # scene statistics from Earth Engine: S2, LANDSAT, HLS
   LANDSAT_YEARS: [1984, 2026]
   OCEAN_COLOUR: true         # Copernicus Marine ocean-colour transparency (daily AOI median)

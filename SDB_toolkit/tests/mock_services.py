@@ -88,7 +88,7 @@ class Task:
                 wet = np.isin(d.month, [6, 7, 8, 9, 10, 11]); n = len(d)
                 clear = np.clip(rng.beta(2, 2, n) + np.where(wet, -0.3, 0.2), 0, 1)
                 pd.DataFrame({'time_ms': (d + pd.Timedelta(hours=16, minutes=20)).as_unit('ns').asi8 // 1_000_000,
-                              'sensor': 'S2' if s2_ else rng.choice(['L5', 'L8'], n), 'n_water': 4000, 'n_clear': (clear * 4000).round(),
+                              'sensor': 'S2' if s2_ else rng.choice(['L5', 'L8'], n), 'n_water_aoi': 4000, 'n_water': 4000, 'n_clear': (clear * 4000).round(),
                               'n_glint': (rng.uniform(0, 0.1, n) * clear * 4000).round(),
                               'red': 0.02 + np.where(wet, 0.03, 0.0) + rng.gamma(2, 0.004, n), 'nir': 0.01}).to_csv(p, index=False)
             elif 'habitat_areas' in nm:
