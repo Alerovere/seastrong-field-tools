@@ -162,6 +162,37 @@ def s2(ctx=None):
                           f"This value keeps 70 % of them; check in the screening figure that the extra dates are acceptable")
             if v['missing'] and v['missing'] / max(len(d), 1) > 0.2:
                 R.say(f"    ! {k}: {v['missing']} dates without data ({'dropped' if S2['MISSING_POLICY'].get('waves' if k == 'waves' else k if k in ('wind', 'rain') else 'water') == 'drop' else 'kept unchecked'})")
+        if 'manual' in d and (d.manual.fillna('') != '').any():
+            R.say(f"Your decisions: {int((d.manual == 'accept').sum())} dates accepted, {int((d.manual == 'reject').sum())} rejected (they override the checks).")
+        # --- do the indirect checks predict turbid water?
+        from .s2 import proxy_check, strict_suggestion, add_quality
+        if 'clear_share' not in d: d = add_quality(d)
+        pc = proxy_check(d, S2)
+        R.say('\nIndirect checks: do they pick out turbid water (higher B5) on your dates?')
+        for r in pc.itertuples():
+            extra = (f" — B5 median {r.b5_median_above:.4f} above vs {r.b5_median_below:.4f} below the threshold (×{r.b5_ratio:.2f}, p = {r.p_value:.2g}); "
+                     f"{r.also_failed_direct:.0%} of the dates above it fail an image check anyway") if pd.notna(getattr(r, 'b5_ratio', np.nan)) else ''
+            R.say(f"  {r.check:6s} ({r.n_above} dates above {r.threshold:g}): {r.verdict}{extra}")
+            if r.enabled and r.verdict.startswith('no evidence') and r.n_above >= 5:
+                col_ = {'rain': 'rain_mm', 'wind': 'wind_ms', 'waves': 'hs_m'}[r.check]
+                R.suggest(f"S2['{r.option}']", round(float(pd.to_numeric(d[col_], errors='coerce').quantile(0.9)), 2),
+                          f"the {r.n_above} dates above the {r.check} threshold are not more turbid than the others: the check drops images "
+                          f"without a measurable benefit. Relax it (90th percentile shown) or switch it off ({r.option.split('_')[0]}_FILTER=False); "
+                          "the image checks (NIR, B5) still remove glinty and turbid dates")
+        # --- best images
+        th, sm = strict_suggestion(d, S2)
+        R.say(f"\n'Best images' set (image checks at the median of your dates; indirect checks tightened only where useful):")
+        R.say('  ' + ', '.join(f"{k} = {v}" for k, v in th.items()))
+        R.say(f"  dates: {sm['dates_current']} with the current thresholds -> {sm['dates_strict']} with these; "
+              f"estimated clear observations for a typical water pixel: ~{sm['clear_obs_current']:.0f} -> ~{sm['clear_obs_strict']:.0f} "
+              f"(target TARGET_CLEAR_OBS = {sm['target']}; the QA raster below gives the real numbers)")
+        if sm['clear_obs_strict'] >= sm['target']:
+            R.say('  -> the stricter set still reaches the target: a good candidate for a cleaner composite.')
+            for k, v in th.items():
+                if v < S2[k]: R.suggest(f"S2['{k}']", v, "'best images' set: keeps only the better half of the dates on this check while still reaching TARGET_CLEAR_OBS")
+        else:
+            R.say('  -> the stricter set falls below the target: keep the current thresholds, or use the image checker to reject only the worst dates.')
+        R.say('  Rule of thumb: ~10–30 clear observations per pixel suit a P30 composite; below ~8 use PERCENTILE = 50 (median).')
         kept = int(d.kept.sum())
         if kept < 3 * S2['MIN_VALID']:
             R.say(f"\n! Only {kept} dates kept for MIN_VALID = {S2['MIN_VALID']} clear observations per pixel: many pixels may be NoData.")

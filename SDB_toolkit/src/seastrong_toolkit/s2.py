@@ -43,7 +43,7 @@ from .core import (bind, manifest, save_manifest, stage_done, stage_get, set_sta
                    export_image, export_table, wait, task_files, task_status, read_task_csv, record_file,
                    write_readme, find_task, TERMINAL_BAD, OKABE_ITO, panel_labels, save_fig, empty_panel,
                    figure_style, dir_to, in_months, years_filter, aoi_shapely, aoi_bbox_wgs84, _jsonable,
-                   secret, CMEMS_REGIONS)
+                   secret, CMEMS_REGIONS, decisions_path, load_decisions, applicable_decisions)
 try:
     import ee
 except ImportError:  # documentation builds
@@ -228,10 +228,262 @@ def s2_measure_offsets(col, c):
     return offsets, pd.DataFrame(diag)
 
 
+# ================================================================================ screening cache, decisions, quality
+SCREEN_KEYS = ['YEARS', 'MONTHS', 'MAX_TILE_CLOUD', 'CS_THRESHOLD', 'ORBIT', 'GLINT_FILTER', 'PIXEL_MAX_SWIR',
+               'RAIN_DAYS', 'RAIN_BUFFER', 'WIND_FILTER', 'WIND_SOURCE', 'WIND_WINDOW_H', 'WIND_BUFFER', 'SCENE_STAT_SCALE']
+
+def screening_hash(c):
+    """Hash of the options that change the Earth Engine screening TABLE (not the thresholds applied to it)."""
+    proj = {k: v for k, v in CFG['project'].items() if k not in ('DRIVE_ROOT', 'RUN_TAG')}
+    return hashlib.sha256(json.dumps(_jsonable(dict(p=proj, s={k: c[k] for k in SCREEN_KEYS})), sort_keys=True).encode()).hexdigest()[:10]
+
+def raw_screening(col, c):
+    """Per-date statistics from Earth Engine, exported once per screening hash and kept in the cache folder:
+    changing a threshold or an Accept/Reject decision does not export the table again."""
+    h = screening_hash(c)
+    cache = os.path.join(DRIVE_ROOT, CTX.folders['cache'], 's2_screening'); os.makedirs(cache, exist_ok=True)
+    path = os.path.join(cache, f'raw_{h}.csv')
+    if os.path.exists(path):
+        print(f'  screening table re-used from the cache ({os.path.basename(path)})')
+        return pd.read_csv(path)
+    name = f'S2_date_screening_raw_{h}'
+    export_table(s2_screening_table(col, c), 's2', name,
+                 selectors=SCREEN_COLS if (c['WIND_FILTER'] and c['WIND_SOURCE'] == 'gee') else SCREEN_COLS[:-2])
+    wait([name])
+    raw = read_task_csv(name)
+    raw.to_csv(path + '.tmp', index=False); os.replace(path + '.tmp', path)
+    return raw
+
+def apply_decisions(df, c):
+    """Your Accept / Reject choices override the automatic checks (column 'manual')."""
+    df = df.copy(); df['manual'] = ''
+    if not c.get('MANUAL_DECISIONS'): return df
+    dec = dict((d, v) for d, v in applicable_decisions(CFG))
+    for i, d in df['date'].items():
+        v = dec.get(str(d))
+        if v == 'accept':
+            df.at[i, 'manual'] = 'accept'; df.at[i, 'kept'] = True
+        elif v == 'reject':
+            df.at[i, 'manual'] = 'reject'; df.at[i, 'kept'] = False
+            df.at[i, 'reason'] = ','.join([x for x in str(df.at[i, 'reason']).split(',') if x and x != 'nan'] + ['manual_reject'])
+    return df
+
+QUALITY_VARS = ['water_nir', 'water_b5', 'rain_mm', 'wind_ms', 'hs_m']
+
+def add_quality(df):
+    """clear_share: clear water of the date relative to the clearest date; quality_score 0 (best) .. 100 (worst):
+    mean percentile rank of glint/haze, turbidity, rain, wind, waves and cloudiness among the dates with clear water."""
+    df = df.copy()
+    nw = pd.to_numeric(df.get('n_water_px'), errors='coerce')
+    df['clear_share'] = nw / nw.max() if nw.notna().any() else np.nan
+    has = pd.to_numeric(df['water_nir'], errors='coerce').notna()
+    ranks = [pd.to_numeric(df.loc[has, v], errors='coerce').rank(pct=True) for v in QUALITY_VARS if v in df]
+    ranks.append(1 - df.loc[has, 'clear_share'].rank(pct=True) + 1 / max(has.sum(), 1))
+    df['quality_score'] = np.nan
+    if has.any():
+        df.loc[has, 'quality_score'] = (pd.concat(ranks, axis=1).mean(axis=1, skipna=True) * 100).round(1)
+    return df
+
+PROXIES = [('rain_mm', 'RAIN_MAX_MM', 'RAIN_FILTER', 'rain'), ('wind_ms', 'WIND_MAX_MS', 'WIND_FILTER', 'wind'),
+           ('hs_m', 'WAVE_MAX_HS', 'WAVE_FILTER', 'waves')]
+
+def proxy_check(df, c):
+    """Do rain, wind and waves (indirect checks) predict turbid or glinty water (direct checks) on these dates?
+    Compares the red-edge B5 of clear water between dates above and below each threshold."""
+    from scipy import stats
+    rows = []
+    b5 = pd.to_numeric(df['water_b5'], errors='coerce'); nir = pd.to_numeric(df['water_nir'], errors='coerce')
+    direct_fail = (b5 > c['SCENE_MAX_B5']) | (nir > c['SCENE_MAX_NIR'])
+    for col_, opt, flag, lab in PROXIES:
+        if col_ not in df: continue
+        x = pd.to_numeric(df[col_], errors='coerce'); ok = x.notna() & b5.notna()
+        above = ok & (x > c[opt]); below = ok & ~(x > c[opt])
+        r = dict(check=lab, option=opt, threshold=c[opt], enabled=bool(c[flag]), n_above=int(above.sum()), n_below=int(below.sum()))
+        r['spearman_b5'] = float(stats.spearmanr(x[ok], b5[ok]).correlation) if ok.sum() > 5 else np.nan
+        if above.sum() >= 3 and below.sum() >= 3:
+            r['b5_median_above'], r['b5_median_below'] = float(b5[above].median()), float(b5[below].median())
+            r['b5_ratio'] = r['b5_median_above'] / r['b5_median_below']
+            r['p_value'] = float(stats.mannwhitneyu(b5[above], b5[below], alternative='greater').pvalue)
+            r['also_failed_direct'] = float(direct_fail[above].mean())      # share the image checks catch anyway
+            if r['p_value'] < 0.05 and r['b5_ratio'] > 1.1:
+                r['verdict'] = 'useful: dates above the threshold have more turbid water'
+                if r['also_failed_direct'] > 0.8:
+                    r['verdict'] += ' (but the image checks already catch most of them)'
+            else:
+                r['verdict'] = 'no evidence: dates above the threshold are not more turbid'
+        else:
+            r['verdict'] = 'too few dates on one side of the threshold to judge'
+        rows.append(r)
+    return pd.DataFrame(rows)
+
+def proxy_figure(df, c, pc):
+    b5 = pd.to_numeric(df['water_b5'], errors='coerce')
+    labs = {'rain_mm': f"rain, {c['RAIN_DAYS']} days before (mm)", 'wind_ms': f"wind, {c['WIND_WINDOW_H']} h before (m s$^{{-1}}$)",
+            'hs_m': f"offshore $H_s$, {c['WAVE_WINDOW_H']} h before (m)"}
+    fig, axs = plt.subplots(1, 3, figsize=(7.2, 2.7), constrained_layout=True, sharey=True)
+    for ax, (col_, opt, flag, lab) in zip(axs, PROXIES):
+        x = pd.to_numeric(df.get(col_), errors='coerce') if col_ in df else pd.Series(np.nan, index=df.index)
+        kept = df['kept'].astype(bool)
+        ax.scatter(x[kept], b5[kept], s=9, color=OKABE_ITO[2], label='kept', alpha=0.8)
+        ax.scatter(x[~kept], b5[~kept], s=9, color=OKABE_ITO[3], label='dropped', alpha=0.8)
+        ax.axhline(c['SCENE_MAX_B5'], color='0.3', ls=':', lw=0.9, label='B5 threshold')
+        ax.axvline(c[opt], color=OKABE_ITO[3], ls='--', lw=0.9, label=f'{lab} threshold')
+        ax.set_xlabel(labs[col_])
+        r = pc[pc.check == lab]
+        if len(r):
+            r = r.iloc[0]; v = r.verdict.split(':')[0]
+            ax.set_title(f"{lab}: {v}" + (f"\nB5 ×{r.b5_ratio:.2f}, p={r.p_value:.2g}" if pd.notna(r.get('b5_ratio', np.nan)) else ''),
+                         loc='left', fontsize=8)
+    axs[0].set_ylabel('median water red edge B5'); axs[0].legend(fontsize=6.5, loc='upper right')
+    panel_labels(axs, x=-0.15)
+    save_fig(fig, 's2', f'{PREFIX}_Fig_S2_indirect_checks'); plt.show()
+
+def strict_suggestion(df, c):
+    """'Best images' thresholds: image checks at the median of the dates with clear water; indirect checks at
+    their median only where they proved useful. Returns (thresholds, summary)."""
+    d = df[pd.to_numeric(df['water_nir'], errors='coerce').notna()].copy()
+    pc = proxy_check(df, c)
+    th = {'SCENE_MAX_NIR': round(float(pd.to_numeric(d.water_nir).median()), 4),
+          'SCENE_MAX_B5': round(float(pd.to_numeric(d.water_b5).median()), 4)}
+    for col_, opt, flag, lab in PROXIES:
+        r = pc[pc.check == lab]
+        if len(r) and r.iloc[0].verdict.startswith('useful') and col_ in d:
+            th[opt] = round(float(pd.to_numeric(d[col_], errors='coerce').median()), 2)
+    def keep(t):
+        k = pd.Series(True, index=d.index)
+        for col_, opt in (('water_nir', 'SCENE_MAX_NIR'), ('water_b5', 'SCENE_MAX_B5'), ('rain_mm', 'RAIN_MAX_MM'),
+                          ('wind_ms', 'WIND_MAX_MS'), ('hs_m', 'WAVE_MAX_HS')):
+            if col_ in d: k &= ~(pd.to_numeric(d[col_], errors='coerce') > t.get(opt, c[opt]))
+        return k
+    cur, strict = keep({}), keep(th)
+    obs = lambda k: float(d.loc[k, 'clear_share'].sum()) if 'clear_share' in d else np.nan
+    return th, dict(dates_current=int(cur.sum()), dates_strict=int(strict.sum()), clear_obs_current=obs(cur),
+                    clear_obs_strict=obs(strict), target=c['TARGET_CLEAR_OBS'])
+
+
+# ================================================================================ image-by-image checker
+def thumb_url(date, c, size=360):
+    """True-colour thumbnail of the AOI on one date (all tiles of that date and orbit, no cloud mask), AOI outlined."""
+    d0 = ee.Date(date)
+    col_ = (ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED').filterBounds(roi).filterDate(d0, d0.advance(1, 'day')))
+    if c['ORBIT'] is not None:
+        col_ = col_.filter(ee.Filter.eq('SENSING_ORBIT_NUMBER', c['ORBIT']))
+    vis = col_.mosaic().visualize(bands=['B4', 'B3', 'B2'], min=0, max=1500, gamma=1.3)
+    outline = ee.Image().byte().paint(aoi_fc, 1, 2).visualize(palette=['ff00ff'])
+    return vis.blend(outline).getThumbURL({'region': roi.bounds(), 'dimensions': size, 'format': 'png'})
+
+def save_decision(date, decision, note=''):
+    path = decisions_path(CFG)
+    d = load_decisions(CFG)
+    orb = 'all' if S2['ORBIT'] is None else str(S2['ORBIT'])
+    d = d[~((d.date.astype(str) == str(date)) & (d.orbit.astype(str) == orb))]
+    if decision in ('accept', 'reject'):
+        d = pd.concat([d, pd.DataFrame([dict(date=str(date), orbit=orb, decision=decision, note=note,
+                                             decided_utc=dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds'))])])
+    d.sort_values(['orbit', 'date']).to_csv(path + '.tmp', index=False); os.replace(path + '.tmp', path)
+
+def checker(ctx=None, page_size=12, size=360):
+    """Gallery of all dates with clear water, best first, with Accept / Reject / Auto buttons.
+    Decisions are saved at once to <FOLDER_ROOT>__S2_image_decisions.csv in your Drive; run the S2 options cell
+    and st.s2.run(ctx) again to make a composite that uses them."""
+    import ipywidgets as wg
+    from IPython.display import display
+    try:
+        from google.colab import output; output.enable_custom_widget_manager()
+    except Exception:
+        pass
+    global WAVE_SERIES
+    ctx = bind(globals(), 's2', ctx)
+    c = S2
+    WAVE_SERIES = load_series(required=c['WAVE_FILTER'] or (c['WIND_FILTER'] and c['WIND_SOURCE'] == 'cds'))
+    s2_raw, col_ = s2_collection(c)
+    raw = raw_screening(col_, c)
+    df, _ = s2_decide(raw, c)
+    df = add_quality(df)
+    auto = df[['date', 'kept', 'reason']].rename(columns={'kept': 'auto_kept', 'reason': 'auto_reason'})
+    df = df.merge(auto, on='date')
+    df = df[pd.to_numeric(df.water_nir, errors='coerce').notna()].sort_values('quality_score').reset_index(drop=True)
+    dec = dict((d, v) for d, v in applicable_decisions(CFG))
+    state = dict(page=0, filt='all')
+    out = wg.Output()
+    summary = wg.HTML()
+    lim = {'water_nir': c['SCENE_MAX_NIR'], 'water_b5': c['SCENE_MAX_B5'], 'rain_mm': c['RAIN_MAX_MM'],
+           'wind_ms': c['WIND_MAX_MS'], 'hs_m': c['WAVE_MAX_HS']}
+    short = {'water_nir': 'NIR', 'water_b5': 'B5', 'rain_mm': 'rain', 'wind_ms': 'wind', 'hs_m': 'Hs'}
+
+    def final(r):
+        v = dec.get(r.date)
+        return True if v == 'accept' else False if v == 'reject' else bool(r.auto_kept)
+
+    def refresh_summary():
+        k = sum(final(r) for r in df.itertuples())
+        n_acc = sum(v == 'accept' for v in dec.values()); n_rej = sum(v == 'reject' for v in dec.values())
+        summary.value = (f"<b>{len(df)}</b> dates with clear water · automatically kept <b>{int(df.auto_kept.sum())}</b> · "
+                         f"your decisions: <b>{n_acc}</b> accepted, <b>{n_rej}</b> rejected · the composite would use "
+                         f"<b>{k}</b> dates. Decisions file: <code>{decisions_path(CFG)}</code>")
+
+    def view():
+        f = state['filt']
+        if f == 'all': return df
+        if f == 'automatically kept': return df[df.auto_kept]
+        if f == 'automatically dropped': return df[~df.auto_kept]
+        return df[df.date.isin(dec)]
+
+    def card(r):
+        vals = []
+        for k, lab in short.items():
+            x = pd.to_numeric(getattr(r, k, np.nan), errors='coerce')
+            if pd.isna(x): vals.append(f'{lab} –'); continue
+            bad = x > lim[k]
+            vals.append(f"<span style='color:{'#D55E00' if bad else 'inherit'}'>{lab} {x:.3g}</span>")
+        verdict = 'kept' if r.auto_kept else f"dropped ({r.auto_reason})"
+        html = wg.HTML(f"<b>{r.date}</b> · score {r.quality_score:.0f} · clear {r.clear_share:.0%}<br>"
+                       f"<span style='font-size:11px'>{' · '.join(vals)}<br>auto: {verdict}</span>")
+        try:
+            img = wg.HTML(f"<img src='{thumb_url(r.date, c, size)}' width='{size}'>")
+        except Exception as e:
+            img = wg.HTML(f'<i>thumbnail failed: {str(e)[:80]}</i>')
+        cur = dec.get(r.date, 'auto')
+        tb = wg.ToggleButtons(options=[('Auto', 'auto'), ('Accept', 'accept'), ('Reject', 'reject')], value=cur,
+                              style={'button_width': '80px'})
+        def on_change(ch, date=r.date):
+            save_decision(date, ch['new'])
+            if ch['new'] == 'auto': dec.pop(date, None)
+            else: dec[date] = ch['new']
+            refresh_summary()
+        tb.observe(on_change, names='value')
+        return wg.VBox([img, html, tb], layout=wg.Layout(border='1px solid #ccc', padding='4px', margin='3px', width=f'{size + 14}px'))
+
+    def show():
+        v = view(); n_pages = max(1, int(np.ceil(len(v) / page_size)))
+        state['page'] = min(state['page'], n_pages - 1)
+        page = v.iloc[state['page'] * page_size:(state['page'] + 1) * page_size]
+        pager.value = f"page {state['page'] + 1} / {n_pages} ({len(v)} dates)"
+        with out:
+            out.clear_output(wait=True)
+            display(wg.HBox([card(r) for r in page.itertuples()], layout=wg.Layout(flex_flow='row wrap')))
+
+    prev_b, next_b = wg.Button(description='◀ previous'), wg.Button(description='next ▶')
+    pager = wg.HTML()
+    filt = wg.Dropdown(options=['all', 'automatically kept', 'automatically dropped', 'decided by you'], value='all',
+                       description='show')
+    def go(delta):
+        state['page'] = max(0, state['page'] + delta); show()
+    prev_b.on_click(lambda _: go(-1)); next_b.on_click(lambda _: go(+1))
+    filt.observe(lambda ch: (state.update(filt=ch['new'], page=0), show()), names='value')
+    refresh_summary()
+    print('Dates are sorted by quality score (0 = best). Values in orange fail the current threshold. '
+          'Thumbnails show all tiles of the date, without cloud masking, stretched 0–0.15 reflectance; magenta = AOI.')
+    display(wg.VBox([summary, wg.HBox([prev_b, next_b, pager, filt]), out]))
+    show()
+    return df
+
+
+
 def run(ctx=None, force=False):
     """Run this step. Same settings = same folder: finished exports and stages are re-used
     (force=True starts them again)."""
-    global S2_HASH, S2_RESULT, WAVE_SERIES, ax, axs, b4, c, col, col_kept, comp, count, exclude, fig, \
+    global S2_HASH, S2_RESULT, pc, WAVE_SERIES, ax, axs, b4, c, col, col_kept, comp, count, exclude, fig, \
            flags_txt, img_, invalid, k, kw, lab, med, n, name, names, nm, off_diag, offsets, on, outs, p, \
            parts, qa, raw, rule_counts, s2_raw, scr, src_tile, st_, t, tag, thr, tn, tstd, v, vars_, vcol
     ctx = bind(globals(), 's2', ctx)
@@ -254,15 +506,14 @@ def run(ctx=None, force=False):
         exclude = list(c['EXCLUDE_DATES'])
     elif stage_get('s2_screening'):
         st_ = stage_get('s2_screening'); exclude = st_['exclude']; rule_counts = st_['rule_counts']
-        scr = pd.read_csv(st_['decided_csv']); print('  screening already done in this run:', len(exclude), 'dates excluded')
+        scr = pd.read_csv(st_['decided_csv']); print('  screening already done with these options:', len(exclude), 'dates excluded')
     else:
-        name = f'S2_date_screening_h{S2_HASH}'
-        tn = export_table(s2_screening_table(col, c), 's2', name,
-                          selectors=SCREEN_COLS if (c['WIND_FILTER'] and c['WIND_SOURCE'] == 'gee') else SCREEN_COLS[:-2])
-        wait([name])
-        raw = read_task_csv(name)
+        raw = raw_screening(col, c)
         scr, rule_counts = s2_decide(raw, c)
-        p = drive_path('s2', name + '_decided.csv'); scr.to_csv(p, index=False); record_file(p)
+        scr = add_quality(apply_decisions(scr, c))
+        n_man = int((scr.manual != '').sum())
+        if n_man: print(f"  your decisions applied to {n_man} dates ({int((scr.manual == 'accept').sum())} accepted, {int((scr.manual == 'reject').sum())} rejected)")
+        p = drive_path('s2', f'S2_date_screening_h{S2_HASH}_decided.csv'); scr.to_csv(p, index=False); record_file(p)
         exclude = scr.loc[~scr['kept'], 'date'].tolist()
         stage_done('s2_screening', exclude=exclude, rule_counts=rule_counts, decided_csv=p)
     if scr is not None:
@@ -293,6 +544,12 @@ def run(ctx=None, force=False):
         panel_labels(axs, x=-0.18)
         fig.suptitle(f'Sentinel-2 date screening, {c["YEARS"][0]}–{c["YEARS"][1]} months {c["MONTHS"][0]}–{c["MONTHS"][1]}', fontsize=10)
         save_fig(fig, 's2', f'{PREFIX}_Fig_S2_date_screening'); plt.show()
+        # ---------------- do the indirect checks (rain, wind, waves) predict turbid water? ----------------
+        pc = proxy_check(scr, c)
+        p = drive_path('s2', f'S2_{tag}_indirect_checks.csv'); pc.to_csv(p, index=False); record_file(p)
+        print('Indirect checks vs water turbidity (B5) on these dates:')
+        for r in pc.itertuples(): print(f'   {r.check:6s} {r.verdict}')
+        proxy_figure(scr, c, pc)
     col_kept = col.filter(ee.Filter.inList('date', exclude or ['none']).Not())
 
     # (c) tile offsets (with diagnostics), checkpointed
@@ -346,6 +603,8 @@ def run(ctx=None, force=False):
     | `S2_{tag}_B2_TemporalStd.tif` | temporal std of blue reflectance **of the tile used at each pixel** |
     | `S2_{tag}_Median_B1-B4_sensitivity.tif` | {'median composite of B1–B4 (same dates and offsets), for sensitivity tests' if c['SENSITIVITY_MEDIAN'] else 'not produced'} |
     | `S2_date_screening_h{S2_HASH}*.csv` | per date: acquisition times, water NIR/B5 (+ pixel count), rain (+ days available), wind and Hs per source with sample count, largest gap and status, check results (`chk_*`: pass / fail / missing), reason, unchecked, kept |
+    | `S2_{tag}_indirect_checks.csv`, `{PREFIX}_Fig_S2_indirect_checks.png/.pdf` | do rain, wind and waves predict turbid water (B5) on these dates? medians above/below each threshold, Mann-Whitney p, verdict |
+    | `{FOLDER_ROOT}__S2_image_decisions.csv` (My Drive) | your Accept / Reject choices from the image checker (applied: {S2['MANUAL_DECISIONS']}) |
     | `S2_{tag}_tile_offsets_diagnostics.csv` | per tile: overlap water pixels, offset and IQR per band, flags (unsupported / large / pushes water below 0) |
     | `{PREFIX}_Fig_S2_date_screening.png/.pdf` | screening variables with thresholds and missing counts, kept / dropped dates |
 

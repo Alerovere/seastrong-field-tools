@@ -122,6 +122,8 @@ s2:
   B1_FROM_B2: false
   EXCLUDE_DATES: null
   FIXED_OFFSETS: null
+  MANUAL_DECISIONS: true     # apply your Accept / Reject choices from the image checker (st.s2.checker)
+  TARGET_CLEAR_OBS: 15       # clear observations per pixel the 'best images' suggestion aims for
 
 dem:
   SCALE: 30

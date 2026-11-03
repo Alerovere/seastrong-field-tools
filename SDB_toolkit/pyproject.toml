@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "seastrong_toolkit"
-version = "0.7.1"
+version = "0.8.0"
 description = "SEASTRONG WP1 coastal toolkit: Sentinel-2 composites for satellite-derived bathymetry, wave/wind/rain pre-screening, DEMs, habitats, transport tracers and ICESat-2 (Earth Engine + Copernicus + SlideRule)"
 readme = "README.md"
 requires-python = ">=3.10"

@@ -85,10 +85,45 @@ def step_hash(cfg, step, _memo=None):
     if step in _memo: return _memo[step]
     proj = {k: v for k, v in cfg['project'].items() if k != 'DRIVE_ROOT'}
     d = dict(project=proj, step=step, settings=cfg[step], upstream={u: step_hash(cfg, u, _memo) for u in STEPS[step][1]})
+    if step == 's2' and cfg['s2'].get('MANUAL_DECISIONS'):
+        d['manual_decisions'] = applicable_decisions(cfg)          # your Accept/Reject choices change the composite
     if CODE_VERSION.get(step): d['code'] = CODE_VERSION[step]      # a corrected method gets new folders
     h = _hash(d)
     _memo[step] = h
     return h
+
+
+# =============================================================================================== image decisions
+DECISION_COLS = ['date', 'orbit', 'decision', 'note', 'decided_utc']
+_DEC_CACHE = {}
+
+def decisions_path(cfg):
+    """One file per project with your Accept / Reject choices for Sentinel-2 dates (made in st.s2.checker)."""
+    p = cfg['project']
+    return os.path.join(p['DRIVE_ROOT'], f"{p['FOLDER_ROOT']}__S2_image_decisions.csv")
+
+def load_decisions(cfg):
+    path = decisions_path(cfg)
+    if not os.path.exists(path):
+        return pd.DataFrame(columns=DECISION_COLS)
+    key = (path, os.path.getmtime(path))
+    if key not in _DEC_CACHE:
+        _DEC_CACHE.clear(); _DEC_CACHE[key] = pd.read_csv(path, dtype={'date': str, 'orbit': str})
+    return _DEC_CACHE[key].copy()
+
+def month_in_window(m, window):
+    a, b = window
+    return (a <= m <= b) if a <= b else (m >= a or m <= b)
+
+def applicable_decisions(cfg):
+    """Accept/Reject decisions that concern the current composite (same orbit, inside YEARS and MONTHS)."""
+    c = cfg['s2']; d = load_decisions(cfg)
+    if d.empty: return []
+    orb = 'all' if c['ORBIT'] is None else str(c['ORBIT'])
+    d = d[(d.orbit.astype(str) == orb) & d.decision.isin(['accept', 'reject'])]
+    dd = pd.to_datetime(d.date)
+    ok = dd.dt.year.between(c['YEARS'][0], c['YEARS'][1]) & dd.dt.month.apply(lambda m: month_in_window(m, c['MONTHS']))
+    return sorted(map(list, zip(d.date[ok], d.decision[ok])))
 
 
 # =============================================================================================== secrets

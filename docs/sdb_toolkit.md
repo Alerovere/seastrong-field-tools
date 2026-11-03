@@ -99,6 +99,32 @@ options cell and run step 1. Within the chosen months, `s2` still removes the in
 
 ---
 
+## Choosing the Sentinel-2 date thresholds
+
+The Sentinel-2 step checks every date in two ways:
+
+- **Image checks** measure the problem in the image itself: near-infrared over water (sun glint, haze; `SCENE_MAX_NIR`)
+  and red edge B5 over water (turbid water; `SCENE_MAX_B5`). Put these thresholds where the main group of dates ends and
+  the scattered tail begins (screening figure).
+- **Indirect checks** (rain, wind, offshore waves) only guess that the water might be bad. They are worth keeping only if
+  they remove dates that really have more turbid water. The report and the figure *indirect checks* test exactly this:
+  they compare B5 of the dates above and below each threshold. *Useful* — keep the check; *no evidence* — relax it or
+  switch it off, as the report suggests.
+
+**How many images?** What matters is the number of clear observations per pixel (QA raster, band 1), not the number of
+dates. For the default low-percentile (P30) composite, about **10–30 clear observations per pixel** is the sweet spot;
+below ~8 use the median (`PERCENTILE=50`). If you have more than enough, be strict. The report's **best images** set
+tightens the image checks to the better half of your dates and estimates the clear observations that would remain
+(target `TARGET_CLEAR_OBS`).
+
+**Image-by-image check.** `st.s2.checker(ctx)` shows every date with clear water as a true-colour thumbnail of the AOI,
+best first, with its screening values and the automatic verdict, and **Accept / Reject / Auto** buttons. Your choices are
+saved at once to `<FOLDER_ROOT>__S2_image_decisions.csv` in My Drive and override the automatic checks the next time the
+Sentinel-2 step runs (a new composite folder; the Earth Engine screening table is re-used). Reject dates with visible
+clouds or shadows over water, haze, sun glint, turbid plumes over the area to map, whitecaps or missing data.
+
+---
+
 ## Outputs for Bathymetrix-AI
 
 | File (Drive folder) | Use in Bathymetrix-AI |

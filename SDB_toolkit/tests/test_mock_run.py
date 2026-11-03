@@ -52,6 +52,27 @@ def test_misspelt_option_stops():
     except KeyError as e:
         assert 'MONTHS' in str(e)
 
+def test_checker_decisions_reach_the_composite():
+    import ipywidgets as wg
+    ctx = st.setup(PROJECT, login=False, mount_drive=False)
+    for s, o in OPTIONS.items(): ctx.set(s, o, quiet=True)
+    h0 = ctx.hashes['s2']
+    df = st.s2.checker(ctx)
+    df = df[df.date >= '2023']                            # the fake screening table also has dates outside YEARS
+    dropped = df[~df.auto_kept].date.iloc[0]; kept = df[df.auto_kept].date.iloc[0]
+    st.s2.save_decision(dropped, 'accept'); st.s2.save_decision(kept, 'reject')
+    assert ctx.hashes['s2'] != h0                       # decisions give a new composite folder
+    n_tasks = M.Task.n
+    st.s2.run(ctx)
+    d = st.s2.scr.set_index('date')
+    assert d.loc[dropped, 'kept'] and not d.loc[kept, 'kept'] and d.loc[kept, 'manual'] == 'reject'
+    exported = [M.LOG['tasks'][f'T{i:04d}'][0] for i in range(n_tasks + 1, M.Task.n + 1)]
+    assert not any('screening' in e for e in exported), exported      # screening table re-used from the cache
+    st.s2.save_decision(dropped, 'auto'); st.s2.save_decision(kept, 'auto')
+    assert ctx.hashes['s2'] == h0
+
 if __name__ == '__main__':
     test_pipeline(); test_rerun_reuses_everything(); test_changed_s2_options_only_change_s2_and_downstream(); test_misspelt_option_stops()
+    test_checker_decisions_reach_the_composite()
     print('ALL MOCK TESTS PASSED')
+

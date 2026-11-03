@@ -38,6 +38,9 @@ ctx.set('prescreen', PRESCREEN); st.prescreen.run(ctx); st.prescreen.report(ctx)
 ctx.set('s2', S2); st.s2.run(ctx); st.s2.report(ctx)      # S2['MONTHS'] chosen from the pre-screening
 ```
 
+After the Sentinel-2 step, `st.s2.checker(ctx)` opens an image-by-image gallery with Accept / Reject buttons
+(decisions saved to `<FOLDER_ROOT>__S2_image_decisions.csv` in My Drive and applied at the next run).
+
 `ctx.show('s2')` prints the options a step will use and marks those that differ from the defaults
 (`src/seastrong_toolkit/defaults.yaml`). A misspelt option name stops with a hint.
 

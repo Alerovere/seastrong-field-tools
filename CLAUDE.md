@@ -148,7 +148,10 @@ edit): `ctx = st.setup(PROJECT)`, then per step an options dict passed with `ctx
 `src/seastrong_toolkit/defaults.yaml`, which only holds defaults), `st.<step>.run(ctx)` and `st.<step>.report(ctx)`
 (`diagnostics.py`: plain-language summary + suggested option changes, never applied automatically). Notebook cells
 are deliberately verbose (explanation / options / run / report per step). `core.bind()` injects options into the
-module namespace. Each step writes to `<FOLDER_ROOT>__<NN>_<Name>__<settings-hash>` in Drive with `manifest.json`.
+module namespace. S2 extras (0.8): Earth Engine screening table cached by a hash of the table-relevant options
+(`<FOLDER_ROOT>__cache/s2_screening`); indirect-check test (rain/wind/waves vs B5, Mann-Whitney) in run + report;
+'best images' threshold suggestion; `st.s2.checker(ctx)` ipywidgets gallery with Accept/Reject saved to
+`<FOLDER_ROOT>__S2_image_decisions.csv` in My Drive, included in the s2 options hash (`core.applicable_decisions`). Each step writes to `<FOLDER_ROOT>__<NN>_<Name>__<settings-hash>` in Drive with `manifest.json`.
 Credentials only from Colab Secrets (`EE_PROJECT`, `CDS_KEY`, `CMEMS_USERNAME`, `CMEMS_PASSWORD`, optional
 `EE_SERVICE_ACCOUNT_JSON`). The Colab notebook installs with a constraints file protecting Colab's google-* packages.
 Offline tests with fake services: `python SDB_toolkit/tests/test_mock_run.py` and `tests/test_notebook.py` (runs the notebook cells). Full decision log:
