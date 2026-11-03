@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wave_climate"
+version = "0.1.0"
+description = "Wave, wind, tide and storm-surge climate at an offshore point (ERA5, Copernicus Marine, GTSM) with seasonal tables and XBeach boundary conditions"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+# Colab already ships numpy, pandas, scipy, matplotlib, xarray: left unpinned (the notebook protects Colab's own packages).
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "matplotlib",
+    "xarray",
+    "netCDF4",
+    "h5netcdf",
+    "openpyxl",
+    "cdsapi>=0.7.7",
+    "copernicusmarine>=2.5",
+    "utide>=0.3",
+]
+
+[project.optional-dependencies]
+test = ["pytest", "ipywidgets"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

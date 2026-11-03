@@ -37,6 +37,7 @@ SEASTRONG Field Processing Tools
 
    wave_attenuation
    pressure_sensor_calibration
+   wave_climate
 
 .. toctree::
    :maxdepth: 2
