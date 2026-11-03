@@ -42,21 +42,23 @@ class Client:
                 v = {'u10': rng.normal(-5, 1.5, n) * seasonal(t, 1, 0.3), 'v10': rng.normal(1, 1.5, n) - 3 * np.isin(t.month, [12, 1])}
             xr.Dataset({k: (('valid_time',), x) for k, x in v.items()}, coords={'valid_time': t}).to_netcdf(target); return
         if ds == 'sis-water-level-change-timeseries-cmip6':
-            assert req['experiment'] == 'reanalysis'
-            var = req['variable'][0]; agg = req['temporal_aggregation'][0]
+            var = req['variable'][0]; agg = req['temporal_aggregation'][0]; ex = req['experiment']; v = req['version'][0]
+            ok = (ex == 'reanalysis' and var in ('storm_surge_residual', 'total_water_level') and v in ('v2', 'v3')
+                  and all(1950 <= int(y) <= 2024 for y in req['year'])) or \
+                 (ex == 'historical' and var == 'tidal_elevation' and agg == '10_min' and v == 'v1' and all(int(y) <= 2014 for y in req['year']))
+            if not ok: raise Exception('400 Client Error: Bad Request. Request has not produced a valid combination of values')
             st_lon = LON0 + np.linspace(-1, 1, 41); st_lat = LAT0 + np.linspace(-1, 1, 41) * 0.3
             buf = io.BytesIO(); z = zipfile.ZipFile(buf, 'w')
             for y in req['year']:
                 for m in req['month']:
                     a = pd.Timestamp(f'{y}-{m}-01'); b = a + pd.offsets.MonthBegin(1)
-                    if var == 'tidal_elevation':
-                        t = pd.date_range(a, b, freq='1h' if agg == 'hourly' else '10min', inclusive='left')
-                        h = (t - pd.Timestamp('2000-01-01')) / pd.Timedelta(hours=1)
-                        x = (0.08 * np.cos(2 * np.pi * h / 12.4206 - 1) + 0.03 * np.cos(2 * np.pi * h / 12.0) +
-                             0.06 * np.cos(2 * np.pi * h / 23.9345 - 2) + 0.05 * np.cos(2 * np.pi * h / 25.8193))
-                    else:
-                        t = pd.date_range(a, b, freq='1D', inclusive='left'); rng = np.random.default_rng(int(y) * 13 + int(m))
-                        x = np.abs(rng.gamma(2, 0.02, len(t))) * seasonal(t, 1, 0.8)
+                    t = pd.date_range(a, b, freq={'hourly': '1h', '10_min': '10min', 'daily_maximum': '1D'}[agg], inclusive='left')
+                    h = (t - pd.Timestamp('2000-01-01')) / pd.Timedelta(hours=1)
+                    tide = (0.08 * np.cos(2 * np.pi * h / 12.4206 - 1) + 0.03 * np.cos(2 * np.pi * h / 12.0) +
+                            0.06 * np.cos(2 * np.pi * h / 23.9345 - 2) + 0.05 * np.cos(2 * np.pi * h / 25.8193))
+                    rng = np.random.default_rng(int(y) * 13 + int(m))
+                    surge = np.abs(rng.gamma(2, 0.02 if agg == 'daily_maximum' else 0.01, len(t))) * seasonal(t, 1, 0.8)
+                    x = {'tidal_elevation': tide, 'storm_surge_residual': surge, 'total_water_level': tide + surge + 0.05}[var]
                     data = np.repeat(np.asarray(x)[:, None], len(st_lon), axis=1).astype('float32')
                     dsx = xr.Dataset({'waterlevel': (('time', 'stations'), data)},
                                      coords={'time': t, 'station_x_coordinate': ('stations', st_lon), 'station_y_coordinate': ('stations', st_lat)})

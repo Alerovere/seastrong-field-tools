@@ -42,6 +42,15 @@ def test_rerun_uses_cache():
     run_all()
     assert len(M.LOG['cds']) == n[0] and len(M.LOG['cmems']) == n[1]
 
+def test_pure_tide_option():
+    ctx = run_all(tides=dict(TIDE_SOURCE='tidal_elevation', TIDE_YEARS=[2014, 2014], SURGE_YEARS=[2015, 2024]))
+    tab = ctx.data['tide_constituents'].set_index('constituent').amplitude_m
+    assert abs(tab['M2'] - 0.08) < 0.01
+    try:
+        wc.tides.run(ctx, dict(TIDE_SOURCE='tidal_elevation', TIDE_YEARS=[2023, 2023])); raise AssertionError('no error')
+    except ValueError as e:
+        assert '2014' in str(e)
+
 def test_misspelt_option():
     ctx = wc.setup(SITE)
     try:
@@ -50,5 +59,5 @@ def test_misspelt_option():
         assert 'SEASONS' in str(e)
 
 if __name__ == '__main__':
-    test_pipeline(); test_rerun_uses_cache(); test_misspelt_option()
+    test_pipeline(); test_rerun_uses_cache(); test_pure_tide_option(); test_misspelt_option()
     print('ALL MOCK TESTS PASSED')

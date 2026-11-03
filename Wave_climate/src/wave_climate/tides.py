@@ -1,8 +1,11 @@
 """Step 2 — tide and storm surge from GTSM (Global Tide and Surge Model, Deltares) in the Climate Data Store.
 
-Dataset `sis-water-level-change-timeseries-cmip6`, experiment `reanalysis` (GTSM forced by ERA5, 1950–2024):
-- `tidal_elevation`: astronomical tide only (no weather), relative to model mean sea level;
-- `storm_surge_residual`: total water level minus tide (wind and pressure set-up), `daily_maximum` values.
+Dataset `sis-water-level-change-timeseries-cmip6`:
+- tide (TIDE_SOURCE='twl_minus_surge', default): reanalysis (GTSM forced by ERA5, 1950–2024) `total_water_level`
+  minus `storm_surge_residual`, hourly, for TIDE_YEARS. By definition this is the astronomical tide plus the annual
+  mean sea level, which is removed. The pure `tidal_elevation` exists only in the 'historical' experiment, as 10-min
+  files up to 2014 (TIDE_SOURCE='tidal_elevation'; 6 times larger downloads);
+- `storm_surge_residual`: reanalysis, `daily_maximum` values for SURGE_YEARS.
 
 The files are GLOBAL (the service has no area option): each month is downloaded, the output point nearest to the
 site is extracted, and the global file is deleted (KEEP_GLOBAL_FILES=False). Point series are cached.
@@ -64,13 +67,31 @@ def _retrieve(client, req, target, retries=3):
             print(f'    attempt {attempt} failed ({str(e)[:120]}); retrying in {30 * attempt} s'); time.sleep(30 * attempt)
 
 
-def gtsm_point(ctx, o, variable, aggregation, years):
+# What the CDS actually offers (constraints file, checked 2026-11-04):
+#   reanalysis (ERA5-forced): storm_surge_residual, total_water_level; 10_min / hourly / daily_maximum; v2, v3; 1950-2024
+#   historical: tidal_elevation only as 10_min, version v1, 1950-2014 (future: 2015-2050, same)
+# so tidal_elevation is NOT in the reanalysis.
+def check_request(experiment, variable, aggregation, version, years):
+    ok = {('reanalysis', 'storm_surge_residual'), ('reanalysis', 'total_water_level'), ('historical', 'tidal_elevation')}
+    if (experiment, variable) not in ok:
+        raise ValueError(f'GTSM: {variable} is not offered for experiment {experiment!r}')
+    if experiment == 'reanalysis' and (aggregation not in ('10_min', 'hourly', 'daily_maximum') or version not in ('v2', 'v3')
+                                       or years[0] < 1950 or years[1] > 2024):
+        raise ValueError(f'GTSM reanalysis: aggregation 10_min / hourly / daily_maximum, version v2 / v3, years 1950-2024 '
+                         f'(asked: {aggregation}, {version}, {years})')
+    if experiment == 'historical' and (aggregation != '10_min' or version != 'v1' or years[0] < 1950 or years[1] > 2014):
+        raise ValueError(f'GTSM tidal_elevation: only 10_min, version v1, years 1950-2014 (asked: {aggregation}, {version}, {years})')
+
+
+def gtsm_point(ctx, o, variable, aggregation, years, experiment='reanalysis', version=None):
     """Point series of one GTSM variable for whole years (cached per year), nearest output point."""
+    version = version or o['GTSM_VERSION']
+    check_request(experiment, variable, aggregation, version, years)
     cache = os.path.join(ctx.cache, 'gtsm'); os.makedirs(cache, exist_ok=True)
     client, parts, info = None, [], {}
     for y in range(years[0], years[1] + 1):
-        req = {'variable': [variable], 'experiment': 'reanalysis', 'temporal_aggregation': [aggregation],
-               'year': [str(y)], 'month': [f'{m:02d}' for m in range(1, 13)], 'version': [o['GTSM_VERSION']]}
+        req = {'variable': [variable], 'experiment': experiment, 'temporal_aggregation': [aggregation],
+               'year': [str(y)], 'month': [f'{m:02d}' for m in range(1, 13)], 'version': [version]}
         key = req_hash(dict(r=req, lon=ctx.lon, lat=ctx.lat, k=o['MAX_STATION_KM']))
         f = os.path.join(cache, f'gtsm_{variable}_{aggregation}_{y}_{key}.csv')
         if os.path.exists(f):
@@ -105,8 +126,8 @@ def gtsm_point(ctx, o, variable, aggregation, years):
         s = pd.concat(series).sort_index(); s = s[~s.index.duplicated()]
         s.name = variable
         s.to_csv(f + '.tmp'); os.replace(f + '.tmp', f)
-        ctx.note(f'gtsm_{variable}', dict(dataset=GTSM, experiment='reanalysis', aggregation=aggregation,
-                                          version=o['GTSM_VERSION'], **info))
+        ctx.note(f'gtsm_{variable}_{aggregation}', dict(dataset=GTSM, experiment=experiment, aggregation=aggregation,
+                                                        version=version, **info))
         print(f"    {len(s):,} values at the GTSM point {info['station_lon']:.3f}, {info['station_lat']:.3f} ({info['distance_km']:.1f} km)")
         parts.append(s)
     s = pd.concat(parts).sort_index()
@@ -129,8 +150,10 @@ def predict(coef, start, hours, step_min=10):
     import utide
     start = pd.Timestamp(start); start = start.tz_localize('UTC') if start.tzinfo is None else start
     t = pd.date_range(start, periods=int(hours * 60 / step_min) + 1, freq=f'{int(round(step_min * 60))}s')
-    r = utide.reconstruct(t.tz_convert(None).values.astype('datetime64[ns]'), coef, verbose=False)
-    return pd.Series(r['h'] - coef.get('mean', 0.0), index=t)
+    tt = t.tz_convert(None).values.astype('datetime64[ns]')
+    h = np.concatenate([utide.reconstruct(tt[i:i + 20000], coef, verbose=False)['h']       # in pieces: limits memory
+                        for i in range(0, len(tt), 20000)])
+    return pd.Series(h - coef.get('mean', 0.0), index=t)
 
 
 def extremes(s, min_sep_h=2.0, prominence=0.005):
@@ -236,7 +259,14 @@ def run(ctx, options=None, seasons=None, percentiles=None):
     seasons = seasons or ctx.opts.get('climate', {}).get('SEASONS') or DEFAULTS['climate']['SEASONS']
     pcts = percentiles or DEFAULTS['climate']['PERCENTILES']
     name = ctx.site['NAME']
-    tide = gtsm_point(ctx, o, 'tidal_elevation', o['TIDE_AGGREGATION'], o['TIDE_YEARS'])
+    if o['TIDE_SOURCE'] == 'twl_minus_surge':        # reanalysis: tide = total water level - surge (+ constant MSL)
+        twl = gtsm_point(ctx, o, 'total_water_level', o['TIDE_AGGREGATION'], o['TIDE_YEARS'])
+        sur = gtsm_point(ctx, o, 'storm_surge_residual', o['TIDE_AGGREGATION'], o['TIDE_YEARS'])
+        tide = (twl - sur).dropna(); tide = tide - tide.mean(); tide.name = 'tide'
+    elif o['TIDE_SOURCE'] == 'tidal_elevation':      # pure astronomical tide: 'historical', 10-min, v1, up to 2014
+        tide = gtsm_point(ctx, o, 'tidal_elevation', '10_min', o['TIDE_YEARS'], experiment='historical', version='v1')
+    else:
+        raise ValueError("TIDES['TIDE_SOURCE'] must be 'twl_minus_surge' or 'tidal_elevation'")
     surge = gtsm_point(ctx, o, 'storm_surge_residual', 'daily_maximum', o['SURGE_YEARS'])
     tide.to_csv(ctx.path('data', f'{name}_GTSM_tide.csv')); surge.to_csv(ctx.path('data', f'{name}_GTSM_surge_daily_max.csv'))
     coef, tab = harmonic(tide, ctx.lat)

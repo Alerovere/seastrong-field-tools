@@ -24,8 +24,9 @@ DEFAULTS = {
     ),
     'tides': dict(
         TIDES=True,                   # GTSM tide + surge from the Climate Data Store
-        TIDE_YEARS=[2023, 2023],      # years of hourly tidal elevation for the harmonic analysis (1 year is enough)
-        TIDE_AGGREGATION='hourly',    # 'hourly' or '10_min'
+        TIDE_SOURCE='twl_minus_surge',  # 'twl_minus_surge' (reanalysis, hourly, to 2024) or 'tidal_elevation' (10-min, to 2014)
+        TIDE_YEARS=[2023, 2023],      # years of tide for the harmonic analysis (1 year is enough; <= 2014 for 'tidal_elevation')
+        TIDE_AGGREGATION='hourly',    # 'twl_minus_surge' only: 'hourly' or '10_min'
         SURGE_YEARS=[1995, 2024],     # years of daily-maximum storm surge (GTSM reanalysis ends 2024)
         GTSM_VERSION='v3',
         MAX_STATION_KM=30,            # GTSM output point must be within this distance of POINT
