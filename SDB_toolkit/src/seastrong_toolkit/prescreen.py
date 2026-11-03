@@ -8,14 +8,15 @@ colour, day by day:
 | waves | ERA5 + Copernicus Marine (waves step; `SCREEN_SOURCE`) | max Hs over the `WAVE_WINDOW_H` hours before the overpass |
 | wind | ERA5 10 m wind (waves step) | mean speed over the `WIND_WINDOW_H` hours before |
 | rain (ERA5) | ERA5 total precipitation at the point (waves step) | sum over the `RAIN_DAYS` whole days before *d* |
-| rain (CHIRPS) | CHIRPS daily, mean over AOI + `RAIN_BUFFER` (Earth Engine) | same window |
-| clear sky, glint, turbidity | Sentinel-2 (Cloud Score+) and Landsat 5–9 (QA) scenes over AOI water (Earth Engine) | per scene: share of clear water, share with SWIR glint, median red reflectance of clear water |
+| rain (CHIRPS, optional `CHIRPS`) | CHIRPS daily, mean over AOI + `RAIN_BUFFER` (Earth Engine) | same window |
+| clear sky (`SCENES = 'metadata'`, default) | Sentinel-2 tile metadata (cloud %), read in seconds | per date: 1 − mean tile cloud % / 100 |
+| clear sky, glint, turbidity (`SCENES = 'aoi'`) | Sentinel-2 (Cloud Score+) and Landsat 5–9 (QA) scenes over AOI water (Earth Engine, slow) | per scene: share of clear water, share with SWIR glint, median red reflectance of clear water |
 | ocean-colour transparency | Copernicus Marine OLCI transparency (SPM, ZSD, KD490) | daily median over the AOI |
 
 **Good day.** A day is *good* for the sea state when waves, wind and rain are all at or below their own
 **site percentile** `PCTL` (computed over all months of all years), and never above the absolute `ABS_CAPS`.
-A Sentinel-2 scene is **usable** when the day is good, at least `CLEAR_MIN` of AOI water is cloud-free, and
-its turbidity (red reflectance of clear water) is at or below the Sentinel-2 percentile.
+A Sentinel-2 scene is **usable** when the day is good and at least `CLEAR_MIN` is cloud-free (of the tiles with
+`SCENES = 'metadata'`; of the AOI water, with turbidity at or below the Sentinel-2 percentile, with `'aoi'`).
 
 **Suggestion.** For every window of `WINDOW_LENGTHS` consecutive months, the step counts the usable Sentinel-2
 images per season (one season = one year) and ranks windows by the mean count (then by a smaller year-to-year
@@ -33,7 +34,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from .core import (bind, manifest, save_manifest, stage_done, stage_get, set_status, require, drive_path, export_table,
                    wait, read_task_csv, record_file, write_readme, OKABE_ITO, panel_labels, save_fig, empty_panel,
-                   figure_style, aoi_bbox_wgs84, secret)
+                   figure_style, aoi_bbox_wgs84, secret, s2_tile_metadata, metadata_by_date)
 from .waves import load_series
 try:
     import ee
@@ -119,6 +120,19 @@ def chirps_daily():
     return ee.FeatureCollection(col.map(lambda i: ee.Feature(None, {
         'time_ms': i.get('system:time_start'),
         'rain': i.reduceRegion(reducer=ee.Reducer.mean(), geometry=region, scale=5566, maxPixels=1e9).get('precipitation')})))
+
+
+def metadata_scenes():
+    """SCENES = 'metadata': clear sky of every Sentinel-2 date from the tile metadata (seconds; no pixels, no export).
+    clear_frac = 1 - mean tile cloud % / 100 of the tiles over the AOI; no glint or turbidity information."""
+    y = P['YEARS']
+    t = s2_tile_metadata(roi, (max(y[0], 2017), y[1]), orbit=P['ORBIT'])
+    d = metadata_by_date(t)
+    print(f"  Sentinel-2 metadata: {len(t):,} tile images on {len(d):,} dates ({max(y[0], 2017)}–{y[1]}, orbit {P['ORBIT'] if P['ORBIT'] is not None else 'all'})")
+    return pd.DataFrame({'family': 'S2', 'date': pd.to_datetime(d['date']), 'sensors': 'S2', 'tiles': d['tiles'],
+                         'meta_cloud': d['meta_cloud'], 'meta_cirrus': d['meta_cirrus'], 'glint_angle': d['glint_angle'],
+                         'cover_frac': np.nan, 'clear_frac': (1 - d['meta_cloud'] / 100).clip(0, 1),
+                         'glint_frac': np.nan, 'turb': np.nan})
 
 
 # ------------------------------------------------------------------ Copernicus Marine ocean colour
@@ -269,24 +283,35 @@ def run(ctx=None, force=False):
         print('  NOTE: the ERA5 series has no rain (waves.ERA5_WIND false?): ERA5 rain not used')
     y = P['YEARS']
 
-    # ---- Earth Engine tables (scene statistics, CHIRPS), exported once per settings
-    tables = {'CHIRPS': (chirps_daily, ['time_ms', 'rain'])}
+    if P['SCENES'] not in ('metadata', 'aoi'):
+        raise ValueError("PRESCREEN['SCENES'] must be 'metadata' or 'aoi'")
+    # ---- Earth Engine tables (only for SCENES = 'aoi' and / or CHIRPS), exported once per settings
+    tables = {}
+    if P['CHIRPS']: tables['CHIRPS'] = (chirps_daily, ['time_ms', 'rain'])
     builders = {'S2': s2_scenes, 'LANDSAT': landsat_scenes, 'HLS': hls_scenes}
-    for s in P['SENSORS']:
-        tables[s] = (builders[s], SCENE_COLS)
+    if P['SCENES'] == 'aoi':
+        for s in P['SENSORS']:
+            tables[s] = (builders[s], SCENE_COLS)
     names = {}
     for k, (fn, cols) in tables.items():
         nm = f'{PREFIX}_prescreen_{k}_{y[0]}_{y[1] if k != "LANDSAT" else P["LANDSAT_YEARS"][1]}'
         export_table(fn(), 'prescreen', nm, selectors=cols); names[k] = nm
-    if not WAIT_FOR_EXPORTS:
-        print('WAIT_FOR_EXPORTS is false: run this step again when the exports are COMPLETED'); return ctx
-    wait(list(names.values()), every=60)
-    ch = read_task_csv(names['CHIRPS']); ch['date'] = pd.to_datetime(ch.time_ms, unit='ms').dt.normalize()
-    SCENES = scenes_by_date(pd.concat([read_task_csv(names[s]) for s in P['SENSORS']], ignore_index=True))
+    if names:
+        if not WAIT_FOR_EXPORTS:
+            print('WAIT_FOR_EXPORTS is false: run this step again when the exports are COMPLETED'); return ctx
+        wait(list(names.values()), every=60)
+    ch = None
+    if 'CHIRPS' in names:
+        ch = read_task_csv(names['CHIRPS']); ch['date'] = pd.to_datetime(ch.time_ms, unit='ms').dt.normalize()
+        ch = ch[['date', 'rain']]
+    if P['SCENES'] == 'aoi':
+        SCENES = scenes_by_date(pd.concat([read_task_csv(names[s]) for s in P['SENSORS']], ignore_index=True))
+    else:
+        SCENES = metadata_scenes()
 
     # ---- daily table
     days = pd.date_range(f'{y[0]}-01-01', min(pd.Timestamp(f'{y[1]}-12-31'), pd.Timestamp(ctx.today) - pd.Timedelta(days=1)), freq='D')
-    DAILY = daily_metocean(series, ch[['date', 'rain']], days)
+    DAILY = daily_metocean(series, ch, days)
     if P['OCEAN_COLOUR']:
         oc = ocean_colour_daily()
         if oc is not None: DAILY = DAILY.join(oc, how='left')
@@ -299,8 +324,10 @@ def run(ctx=None, force=False):
     # ---- scenes: turbidity percentile per sensor family (all months), usable S2 images
     SCENES['turb_rank'] = SCENES.groupby('family')['turb'].rank(pct=True) * 100
     turb_q = SCENES.groupby('family')['turb'].quantile(P['PCTL'].get('turbidity', 50) / 100).to_dict()
-    SCENES['turb_ok'] = SCENES.apply(lambda r: (r.turb <= turb_q.get(r.family, np.inf)) if pd.notna(r.turb) else False, axis=1)
-    SCENES['clear_ok'] = (SCENES.clear_frac >= P['CLEAR_MIN']) & (SCENES.cover_frac >= P['COVER_MIN'])
+    has_turb = SCENES.groupby('family')['turb'].transform(lambda x: x.notna().any())
+    SCENES['turb_ok'] = [(t <= turb_q.get(f, np.inf)) if pd.notna(t) else not h            # no turbidity data at all: not used
+                         for t, f, h in zip(SCENES.turb, SCENES.family, has_turb)]
+    SCENES['clear_ok'] = (SCENES.clear_frac >= P['CLEAR_MIN']) & ((SCENES.cover_frac >= P['COVER_MIN']) | SCENES.cover_frac.isna())
     SCENES = SCENES.merge(DAILY[['good_day']], left_on='date', right_index=True, how='left')
     SCENES['usable'] = SCENES.clear_ok & SCENES.turb_ok & (SCENES.good_day == 1)
     s2 = SCENES[SCENES.family == 'S2']
@@ -359,7 +386,7 @@ def run(ctx=None, force=False):
     for v in VARS:
         if f'{v}_rank' in M: rows.append(M[f'{v}_rank'].values); labs.append(LABELS[v])
     for fam in sorted(SCENES.family.unique()):
-        if f'turb_rank_{fam}' in M: rows.append(M[f'turb_rank_{fam}'].values); labs.append(f'turbidity {fam}')
+        if f'turb_rank_{fam}' in M and M[f'turb_rank_{fam}'].notna().any(): rows.append(M[f'turb_rank_{fam}'].values); labs.append(f'turbidity {fam}')
         if f'p_clear_{fam}' in M: rows.append(100 - 100 * M[f'p_clear_{fam}'].values); labs.append(f'cloudy scenes {fam} (%)')
     for c in [c for c in M.columns if c.startswith('oc_') and c.endswith('_median')]:
         rows.append(M[c].rank(pct=True).values * 100); labs.append(c[3:-7] + ' (ocean colour, rank)')
@@ -410,7 +437,7 @@ def run(ctx=None, force=False):
     {tbl}
 
     Months compared (`COMPARE_MONTHS`) {P['COMPARE_MONTHS']}: {f"{cur.iloc[0].usable_mean:.1f} ± {cur.iloc[0].usable_std:.1f} usable images per season" if len(cur) else 'not a contiguous window'}.
-    Usable = good sea-state day + image covers ≥ {P['COVER_MIN']:.0%} of AOI water + ≥ {P['CLEAR_MIN']:.0%} of the water it covers cloud-free + turbidity at or below the Sentinel-2 P{P['PCTL'].get('turbidity', 50)}.
+    Usable = good sea-state day + {f"mean tile cloud ≤ {100 - 100 * P['CLEAR_MIN']:.0f} % (Sentinel-2 metadata)" if P['SCENES'] == 'metadata' else f"image covers ≥ {P['COVER_MIN']:.0%} of AOI water + ≥ {P['CLEAR_MIN']:.0%} of the water it covers cloud-free + turbidity at or below the Sentinel-2 P{P['PCTL'].get('turbidity', 50)}"}.
     Sentinel-2 years {max(y[0], 2017)}–{y[1]}, relative orbit {P['ORBIT'] if P['ORBIT'] is not None else 'all'}.
 
     ## Thresholds (site percentiles over all months, capped)
@@ -420,19 +447,20 @@ def run(ctx=None, force=False):
     | File | Content |
     |---|---|
     | `{PREFIX}_prescreen_daily_conditions.csv` | per day: hs (max over {P['WAVE_WINDOW_H']} h), wind (mean over {P['WIND_WINDOW_H']} h), rain_era5 / rain_chirps ({P['RAIN_DAYS']} whole days before), ocean colour, good_day |
-    | `{PREFIX}_prescreen_scenes_by_date.csv` | per sensor family and date: share of AOI water covered (cover_frac), clear share of the covered water, glint share, turbidity (median red of clear water), ranks, usable |
+    | `{PREFIX}_prescreen_scenes_by_date.csv` | per sensor family and date: {'tiles, mean tile cloud and cirrus %, glint angle, clear share (1 − cloud), usable' if P['SCENES'] == 'metadata' else 'share of AOI water covered (cover_frac), clear share of the covered water, glint share, turbidity (median red of clear water), ranks, usable'} |
     | `{PREFIX}_prescreen_monthly_summary.csv` | per month: medians and ranks, probability of a good day, clear-scene probability, usable S2 images per year (mean, std, min, max) |
     | `{PREFIX}_prescreen_window_ranking.csv` | every window of {P['WINDOW_LENGTHS']} months: usable images per season (mean, std, min, max), good-day probability |
     | `{PREFIX}_Fig_prescreen_*.png/.pdf` | calendar of good days and month × variable heatmap; usable images per month, probabilities, best windows |
 
     ## Method
-    - Waves: {W['SCREEN_SOURCE']} of ERA5 / Copernicus Marine ({W['REGION']}) at {W['POINT']}; wind and rain: ERA5 at the nearest cell; CHIRPS: mean over AOI + {P['RAIN_BUFFER'] / 1000:.0f} km.
-    - Scenes: Sentinel-2 L2A (Cloud Score+ ≥ {P['CS_THRESHOLD']}), {', '.join(P['SENSORS'])}; glint = clear water with SWIR > {P['PIXEL_MAX_SWIR']}; statistics at {P['STAT_SCALE']} m over the Copernicus DEM water mask.
+    - Waves: {W['SCREEN_SOURCE']} of ERA5 / Copernicus Marine ({W['REGION']}) at {W['POINT']}; wind and rain: ERA5 at the nearest cell; CHIRPS: {f"mean over AOI + {P['RAIN_BUFFER'] / 1000:.0f} km" if P['CHIRPS'] else 'not used'}.
+    - Scenes: {'Sentinel-2 L2A tile metadata (CLOUDY_PIXEL_PERCENTAGE, mean over the tiles of the date; the percentage refers to the whole 110 km tile, not to the AOI)' if P['SCENES'] == 'metadata' else f"Sentinel-2 L2A (Cloud Score+ ≥ {P['CS_THRESHOLD']}), {', '.join(P['SENSORS'])}; glint = clear water with SWIR > {P['PIXEL_MAX_SWIR']}; statistics at {P['STAT_SCALE']} m over the Copernicus DEM water mask"}.
     - Ocean colour: {P['OC_DATASETS'][W['REGION']]['id'] if P['OCEAN_COLOUR'] else 'not used'} (daily AOI median, shown in the heatmap; not part of the usable count).
 
     ## Limitations
     - Percentiles are relative to the site; caps keep "calm" within Module 1's physical limits.
-    - Turbidity from red surface reflectance is relative and compared only within a sensor family.
+    - Turbidity from red surface reflectance is relative and compared only within a sensor family{' (not used with tile metadata: the S2 step checks turbidity date by date)' if P['SCENES'] == 'metadata' else ''}.
+    - Tile cloud % describes the whole tile: an AOI can be clear on a cloudy-tile day and the reverse.
     - Past seasons are not a forecast; year-to-year spread (std, min–max) shows how reliable a window is.
     """)
     stage_done('prescreen', best=best)

@@ -1,0 +1,4 @@
+outputs/
+_backup_src_*/
+*.egg-info/
+__pycache__/

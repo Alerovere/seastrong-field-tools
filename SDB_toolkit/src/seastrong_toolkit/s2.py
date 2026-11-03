@@ -14,9 +14,12 @@ of the tile actually used at each pixel.
 2. **Mask** clouds pixel by pixel (Cloud Score+) and sun glint / whitecaps over water (SWIR > threshold).
    An observation is used only where **all 12 bands** are valid (one common mask), so every band of the
    composite comes from the same set of observations.
-3. **Screen whole dates** that would bias the seabed colour: glint or haze (high NIR over water), river
-   plumes (high red-edge B5), runoff after rain (CHIRPS, days before the image), wind-stirred water and
-   rough seas (Module 0 ERA5 / Copernicus Marine, in a window **ending at the image's acquisition time**).
+3. **Screen whole dates**, cheapest first (`SCREENING = 'metadata+aoi'`):
+   (i) **tile metadata** (seconds, no pixels): cloud, shadow and thin-cirrus percentages and the sun-glint angle that
+   ESA stores with every 110 km tile; (ii) **weather** from the waves step (no Earth Engine): rain, wind and rough seas
+   in a window **ending at the image's acquisition time**; (iii) **image check** in Earth Engine, only for the dates
+   that passed (i) and (ii): glint or haze (high NIR over AOI water) and river plumes (high red-edge B5). Image
+   statistics are cached date by date, so a date is never sent to Earth Engine twice with the same options.
    Each check records whether it could be evaluated; a check without data is never counted as a pass —
    `MISSING_POLICY` decides whether such a date is dropped or kept as *unchecked*.
 4. **Composite** per MGRS tile with a low percentile (residual haze and glint are brighter, so P30
@@ -43,7 +46,8 @@ from .core import (bind, manifest, save_manifest, stage_done, stage_get, set_sta
                    export_image, export_table, wait, task_files, task_status, read_task_csv, record_file,
                    write_readme, find_task, TERMINAL_BAD, OKABE_ITO, panel_labels, save_fig, empty_panel,
                    figure_style, dir_to, in_months, years_filter, aoi_shapely, aoi_bbox_wgs84, _jsonable,
-                   secret, CMEMS_REGIONS, decisions_path, load_decisions, applicable_decisions)
+                   secret, CMEMS_REGIONS, decisions_path, load_decisions, applicable_decisions,
+                   s2_tile_metadata, metadata_by_date)
 try:
     import ee
 except ImportError:  # documentation builds
@@ -82,82 +86,7 @@ def s2_collection(c):
         return (out.copyProperties(img, ['system:time_start', 'MGRS_TILE', 'SENSING_ORBIT_NUMBER'])
                 .set('date', ee.Date(img.get('system:time_start')).format('YYYY-MM-dd')))
     return s2, s2.linkCollection(cs, ['cs_cdf']).map(prep)
-SCREEN_COLS = ['date', 'tiles', 't_first_ms', 't_last_ms', 'water_nir', 'water_b5', 'n_water_px',
-               'rain_mm', 'rain_days', 'wind_ms_gee', 'wind_n_gee']
-def s2_screening_table(col, c):
-    """Per-date statistics: acquisition times, water NIR / B5, rain [day-N, day), GEE wind (optional)."""
-    rain_region = roi.bounds().buffer(c['RAIN_BUFFER'])
-    wind_region = roi.bounds().buffer(c['WIND_BUFFER'])
-    def row(d):
-        day = ee.Date(d)                                   # midnight UTC of the acquisition day
-        imgs = col.filter(ee.Filter.eq('date', d))
-        t_last = ee.Date(imgs.aggregate_max('system:time_start'))
-        wat = imgs.mosaic().select(['B8', 'B5']).updateMask(water)
-        st = wat.reduceRegion(reducer=ee.Reducer.median().combine(ee.Reducer.count(), None, True),
-                              geometry=roi, scale=c['SCENE_STAT_SCALE'], maxPixels=1e9, bestEffort=True, tileScale=16)
-        rcol = chirps.filterDate(day.advance(-c['RAIN_DAYS'], 'day'), day)       # whole days before the image
-        rain = ee.Algorithms.If(rcol.size().eq(c['RAIN_DAYS']),
-            rcol.sum().reduceRegion(reducer=ee.Reducer.mean(), geometry=rain_region, scale=5566,
-                                    maxPixels=1e9, bestEffort=True).get('precipitation'), None)
-        props = {'date': d, 'tiles': imgs.size(), 't_first_ms': imgs.aggregate_min('system:time_start'),
-                 't_last_ms': imgs.aggregate_max('system:time_start'), 'water_nir': st.get('B8_median'),
-                 'water_b5': st.get('B5_median'), 'n_water_px': st.get('B8_count'),
-                 'rain_mm': rain, 'rain_days': rcol.size()}
-        if c['WIND_FILTER'] and c['WIND_SOURCE'] == 'gee':
-            w = era5_gee.filterDate(t_last.advance(-c['WIND_WINDOW_H'], 'hour'), t_last.advance(1, 'second'))
-            spd = w.map(lambda i: i.expression('hypot(b("u"), b("v"))').rename('s'))
-            props['wind_ms_gee'] = ee.Algorithms.If(w.size().gt(0), spd.mean().reduceRegion(
-                reducer=ee.Reducer.mean(), geometry=wind_region, scale=27830, maxPixels=1e9, bestEffort=True).get('s'), None)
-            props['wind_n_gee'] = w.size()
-        return ee.Feature(None, props)
-    dates = col.aggregate_array('date').distinct().sort()
-    return ee.FeatureCollection(dates.map(row))
-def s2_decide(df, c):
-    """Apply all date checks. Each check is 'pass', 'fail' or 'missing'; missing follows MISSING_POLICY."""
-    df = df.copy()
-    t1 = pd.to_datetime(df['t_last_ms'], unit='ms', utc=True)
-    span_h = (df['t_last_ms'] - df['t_first_ms']).fillna(0) / 3.6e6
-    # waves: per source, window (first acquisition - WAVE_WINDOW_H, last acquisition]
-    srcs = {'cmems': ['cmems'], 'era5': ['era5'], 'max': ['era5', 'cmems']}[W['SCREEN_SOURCE']]
-    if c['WAVE_FILTER']:
-        for s in srcs:
-            ser = WAVE_SERIES[s].set_index('time')['hs'] if s in WAVE_SERIES else pd.Series(dtype=float)
-            res = [window_stats(ser, t, c['WAVE_WINDOW_H'] + h, 1 if s == 'era5' else W['CMEMS_STEP_H']) for t, h in zip(t1, span_h)]
-            df[f'hs_{s}'], df[f'hs_{s}_n'], df[f'hs_{s}_maxgap_h'], df[f'hs_{s}_status'] = map(list, zip(*res))
-        st = df[[f'hs_{s}_status' for s in srcs]]
-        df['hs_m'] = df[[f'hs_{s}' for s in srcs]].max(axis=1, skipna=True)
-        df['hs_status'] = np.where((st == 'ok').all(axis=1), 'ok', np.where((st == 'missing').all(axis=1), 'missing', 'partial'))
-    if c['WIND_FILTER']:
-        if c['WIND_SOURCE'] == 'cds':
-            ser = WAVE_SERIES['era5'].set_index('time')['wind_speed']
-            res = [window_stats(ser, t, c['WIND_WINDOW_H'] + h, 1, how='mean') for t, h in zip(t1, span_h)]
-            df['wind_ms'], df['wind_n'], df['wind_maxgap_h'], df['wind_status'] = map(list, zip(*res))
-        else:
-            df['wind_ms'], df['wind_n'] = df['wind_ms_gee'], df['wind_n_gee']
-            df['wind_status'] = np.where(df['wind_ms'].notna(), 'ok', 'missing')
 
-    checks = [('water', 'glint', c['GLINT_FILTER'], 'water_nir', c['SCENE_MAX_NIR']),
-              ('water', 'turbid', c['TURBIDITY_FILTER'], 'water_b5', c['SCENE_MAX_B5']),
-              ('rain', 'rain', c['RAIN_FILTER'], 'rain_mm', c['RAIN_MAX_MM']),
-              ('wind', 'wind', c['WIND_FILTER'], 'wind_ms', c['WIND_MAX_MS']),
-              ('waves', 'waves', c['WAVE_FILTER'], 'hs_m', c['WAVE_MAX_HS'])]
-    reasons = [[] for _ in range(len(df))]; unchecked = [[] for _ in range(len(df))]
-    rule_counts = {}
-    for kind, name, on, colname, thr in checks:
-        if not on: continue
-        v = pd.to_numeric(df[colname], errors='coerce').values
-        miss = ~np.isfinite(v); fail = np.isfinite(v) & (v > thr)
-        df[f'chk_{name}'] = np.where(miss, 'missing', np.where(fail, 'fail', 'pass'))
-        rule_counts[name] = dict(evaluated=int((~miss).sum()), failed=int(fail.sum()), missing=int(miss.sum()))
-        for i in np.where(fail)[0]: reasons[i].append(name)
-        for i in np.where(miss)[0]:
-            (reasons[i].append(f'no_{name}_data') if c['MISSING_POLICY'][kind] == 'drop' else unchecked[i].append(name))
-    df['reason'] = [','.join(sorted(set(r))) for r in reasons]
-    df['unchecked'] = [','.join(u) for u in unchecked]
-    df['kept'] = df['reason'] == ''
-    partial = (df.get('hs_status', 'ok') == 'partial') | (df.get('wind_status', 'ok') == 'partial')
-    df['screen_status'] = np.where(df['unchecked'] != '', 'unchecked', np.where(partial, 'partial', 'complete'))
-    return df, rule_counts
 def make_composite(col, pct, bands=BANDS):
     comp = (col.select(bands).median() if pct == 50
             else col.select(bands).reduce(ee.Reducer.percentile([pct])).rename(bands))
@@ -228,137 +157,320 @@ def s2_measure_offsets(col, c):
     return offsets, pd.DataFrame(diag)
 
 
-# ================================================================================ screening cache, decisions, quality
-SCREEN_KEYS = ['YEARS', 'MONTHS', 'MAX_TILE_CLOUD', 'CS_THRESHOLD', 'ORBIT', 'GLINT_FILTER', 'PIXEL_MAX_SWIR',
-               'RAIN_DAYS', 'RAIN_BUFFER', 'WIND_FILTER', 'WIND_SOURCE', 'WIND_WINDOW_H', 'WIND_BUFFER', 'SCENE_STAT_SCALE']
+# ================================================================================ date screening
+# 1. metadata (seconds, no pixels): one row per date from the image properties of every tile;
+# 2. weather (no Earth Engine): rain, wind, waves from the waves step, in windows ending at the acquisition time;
+# 3. image check (Earth Engine): glint and turbidity of the AOI water, only for the dates that passed 1 + 2.
+AOI_COLS = ['date', 'water_nir', 'water_b5', 'n_water_px']
+
+def metadata_table(c):
+    """(tiles, dates): tile metadata of the collection used by the composite, and one row per date."""
+    tiles = s2_tile_metadata(roi, c['YEARS'], c['MONTHS'], c['ORBIT'], c['MAX_TILE_CLOUD'])
+    return tiles, metadata_by_date(tiles)
+
+def add_weather(df, c):
+    """Waves, wind (ERA5 point series) and rain (ERA5 point series) for each date, from the waves step."""
+    df = df.copy()
+    t1 = pd.to_datetime(df['t_last_ms'], unit='ms', utc=True)
+    span_h = (df['t_last_ms'] - df['t_first_ms']).fillna(0) / 3.6e6
+    # waves: per source, window (first acquisition - WAVE_WINDOW_H, last acquisition]
+    srcs = {'cmems': ['cmems'], 'era5': ['era5'], 'max': ['era5', 'cmems']}[W['SCREEN_SOURCE']]
+    if c['WAVE_FILTER']:
+        for s in srcs:
+            ser = WAVE_SERIES[s].set_index('time')['hs'] if s in WAVE_SERIES else pd.Series(dtype=float)
+            res = [window_stats(ser, t, c['WAVE_WINDOW_H'] + h, 1 if s == 'era5' else W['CMEMS_STEP_H']) for t, h in zip(t1, span_h)]
+            df[f'hs_{s}'], df[f'hs_{s}_n'], df[f'hs_{s}_maxgap_h'], df[f'hs_{s}_status'] = map(list, zip(*res)) if res else ([],) * 4
+        st = df[[f'hs_{s}_status' for s in srcs]]
+        df['hs_m'] = df[[f'hs_{s}' for s in srcs]].max(axis=1, skipna=True)
+        df['hs_status'] = np.where((st == 'ok').all(axis=1), 'ok', np.where((st == 'missing').all(axis=1), 'missing', 'partial'))
+    if c['WIND_FILTER'] and c['WIND_SOURCE'] == 'cds':
+        ser = WAVE_SERIES['era5'].set_index('time')['wind_speed']
+        res = [window_stats(ser, t, c['WIND_WINDOW_H'] + h, 1, how='mean') for t, h in zip(t1, span_h)]
+        df['wind_ms'], df['wind_n'], df['wind_maxgap_h'], df['wind_status'] = map(list, zip(*res)) if res else ([],) * 4
+    if c['RAIN_SOURCE'] == 'era5':
+        n = c['RAIN_DAYS']; e = WAVE_SERIES.get('era5')
+        if e is not None and 'rain_mm' in e:
+            r = e.set_index('time')['rain_mm'].dropna().sort_index()
+            day = r[~r.index.duplicated()].resample('1D').sum(min_count=20)          # NaN if < 20 hours of the day
+            day.index = day.index.tz_localize(None)
+            roll = day.rolling(n, min_periods=n).sum().shift(1)                       # whole days [d-N, d)
+            df['rain_mm'] = roll.reindex(pd.to_datetime(df['date'])).values
+        else:
+            df['rain_mm'] = np.nan
+        df['rain_days'] = np.where(pd.notna(df['rain_mm']), n, 0)
+    return df
+
+def check_list(c):
+    """(name, missing-policy group, stage, on, column, threshold, fails when 'above' / 'below')."""
+    rain_stage = 'meta' if c['RAIN_SOURCE'] == 'era5' else 'aoi'
+    wind_stage = 'meta' if c['WIND_SOURCE'] == 'cds' else 'aoi'
+    return [('cloud', 'meta', 'meta', c['META_MAX_CLOUD'] is not None, 'meta_cloud', c['META_MAX_CLOUD'], 'above'),
+            ('shadow', 'meta', 'meta', c['META_MAX_SHADOW'] is not None, 'meta_shadow', c['META_MAX_SHADOW'], 'above'),
+            ('cirrus', 'meta', 'meta', c['META_MAX_CIRRUS'] is not None, 'meta_cirrus', c['META_MAX_CIRRUS'], 'above'),
+            ('glint_angle', 'meta', 'meta', c['META_MIN_GLINT_ANGLE'] is not None, 'glint_angle', c['META_MIN_GLINT_ANGLE'], 'below'),
+            ('rain', 'rain', rain_stage, c['RAIN_FILTER'], 'rain_mm', c['RAIN_MAX_MM'], 'above'),
+            ('wind', 'wind', wind_stage, c['WIND_FILTER'], 'wind_ms', c['WIND_MAX_MS'], 'above'),
+            ('waves', 'waves', 'meta', c['WAVE_FILTER'], 'hs_m', c['WAVE_MAX_HS'], 'above'),
+            ('glint', 'water', 'aoi', c['GLINT_FILTER'], 'water_nir', c['SCENE_MAX_NIR'], 'above'),
+            ('turbid', 'water', 'aoi', c['TURBIDITY_FILTER'], 'water_b5', c['SCENE_MAX_B5'], 'above')]
+
+def apply_checks(df, c, stage=None):
+    """Each check is 'pass', 'fail', 'missing' (no data: MISSING_POLICY decides) or 'not evaluated' (image checks on
+    dates that were not sent to Earth Engine). Your Accept / Reject decisions (column 'manual') override everything.
+    stage='meta': only the metadata and weather checks (to choose the dates for the image check)."""
+    df = df.copy()
+    aoi_ok = df['aoi_evaluated'].astype(bool).values if 'aoi_evaluated' in df else np.ones(len(df), bool)
+    reasons = [[] for _ in range(len(df))]; unchecked = [[] for _ in range(len(df))]
+    rule_counts = {}
+    for name, group, stg, on, colname, thr, side in check_list(c):
+        if not on or (stage == 'meta' and stg != 'meta'): continue
+        v = pd.to_numeric(df[colname], errors='coerce').values if colname in df else np.full(len(df), np.nan)
+        ne = (~aoi_ok) if stg == 'aoi' else np.zeros(len(df), bool)
+        miss = ~np.isfinite(v) & ~ne
+        fail = np.isfinite(v) & ((v > thr) if side == 'above' else (v < thr)) & ~ne
+        df[f'chk_{name}'] = np.where(ne, 'not evaluated', np.where(miss, 'missing', np.where(fail, 'fail', 'pass')))
+        rule_counts[name] = dict(evaluated=int((~miss & ~ne).sum()), failed=int(fail.sum()), missing=int(miss.sum()),
+                                 not_evaluated=int(ne.sum()))
+        for i in np.where(fail)[0]: reasons[i].append(name)
+        for i in np.where(miss)[0]:
+            (reasons[i].append(f'no_{name}_data') if c['MISSING_POLICY'].get(group, 'drop') == 'drop' else unchecked[i].append(name))
+    df['reason'] = [','.join(sorted(set(r))) for r in reasons]
+    df['unchecked'] = [','.join(u) for u in unchecked]
+    df['kept'] = df['reason'] == ''
+    if 'manual' in df:
+        man = df['manual'].fillna('').astype(str)
+        df.loc[man == 'accept', 'kept'] = True
+        rej = man == 'reject'
+        df.loc[rej, 'kept'] = False
+        df.loc[rej, 'reason'] = [','.join([x for x in r.split(',') if x] + ['manual_reject']) for r in df.loc[rej, 'reason']]
+    partial = (df.get('hs_status', 'ok') == 'partial') | (df.get('wind_status', 'ok') == 'partial')
+    df['screen_status'] = np.where(df['unchecked'] != '', 'unchecked',
+                                   np.where(df['kept'] & ~aoi_ok, 'metadata only', np.where(partial, 'partial', 'complete')))
+    return df, rule_counts
+
+def set_manual(df, c):
+    """Column 'manual': your Accept / Reject choices from the image checker (if MANUAL_DECISIONS)."""
+    df = df.copy(); df['manual'] = ''
+    if c.get('MANUAL_DECISIONS'):
+        dec = dict((d, v) for d, v in applicable_decisions(CFG))
+        df['manual'] = [dec.get(str(d), '') if dec.get(str(d)) in ('accept', 'reject') else '' for d in df['date']]
+    return df
+
+def aoi_keys(c):
+    k = ['MAX_TILE_CLOUD', 'CS_THRESHOLD', 'ORBIT', 'GLINT_FILTER', 'PIXEL_MAX_SWIR', 'SCENE_STAT_SCALE', 'RAIN_SOURCE']
+    if c['RAIN_SOURCE'] == 'chirps': k += ['RAIN_DAYS', 'RAIN_BUFFER']
+    if c['WIND_FILTER'] and c['WIND_SOURCE'] == 'gee': k += ['WIND_SOURCE', 'WIND_WINDOW_H', 'WIND_BUFFER']
+    return k
 
 def screening_hash(c):
-    """Hash of the options that change the Earth Engine screening TABLE (not the thresholds applied to it)."""
+    """Hash of the options that change the Earth Engine image statistics of a date (not the thresholds)."""
     proj = {k: v for k, v in CFG['project'].items() if k not in ('DRIVE_ROOT', 'RUN_TAG')}
-    return hashlib.sha256(json.dumps(_jsonable(dict(p=proj, s={k: c[k] for k in SCREEN_KEYS})), sort_keys=True).encode()).hexdigest()[:10]
+    return hashlib.sha256(json.dumps(_jsonable(dict(p=proj, s={k: c[k] for k in aoi_keys(c)})), sort_keys=True).encode()).hexdigest()[:10]
 
-def raw_screening(col, c):
-    """Per-date statistics from Earth Engine, exported once per screening hash and kept in the cache folder:
-    changing a threshold or an Accept/Reject decision does not export the table again."""
+def aoi_columns(c):
+    return AOI_COLS + (['rain_mm', 'rain_days'] if c['RAIN_SOURCE'] == 'chirps' else []) + \
+           (['wind_ms_gee', 'wind_n_gee'] if c['WIND_FILTER'] and c['WIND_SOURCE'] == 'gee' else [])
+
+def aoi_table(col, c, dates):
+    """Earth Engine: median NIR / B5 of clear AOI water (+ CHIRPS rain, ERA5 area wind if chosen) for these dates."""
+    rain_region = roi.bounds().buffer(c['RAIN_BUFFER'])
+    wind_region = roi.bounds().buffer(c['WIND_BUFFER'])
+    def row(d):
+        day = ee.Date(d)
+        imgs = col.filter(ee.Filter.eq('date', d))
+        wat = imgs.mosaic().select(['B8', 'B5']).updateMask(water)
+        st = wat.reduceRegion(reducer=ee.Reducer.median().combine(ee.Reducer.count(), None, True),
+                              geometry=roi, scale=c['SCENE_STAT_SCALE'], maxPixels=1e9, bestEffort=True, tileScale=16)
+        props = {'date': d, 'water_nir': st.get('B8_median'), 'water_b5': st.get('B5_median'), 'n_water_px': st.get('B8_count')}
+        if c['RAIN_SOURCE'] == 'chirps':
+            rcol = chirps.filterDate(day.advance(-c['RAIN_DAYS'], 'day'), day)       # whole days before the image
+            props['rain_mm'] = ee.Algorithms.If(rcol.size().eq(c['RAIN_DAYS']),
+                rcol.sum().reduceRegion(reducer=ee.Reducer.mean(), geometry=rain_region, scale=5566,
+                                        maxPixels=1e9, bestEffort=True).get('precipitation'), None)
+            props['rain_days'] = rcol.size()
+        if c['WIND_FILTER'] and c['WIND_SOURCE'] == 'gee':
+            t_last = ee.Date(imgs.aggregate_max('system:time_start'))
+            w = era5_gee.filterDate(t_last.advance(-c['WIND_WINDOW_H'], 'hour'), t_last.advance(1, 'second'))
+            spd = w.map(lambda i: i.expression('hypot(b("u"), b("v"))').rename('s'))
+            props['wind_ms_gee'] = ee.Algorithms.If(w.size().gt(0), spd.mean().reduceRegion(
+                reducer=ee.Reducer.mean(), geometry=wind_region, scale=27830, maxPixels=1e9, bestEffort=True).get('s'), None)
+            props['wind_n_gee'] = w.size()
+        return ee.Feature(None, props)
+    return ee.FeatureCollection(ee.List(list(dates)).map(row))
+
+def aoi_stats(col, c, dates):
+    """Image statistics per date, kept in the cache folder date by date: only dates never evaluated with these
+    options go to Earth Engine (changing months, thresholds or decisions re-uses the dates already done)."""
     h = screening_hash(c)
     cache = os.path.join(DRIVE_ROOT, CTX.folders['cache'], 's2_screening'); os.makedirs(cache, exist_ok=True)
-    path = os.path.join(cache, f'raw_{h}.csv')
-    if os.path.exists(path):
-        print(f'  screening table re-used from the cache ({os.path.basename(path)})')
-        return pd.read_csv(path)
-    name = f'S2_date_screening_raw_{h}'
-    export_table(s2_screening_table(col, c), 's2', name,
-                 selectors=SCREEN_COLS if (c['WIND_FILTER'] and c['WIND_SOURCE'] == 'gee') else SCREEN_COLS[:-2])
-    wait([name])
-    raw = read_task_csv(name)
-    raw.to_csv(path + '.tmp', index=False); os.replace(path + '.tmp', path)
-    return raw
+    path = os.path.join(cache, f'aoi_{h}.csv')
+    cols = aoi_columns(c)
+    have = pd.read_csv(path, dtype={'date': str}) if os.path.exists(path) else pd.DataFrame(columns=cols)
+    need = sorted(set(map(str, dates)) - set(have['date'].astype(str)))
+    if not need:
+        print(f'  image statistics of all {len(dates)} dates re-used from the cache ({os.path.basename(path)})')
+    else:
+        print(f'  Earth Engine: image statistics for {len(need)} dates ({len(set(dates)) - len(need)} already in the cache)')
+        name = f"S2_AOI_stats_{h}_{hashlib.sha256(' '.join(need).encode()).hexdigest()[:6]}"
+        export_table(aoi_table(col, c, need), 's2', name, selectors=cols)
+        wait([name], every=20)
+        new = read_task_csv(name); new['date'] = new['date'].astype(str)
+        new = new[new['date'].isin(need)]
+        lost = [d for d in need if d not in set(new['date'])]
+        if lost: new = pd.concat([new, pd.DataFrame({'date': lost})], ignore_index=True)     # evaluated, no data
+        have = pd.concat([have, new[[x for x in cols if x in new]]], ignore_index=True).drop_duplicates('date', keep='last')
+        have.sort_values('date').to_csv(path + '.tmp', index=False); os.replace(path + '.tmp', path)
+    have['date'] = have['date'].astype(str)
+    return have[have['date'].isin(set(map(str, dates)))]
 
-def apply_decisions(df, c):
-    """Your Accept / Reject choices override the automatic checks (column 'manual')."""
-    df = df.copy(); df['manual'] = ''
-    if not c.get('MANUAL_DECISIONS'): return df
-    dec = dict((d, v) for d, v in applicable_decisions(CFG))
-    for i, d in df['date'].items():
-        v = dec.get(str(d))
-        if v == 'accept':
-            df.at[i, 'manual'] = 'accept'; df.at[i, 'kept'] = True
-        elif v == 'reject':
-            df.at[i, 'manual'] = 'reject'; df.at[i, 'kept'] = False
-            df.at[i, 'reason'] = ','.join([x for x in str(df.at[i, 'reason']).split(',') if x and x != 'nan'] + ['manual_reject'])
-    return df
+def screening(c, col):
+    """All dates of the composite months with metadata, weather and (where evaluated) image statistics, checked.
+    Returns (table, rule_counts, tiles)."""
+    if c['SCREENING'] not in ('metadata+aoi', 'metadata', 'aoi'):
+        raise ValueError("S2['SCREENING'] must be 'metadata+aoi', 'metadata' or 'aoi'")
+    if c['SCREENING'] == 'metadata' and (c['RAIN_SOURCE'] == 'chirps' or (c['WIND_FILTER'] and c['WIND_SOURCE'] == 'gee')):
+        raise ValueError("With SCREENING = 'metadata' nothing is computed in Earth Engine: use RAIN_SOURCE = 'era5' and WIND_SOURCE = 'cds'")
+    tiles, df = metadata_table(c)
+    if not len(df):
+        raise RuntimeError('No Sentinel-2 image matches YEARS, MONTHS, ORBIT and MAX_TILE_CLOUD over the AOI')
+    print(f"  metadata: {len(tiles)} tile images on {len(df)} dates (tiles: {tiles.MGRS_TILE.value_counts().to_dict()})")
+    df = set_manual(add_weather(df, c), c)
+    df['aoi_evaluated'] = False
+    if c['SCREENING'] != 'metadata':
+        if c['SCREENING'] == 'aoi':
+            want = df['date'].tolist()
+        else:
+            pre, _ = apply_checks(df, c, stage='meta')
+            want = pre.loc[pre['kept'], 'date'].tolist()
+            print(f"  metadata + weather checks: {len(want)} of {len(df)} dates go on to the image check in Earth Engine")
+        if want:
+            df = df.merge(aoi_stats(col, c, want), on='date', how='left')
+        df['aoi_evaluated'] = df['date'].isin(want)
+        if c['WIND_FILTER'] and c['WIND_SOURCE'] == 'gee':
+            df['wind_ms'], df['wind_n'] = df.get('wind_ms_gee'), df.get('wind_n_gee')
+            df['wind_status'] = np.where(pd.notna(df['wind_ms']), 'ok', 'missing')
+    for k in ('water_nir', 'water_b5', 'n_water_px'):
+        if k not in df: df[k] = np.nan
+    df, rule_counts = apply_checks(df, c)
+    return add_quality(df), rule_counts, tiles
 
-QUALITY_VARS = ['water_nir', 'water_b5', 'rain_mm', 'wind_ms', 'hs_m']
+QUALITY_VARS = [('water_nir', 1), ('water_b5', 1), ('rain_mm', 1), ('wind_ms', 1), ('hs_m', 1), ('meta_cirrus', 1),
+                ('glint_angle', -1)]
 
 def add_quality(df):
-    """clear_share: clear water of the date relative to the clearest date; quality_score 0 (best) .. 100 (worst):
-    mean percentile rank of glint/haze, turbidity, rain, wind, waves and cloudiness among the dates with clear water."""
+    """clear_share: clear AOI water of the date relative to the clearest date (image check);
+    clear_est: clear_share where evaluated, otherwise 1 - tile cloud / 100;
+    quality_score 0 (best) .. 100 (worst): mean percentile rank of the available variables (glint / haze, turbidity,
+    rain, wind, waves, cirrus, glint angle, cloudiness)."""
     df = df.copy()
-    nw = pd.to_numeric(df.get('n_water_px'), errors='coerce')
-    df['clear_share'] = nw / nw.max() if nw.notna().any() else np.nan
-    has = pd.to_numeric(df['water_nir'], errors='coerce').notna()
-    ranks = [pd.to_numeric(df.loc[has, v], errors='coerce').rank(pct=True) for v in QUALITY_VARS if v in df]
-    ranks.append(1 - df.loc[has, 'clear_share'].rank(pct=True) + 1 / max(has.sum(), 1))
-    df['quality_score'] = np.nan
-    if has.any():
-        df.loc[has, 'quality_score'] = (pd.concat(ranks, axis=1).mean(axis=1, skipna=True) * 100).round(1)
+    nw = pd.to_numeric(df.get('n_water_px'), errors='coerce') if 'n_water_px' in df else pd.Series(np.nan, index=df.index)
+    df['clear_share'] = nw / nw.max() if nw.notna().any() and nw.max() > 0 else np.nan
+    est = 1 - pd.to_numeric(df.get('meta_cloud'), errors='coerce') / 100 if 'meta_cloud' in df else pd.Series(np.nan, index=df.index)
+    df['clear_est'] = pd.to_numeric(df['clear_share'], errors='coerce').fillna(est).clip(0, 1)
+    ranks = []
+    for v, sign in QUALITY_VARS + [('clear_est', -1)]:
+        if v not in df: continue
+        x = pd.to_numeric(df[v], errors='coerce')
+        if x.notna().sum() < 2: continue
+        r = x.rank(pct=True)
+        ranks.append(r if sign > 0 else 1 - r + 1 / x.notna().sum())
+    df['quality_score'] = (pd.concat(ranks, axis=1).mean(axis=1, skipna=True) * 100).round(1) if ranks else np.nan
     return df
 
-PROXIES = [('rain_mm', 'RAIN_MAX_MM', 'RAIN_FILTER', 'rain'), ('wind_ms', 'WIND_MAX_MS', 'WIND_FILTER', 'wind'),
-           ('hs_m', 'WAVE_MAX_HS', 'WAVE_FILTER', 'waves')]
+# column, option, switch (None: on when the option is set), label, compared with, which side is 'bad'
+PROXIES = [('rain_mm', 'RAIN_MAX_MM', 'RAIN_FILTER', 'rain', 'water_b5', 'above'),
+           ('wind_ms', 'WIND_MAX_MS', 'WIND_FILTER', 'wind', 'water_b5', 'above'),
+           ('hs_m', 'WAVE_MAX_HS', 'WAVE_FILTER', 'waves', 'water_b5', 'above'),
+           ('meta_cloud', 'META_MAX_CLOUD', None, 'tile cloud', 'water_nir', 'above'),
+           ('meta_cirrus', 'META_MAX_CIRRUS', None, 'cirrus', 'water_nir', 'above'),
+           ('glint_angle', 'META_MIN_GLINT_ANGLE', None, 'glint angle', 'water_nir', 'below')]
+TARGET_LAB = {'water_b5': 'B5', 'water_nir': 'NIR'}
 
 def proxy_check(df, c):
-    """Do rain, wind and waves (indirect checks) predict turbid or glinty water (direct checks) on these dates?
-    Compares the red-edge B5 of clear water between dates above and below each threshold."""
+    """Do the indirect checks (rain, wind, waves, tile metadata) predict turbid or glinty water on these dates?
+    Compares the image value (B5 for turbidity, NIR for glint / haze) of clear water between dates on the 'bad'
+    and the 'good' side of each threshold (or of the median when a metadata check is switched off)."""
     from scipy import stats
     rows = []
-    b5 = pd.to_numeric(df['water_b5'], errors='coerce'); nir = pd.to_numeric(df['water_nir'], errors='coerce')
-    direct_fail = (b5 > c['SCENE_MAX_B5']) | (nir > c['SCENE_MAX_NIR'])
-    for col_, opt, flag, lab in PROXIES:
-        if col_ not in df: continue
-        x = pd.to_numeric(df[col_], errors='coerce'); ok = x.notna() & b5.notna()
-        above = ok & (x > c[opt]); below = ok & ~(x > c[opt])
-        r = dict(check=lab, option=opt, threshold=c[opt], enabled=bool(c[flag]), n_above=int(above.sum()), n_below=int(below.sum()))
-        r['spearman_b5'] = float(stats.spearmanr(x[ok], b5[ok]).correlation) if ok.sum() > 5 else np.nan
-        if above.sum() >= 3 and below.sum() >= 3:
-            r['b5_median_above'], r['b5_median_below'] = float(b5[above].median()), float(b5[below].median())
-            r['b5_ratio'] = r['b5_median_above'] / r['b5_median_below']
-            r['p_value'] = float(stats.mannwhitneyu(b5[above], b5[below], alternative='greater').pvalue)
-            r['also_failed_direct'] = float(direct_fail[above].mean())      # share the image checks catch anyway
-            if r['p_value'] < 0.05 and r['b5_ratio'] > 1.1:
-                r['verdict'] = 'useful: dates above the threshold have more turbid water'
+    direct_fail = ((pd.to_numeric(df['water_b5'], errors='coerce') > c['SCENE_MAX_B5']) |
+                   (pd.to_numeric(df['water_nir'], errors='coerce') > c['SCENE_MAX_NIR']))
+    for col_, opt, flag, lab, tgt, side in PROXIES:
+        if col_ not in df or tgt not in df: continue
+        x = pd.to_numeric(df[col_], errors='coerce'); y = pd.to_numeric(df[tgt], errors='coerce')
+        ok = x.notna() & y.notna()
+        if ok.sum() == 0 and x.notna().sum() == 0: continue
+        thr = c[opt]; split = thr if thr is not None else (float(x[ok].median()) if ok.any() else np.nan)
+        bad = ok & ((x > split) if side == 'above' else (x < split)); good = ok & ~bad
+        r = dict(check=lab, option=opt, threshold=thr, split=split, split_at='threshold' if thr is not None else 'median',
+                 enabled=bool(c[flag]) if flag else thr is not None, compared_with=TARGET_LAB[tgt], side=side,
+                 n_bad=int(bad.sum()), n_good=int(good.sum()))
+        r['spearman'] = float(stats.spearmanr(x[ok], y[ok]).correlation) if ok.sum() > 5 else np.nan
+        if bad.sum() >= 3 and good.sum() >= 3:
+            r['median_bad'], r['median_good'] = float(y[bad].median()), float(y[good].median())
+            r['ratio'] = r['median_bad'] / r['median_good'] if r['median_good'] else np.nan
+            r['p_value'] = float(stats.mannwhitneyu(y[bad], y[good], alternative='greater').pvalue)
+            r['also_failed_direct'] = float(direct_fail[bad].mean())      # share the image checks catch anyway
+            what = 'turbid' if tgt == 'water_b5' else 'glinty or hazy'
+            if r['p_value'] < 0.05 and r['ratio'] > 1.1:
+                r['verdict'] = f'useful: dates on the bad side have more {what} water'
                 if r['also_failed_direct'] > 0.8:
                     r['verdict'] += ' (but the image checks already catch most of them)'
             else:
-                r['verdict'] = 'no evidence: dates above the threshold are not more turbid'
+                r['verdict'] = f'no evidence: dates on the bad side are not more {what}'
         else:
-            r['verdict'] = 'too few dates on one side of the threshold to judge'
+            r['verdict'] = 'too few image-checked dates on one side to judge'
         rows.append(r)
     return pd.DataFrame(rows)
 
 def proxy_figure(df, c, pc):
-    b5 = pd.to_numeric(df['water_b5'], errors='coerce')
     labs = {'rain_mm': f"rain, {c['RAIN_DAYS']} days before (mm)", 'wind_ms': f"wind, {c['WIND_WINDOW_H']} h before (m s$^{{-1}}$)",
-            'hs_m': f"offshore $H_s$, {c['WAVE_WINDOW_H']} h before (m)"}
-    fig, axs = plt.subplots(1, 3, figsize=(7.2, 2.7), constrained_layout=True, sharey=True)
-    for ax, (col_, opt, flag, lab) in zip(axs, PROXIES):
-        x = pd.to_numeric(df.get(col_), errors='coerce') if col_ in df else pd.Series(np.nan, index=df.index)
-        kept = df['kept'].astype(bool)
-        ax.scatter(x[kept], b5[kept], s=9, color=OKABE_ITO[2], label='kept', alpha=0.8)
-        ax.scatter(x[~kept], b5[~kept], s=9, color=OKABE_ITO[3], label='dropped', alpha=0.8)
-        ax.axhline(c['SCENE_MAX_B5'], color='0.3', ls=':', lw=0.9, label='B5 threshold')
-        ax.axvline(c[opt], color=OKABE_ITO[3], ls='--', lw=0.9, label=f'{lab} threshold')
-        ax.set_xlabel(labs[col_])
-        r = pc[pc.check == lab]
-        if len(r):
-            r = r.iloc[0]; v = r.verdict.split(':')[0]
-            ax.set_title(f"{lab}: {v}" + (f"\nB5 ×{r.b5_ratio:.2f}, p={r.p_value:.2g}" if pd.notna(r.get('b5_ratio', np.nan)) else ''),
-                         loc='left', fontsize=8)
-    axs[0].set_ylabel('median water red edge B5'); axs[0].legend(fontsize=6.5, loc='upper right')
-    panel_labels(axs, x=-0.15)
+            'hs_m': f"offshore $H_s$, {c['WAVE_WINDOW_H']} h before (m)", 'meta_cloud': 'tile cloud (%)',
+            'meta_cirrus': 'tile thin cirrus (%)', 'glint_angle': 'glint angle (°)'}
+    items = [p for p in PROXIES if p[0] in df and len(pc) and (pc.check == p[3]).any()]
+    if not items: return
+    nc = 3; nr = int(np.ceil(len(items) / nc))
+    fig, axs = plt.subplots(nr, nc, figsize=(7.2, 2.5 * nr), constrained_layout=True, squeeze=False)
+    kept = df['kept'].astype(bool)
+    for ax, (col_, opt, flag, lab, tgt, side) in zip(axs.ravel(), items):
+        x = pd.to_numeric(df[col_], errors='coerce'); y = pd.to_numeric(df[tgt], errors='coerce')
+        ax.scatter(x[kept], y[kept], s=9, color=OKABE_ITO[2], label='kept', alpha=0.8)
+        ax.scatter(x[~kept], y[~kept], s=9, color=OKABE_ITO[3], label='dropped', alpha=0.8)
+        ax.axhline(c['SCENE_MAX_B5' if tgt == 'water_b5' else 'SCENE_MAX_NIR'], color='0.3', ls=':', lw=0.9, label=f'{TARGET_LAB[tgt]} threshold')
+        r = pc[pc.check == lab].iloc[0]
+        if pd.notna(r.split):
+            ax.axvline(r.split, color=OKABE_ITO[3], ls='--' if r.split_at == 'threshold' else ':', lw=0.9,
+                       label=f'{lab} {r.split_at}')
+        ax.set_xlabel(labs[col_]); ax.set_ylabel(f'median water {TARGET_LAB[tgt]}', fontsize=7)
+        v = r.verdict.split(':')[0]
+        ax.set_title(f"{lab}: {v}" + (f"\n×{r.ratio:.2f}, p={r.p_value:.2g}" if pd.notna(r.get('ratio', np.nan)) else ''),
+                     loc='left', fontsize=8)
+    for ax in axs.ravel()[len(items):]: ax.set_visible(False)
+    axs.ravel()[0].legend(fontsize=6, loc='upper right')
+    panel_labels(axs.ravel()[:len(items)], x=-0.15)
     save_fig(fig, 's2', f'{PREFIX}_Fig_S2_indirect_checks'); plt.show()
 
 def strict_suggestion(df, c):
-    """'Best images' thresholds: image checks at the median of the dates with clear water; indirect checks at
-    their median only where they proved useful. Returns (thresholds, summary)."""
-    d = df[pd.to_numeric(df['water_nir'], errors='coerce').notna()].copy()
+    """'Best images' thresholds: image checks at the median of the image-checked dates; indirect checks at their
+    median only where they proved useful. Returns (thresholds, summary)."""
+    d = df[pd.to_numeric(df['water_nir'], errors='coerce').notna()]
     pc = proxy_check(df, c)
-    th = {'SCENE_MAX_NIR': round(float(pd.to_numeric(d.water_nir).median()), 4),
-          'SCENE_MAX_B5': round(float(pd.to_numeric(d.water_b5).median()), 4)}
-    for col_, opt, flag, lab in PROXIES:
+    th = {}
+    if len(d) >= 5:
+        th['SCENE_MAX_NIR'] = round(float(pd.to_numeric(d.water_nir).median()), 4)
+        th['SCENE_MAX_B5'] = round(float(pd.to_numeric(d.water_b5).median()), 4)
+    for col_, opt, flag, lab, tgt, side in PROXIES:
         r = pc[pc.check == lab]
-        if len(r) and r.iloc[0].verdict.startswith('useful') and col_ in d:
+        if len(r) and r.iloc[0].verdict.startswith('useful'):
             th[opt] = round(float(pd.to_numeric(d[col_], errors='coerce').median()), 2)
-    def keep(t):
-        k = pd.Series(True, index=d.index)
-        for col_, opt in (('water_nir', 'SCENE_MAX_NIR'), ('water_b5', 'SCENE_MAX_B5'), ('rain_mm', 'RAIN_MAX_MM'),
-                          ('wind_ms', 'WIND_MAX_MS'), ('hs_m', 'WAVE_MAX_HS')):
-            if col_ in d: k &= ~(pd.to_numeric(d[col_], errors='coerce') > t.get(opt, c[opt]))
-        return k
-    cur, strict = keep({}), keep(th)
-    obs = lambda k: float(d.loc[k, 'clear_share'].sum()) if 'clear_share' in d else np.nan
+    flags = {f: True for col_, opt, f, *_ in PROXIES if f and opt in th}
+    if th: flags.update(GLINT_FILTER=True, TURBIDITY_FILTER=True)
+    cur = apply_checks(df, c)[0]['kept']
+    strict = apply_checks(df, {**c, **th, **flags})[0]['kept']
+    obs = lambda k: float(pd.to_numeric(df.loc[k, 'clear_est'], errors='coerce').sum()) if 'clear_est' in df else np.nan
+    tighter = {k: v for k, v in th.items()
+               if c[k] is None or (v > c[k] if k == 'META_MIN_GLINT_ANGLE' else v < c[k])}
     return th, dict(dates_current=int(cur.sum()), dates_strict=int(strict.sum()), clear_obs_current=obs(cur),
-                    clear_obs_strict=obs(strict), target=c['TARGET_CLEAR_OBS'])
+                    clear_obs_strict=obs(strict), target=c['TARGET_CLEAR_OBS'], tighter=tighter, image_checked=len(d))
 
 
 # ================================================================================ image-by-image checker
@@ -382,10 +494,11 @@ def save_decision(date, decision, note=''):
                                              decided_utc=dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds'))])])
     d.sort_values(['orbit', 'date']).to_csv(path + '.tmp', index=False); os.replace(path + '.tmp', path)
 
-def checker(ctx=None, page_size=12, size=360):
-    """Gallery of all dates with clear water, best first, with Accept / Reject / Auto buttons.
-    Decisions are saved at once to <FOLDER_ROOT>__S2_image_decisions.csv in your Drive; run the S2 options cell
-    and st.s2.run(ctx) again to make a composite that uses them."""
+def checker(ctx=None, page_size=12, size=360, show_first='all'):
+    """Gallery of the screened dates, best first, with Accept / Reject / Auto buttons.
+    Decisions are saved at once to <FOLDER_ROOT>__S2_image_decisions.csv in the outputs folder; run the S2 options
+    cell and st.s2.run(ctx) again to make a composite that uses them. Accepting a date that has not had the image
+    check yet sends it to Earth Engine at the next run (only that date)."""
     import ipywidgets as wg
     from IPython.display import display
     try:
@@ -395,21 +508,22 @@ def checker(ctx=None, page_size=12, size=360):
     global WAVE_SERIES
     ctx = bind(globals(), 's2', ctx)
     c = S2
-    WAVE_SERIES = load_series(required=c['WAVE_FILTER'] or (c['WIND_FILTER'] and c['WIND_SOURCE'] == 'cds'))
+    WAVE_SERIES = load_series(required=c['WAVE_FILTER'] or (c['WIND_FILTER'] and c['WIND_SOURCE'] == 'cds') or c['RAIN_SOURCE'] == 'era5')
     s2_raw, col_ = s2_collection(c)
-    raw = raw_screening(col_, c)
-    df, _ = s2_decide(raw, c)
-    df = add_quality(df)
-    auto = df[['date', 'kept', 'reason']].rename(columns={'kept': 'auto_kept', 'reason': 'auto_reason'})
-    df = df.merge(auto, on='date')
-    df = df[pd.to_numeric(df.water_nir, errors='coerce').notna()].sort_values('quality_score').reset_index(drop=True)
+    auto_c = dict(c, MANUAL_DECISIONS=False)              # automatic result, without your decisions
+    df, _, _ = screening(auto_c, col_)
+    df = df.rename(columns={'kept': 'auto_kept', 'reason': 'auto_reason'})
+    df = df.sort_values(['quality_score', 'date']).reset_index(drop=True)
     dec = dict((d, v) for d, v in applicable_decisions(CFG))
-    state = dict(page=0, filt='all')
+    state = dict(page=0, filt=show_first)
     out = wg.Output()
     summary = wg.HTML()
-    lim = {'water_nir': c['SCENE_MAX_NIR'], 'water_b5': c['SCENE_MAX_B5'], 'rain_mm': c['RAIN_MAX_MM'],
-           'wind_ms': c['WIND_MAX_MS'], 'hs_m': c['WAVE_MAX_HS']}
-    short = {'water_nir': 'NIR', 'water_b5': 'B5', 'rain_mm': 'rain', 'wind_ms': 'wind', 'hs_m': 'Hs'}
+    lim = {'meta_cloud': (c['META_MAX_CLOUD'], 'above'), 'meta_cirrus': (c['META_MAX_CIRRUS'], 'above'),
+           'glint_angle': (c['META_MIN_GLINT_ANGLE'], 'below'), 'water_nir': (c['SCENE_MAX_NIR'], 'above'),
+           'water_b5': (c['SCENE_MAX_B5'], 'above'), 'rain_mm': (c['RAIN_MAX_MM'], 'above'),
+           'wind_ms': (c['WIND_MAX_MS'], 'above'), 'hs_m': (c['WAVE_MAX_HS'], 'above')}
+    short = {'meta_cloud': 'tile cloud %', 'meta_cirrus': 'cirrus %', 'glint_angle': 'glint°', 'water_nir': 'NIR',
+             'water_b5': 'B5', 'rain_mm': 'rain', 'wind_ms': 'wind', 'hs_m': 'Hs'}
 
     def final(r):
         v = dec.get(r.date)
@@ -418,26 +532,30 @@ def checker(ctx=None, page_size=12, size=360):
     def refresh_summary():
         k = sum(final(r) for r in df.itertuples())
         n_acc = sum(v == 'accept' for v in dec.values()); n_rej = sum(v == 'reject' for v in dec.values())
-        summary.value = (f"<b>{len(df)}</b> dates with clear water · automatically kept <b>{int(df.auto_kept.sum())}</b> · "
-                         f"your decisions: <b>{n_acc}</b> accepted, <b>{n_rej}</b> rejected · the composite would use "
-                         f"<b>{k}</b> dates. Decisions file: <code>{decisions_path(CFG)}</code>")
+        summary.value = (f"<b>{len(df)}</b> dates · image-checked <b>{int(df.aoi_evaluated.sum())}</b> · automatically kept "
+                         f"<b>{int(df.auto_kept.sum())}</b> · your decisions: <b>{n_acc}</b> accepted, <b>{n_rej}</b> rejected · "
+                         f"the composite would use <b>{k}</b> dates. Decisions file: <code>{decisions_path(CFG)}</code>")
 
     def view():
         f = state['filt']
-        if f == 'all': return df
         if f == 'automatically kept': return df[df.auto_kept]
         if f == 'automatically dropped': return df[~df.auto_kept]
-        return df[df.date.isin(dec)]
+        if f == 'image-checked': return df[df.aoi_evaluated]
+        if f == 'decided by you': return df[df.date.isin(dec)]
+        return df
 
     def card(r):
         vals = []
         for k, lab in short.items():
             x = pd.to_numeric(getattr(r, k, np.nan), errors='coerce')
-            if pd.isna(x): vals.append(f'{lab} –'); continue
-            bad = x > lim[k]
+            if pd.isna(x): continue
+            thr, side = lim[k]
+            bad = thr is not None and ((x > thr) if side == 'above' else (x < thr))
             vals.append(f"<span style='color:{'#D55E00' if bad else 'inherit'}'>{lab} {x:.3g}</span>")
         verdict = 'kept' if r.auto_kept else f"dropped ({r.auto_reason})"
-        html = wg.HTML(f"<b>{r.date}</b> · score {r.quality_score:.0f} · clear {r.clear_share:.0%}<br>"
+        clear = (f"clear water {r.clear_share:.0%}" if pd.notna(r.clear_share) else
+                 f"no image check" if not r.aoi_evaluated else 'no clear water')
+        html = wg.HTML(f"<b>{r.date}</b> · score {r.quality_score:.0f} · {clear} · tiles {r.tile_list}<br>"
                        f"<span style='font-size:11px'>{' · '.join(vals)}<br>auto: {verdict}</span>")
         try:
             img = wg.HTML(f"<img src='{thumb_url(r.date, c, size)}' width='{size}'>")
@@ -465,19 +583,19 @@ def checker(ctx=None, page_size=12, size=360):
 
     prev_b, next_b = wg.Button(description='◀ previous'), wg.Button(description='next ▶')
     pager = wg.HTML()
-    filt = wg.Dropdown(options=['all', 'automatically kept', 'automatically dropped', 'decided by you'], value='all',
-                       description='show')
+    filt = wg.Dropdown(options=['all', 'automatically kept', 'automatically dropped', 'image-checked', 'decided by you'],
+                       value=show_first, description='show')
     def go(delta):
         state['page'] = max(0, state['page'] + delta); show()
     prev_b.on_click(lambda _: go(-1)); next_b.on_click(lambda _: go(+1))
     filt.observe(lambda ch: (state.update(filt=ch['new'], page=0), show()), names='value')
     refresh_summary()
-    print('Dates are sorted by quality score (0 = best). Values in orange fail the current threshold. '
-          'Thumbnails show all tiles of the date, without cloud masking, stretched 0–0.15 reflectance; magenta = AOI.')
+    print('Dates are sorted by quality score (0 = best; dates without the image check are scored on metadata and weather only). '
+          'Values in orange fail the current threshold. Thumbnails: all tiles of the date, no cloud masking, '
+          'reflectance 0–0.15; magenta = AOI. A thumbnail is computed by Earth Engine only when its page is shown.')
     display(wg.VBox([summary, wg.HBox([prev_b, next_b, pager, filt]), out]))
     show()
     return df
-
 
 
 def run(ctx=None, force=False):
@@ -489,7 +607,7 @@ def run(ctx=None, force=False):
     ctx = bind(globals(), 's2', ctx)
     ctx.force = force
     figure_style()
-    WAVE_SERIES = load_series(required=S2['WAVE_FILTER'] or (S2['WIND_FILTER'] and S2['WIND_SOURCE'] == 'cds'))
+    WAVE_SERIES = load_series(required=S2['WAVE_FILTER'] or (S2['WIND_FILTER'] and S2['WIND_SOURCE'] == 'cds') or S2['RAIN_SOURCE'] == 'era5')
     S2_HASH = hashlib.sha256(json.dumps(_jsonable(S2), sort_keys=True).encode()).hexdigest()[:6]
     S2_RESULT = {}
     c, tag = S2, s2_tag(S2)
@@ -497,8 +615,9 @@ def run(ctx=None, force=False):
         raise RuntimeError('WAVE_FILTER is on but no Module 0 wave series is loaded: run Module 0 or set S2["WAVE_FILTER"] = False')
     if c['WIND_FILTER'] and c['WIND_SOURCE'] == 'cds' and ('era5' not in WAVE_SERIES or 'wind_speed' not in WAVE_SERIES['era5']):
         raise RuntimeError('WIND_SOURCE = "cds" needs ERA5 wind from Module 0 (W["ERA5_WIND"] = True), or set WIND_SOURCE = "gee"')
+    if c['RAIN_FILTER'] and c['RAIN_SOURCE'] == 'era5' and ('era5' not in WAVE_SERIES or 'rain_mm' not in WAVE_SERIES['era5']):
+        raise RuntimeError('RAIN_SOURCE = "era5" needs ERA5 rain from the waves step (total_precipitation in ERA5_VARIABLES), or set RAIN_SOURCE = "chirps"')
     s2_raw, col = s2_collection(c)
-    print('Images per tile:', s2_raw.aggregate_histogram('MGRS_TILE').getInfo())
 
     # (a)+(b) screening -> excluded dates
     scr, rule_counts = None, {}
@@ -508,25 +627,29 @@ def run(ctx=None, force=False):
         st_ = stage_get('s2_screening'); exclude = st_['exclude']; rule_counts = st_['rule_counts']
         scr = pd.read_csv(st_['decided_csv']); print('  screening already done with these options:', len(exclude), 'dates excluded')
     else:
-        raw = raw_screening(col, c)
-        scr, rule_counts = s2_decide(raw, c)
-        scr = add_quality(apply_decisions(scr, c))
+        print(f"Date screening ({c['SCREENING']}):")
+        scr, rule_counts, tiles = screening(c, col)
+        p = drive_path('s2', f'S2_tile_metadata_h{S2_HASH}.csv'); tiles.to_csv(p, index=False); record_file(p)
         n_man = int((scr.manual != '').sum())
         if n_man: print(f"  your decisions applied to {n_man} dates ({int((scr.manual == 'accept').sum())} accepted, {int((scr.manual == 'reject').sum())} rejected)")
         p = drive_path('s2', f'S2_date_screening_h{S2_HASH}_decided.csv'); scr.to_csv(p, index=False); record_file(p)
         exclude = scr.loc[~scr['kept'], 'date'].tolist()
         stage_done('s2_screening', exclude=exclude, rule_counts=rule_counts, decided_csv=p)
     if scr is not None:
-        print(f'Dates: {len(scr)} | dropped {len(exclude)} | per rule (evaluated / failed / missing):')
-        for k, v in rule_counts.items(): print(f"   {k:7s} {v['evaluated']:4d} / {v['failed']:4d} / {v['missing']:4d}")
+        print(f'Dates: {len(scr)} | image-checked {int(scr.aoi_evaluated.sum())} | dropped {len(exclude)} | '
+              'per check (evaluated / failed / missing / not evaluated):')
+        for k, v in rule_counts.items():
+            print(f"   {k:11s} {v['evaluated']:4d} / {v['failed']:4d} / {v['missing']:4d} / {v.get('not_evaluated', 0):4d}")
         print('   screening status:', scr['screen_status'].value_counts().to_dict())
         # ---------------- figure: screening variables and thresholds ----------------
-        vars_ = [('water_nir', 'median water NIR (B8)', c['SCENE_MAX_NIR'], c['GLINT_FILTER']),
+        vars_ = [('meta_cloud', 'tile cloud, metadata (%)', c['META_MAX_CLOUD'], c['META_MAX_CLOUD'] is not None),
+                 ('water_nir', 'median water NIR (B8)', c['SCENE_MAX_NIR'], c['GLINT_FILTER']),
                  ('water_b5', 'median water red edge (B5)', c['SCENE_MAX_B5'], c['TURBIDITY_FILTER']),
                  ('rain_mm', f"rain, {c['RAIN_DAYS']} days before (mm)", c['RAIN_MAX_MM'], c['RAIN_FILTER']),
                  ('wind_ms', f"ERA5 wind, {c['WIND_WINDOW_H']} h before (m s$^{{-1}}$)", c['WIND_MAX_MS'], c['WIND_FILTER']),
                  ('hs_m', f"offshore $H_s$, {c['WAVE_WINDOW_H']} h before (m)", c['WAVE_MAX_HS'], c['WAVE_FILTER'])]
-        fig, axs = plt.subplots(2, 3, figsize=(7.2, 4.6), constrained_layout=True)
+        fig, axs = plt.subplots(2, 4, figsize=(7.2, 4.4), constrained_layout=True)
+        axs.ravel()[-2].set_visible(False)
         for ax, (vcol, lab, thr, on) in zip(axs.ravel(), vars_):
             v = pd.to_numeric(scr[vcol], errors='coerce').dropna() if vcol in scr else pd.Series(dtype=float)
             if len(v):
@@ -547,8 +670,8 @@ def run(ctx=None, force=False):
         # ---------------- do the indirect checks (rain, wind, waves) predict turbid water? ----------------
         pc = proxy_check(scr, c)
         p = drive_path('s2', f'S2_{tag}_indirect_checks.csv'); pc.to_csv(p, index=False); record_file(p)
-        print('Indirect checks vs water turbidity (B5) on these dates:')
-        for r in pc.itertuples(): print(f'   {r.check:6s} {r.verdict}')
+        print('Indirect checks vs the image (turbidity B5, glint / haze NIR) on the image-checked dates:')
+        for r in pc.itertuples(): print(f'   {r.check:11s} {r.verdict}')
         proxy_figure(scr, c, pc)
     col_kept = col.filter(ee.Filter.inList('date', exclude or ['none']).Not())
 
@@ -602,7 +725,8 @@ def run(ctx=None, force=False):
     | `S2_{tag}_QA.tif` | Int16, NoData −1: band 1 clear observations of the tile used (≥ {c['MIN_VALID']}), band 2 source tile (1..{max(1, len(c['GROUPS']))} = {', '.join(map(str, c['GROUPS'])) or 'all'}), band 3 = 1 where any band is < 0 or > 1 after tile matching |
     | `S2_{tag}_B2_TemporalStd.tif` | temporal std of blue reflectance **of the tile used at each pixel** |
     | `S2_{tag}_Median_B1-B4_sensitivity.tif` | {'median composite of B1–B4 (same dates and offsets), for sensitivity tests' if c['SENSITIVITY_MEDIAN'] else 'not produced'} |
-    | `S2_date_screening_h{S2_HASH}*.csv` | per date: acquisition times, water NIR/B5 (+ pixel count), rain (+ days available), wind and Hs per source with sample count, largest gap and status, check results (`chk_*`: pass / fail / missing), reason, unchecked, kept |
+    | `S2_date_screening_h{S2_HASH}*.csv` | per date: tiles, acquisition times, tile metadata (cloud, shadow, cirrus, no-data %, glint angle), rain, wind and Hs per source with sample count, largest gap and status, image check (`aoi_evaluated`; water NIR/B5 + clear-water pixel count), check results (`chk_*`: pass / fail / missing / not evaluated), reason, unchecked, your decision (`manual`), kept, quality score |
+    | `S2_tile_metadata_h{S2_HASH}.csv` | every tile image used: metadata as provided by ESA (percentages refer to the whole 110 km tile) |
     | `S2_{tag}_indirect_checks.csv`, `{PREFIX}_Fig_S2_indirect_checks.png/.pdf` | do rain, wind and waves predict turbid water (B5) on these dates? medians above/below each threshold, Mann-Whitney p, verdict |
     | `{FOLDER_ROOT}__S2_image_decisions.csv` (My Drive) | your Accept / Reject choices from the image checker (applied: {S2['MANUAL_DECISIONS']}) |
     | `S2_{tag}_tile_offsets_diagnostics.csv` | per tile: overlap water pixels, offset and IQR per band, flags (unsupported / large / pushes water below 0) |
@@ -613,7 +737,7 @@ def run(ctx=None, force=False):
     ## Method
     1. Sentinel-2 L2A (COPERNICUS/S2_SR_HARMONIZED; 2A/2B/2C), months {c['MONTHS']} of {c['YEARS']}{f", relative orbit {c['ORBIT']} only" if c['ORBIT'] else ''}.
     2. Tile cloud < {c['MAX_TILE_CLOUD']} %; Cloud Score+ cs_cdf ≥ {c['CS_THRESHOLD']}; reflectance = DN/10000; water pixels with B11 > {c['PIXEL_MAX_SWIR']} masked; an observation is used only where all 12 bands are valid.
-    3. Date screening (water = Copernicus DEM water body mask): glint (median water B8 > {c['SCENE_MAX_NIR']}), turbidity (median water B5 > {c['SCENE_MAX_B5']}), rain (CHIRPS sum of the {c['RAIN_DAYS']} whole days before the acquisition day > {c['RAIN_MAX_MM']} mm, AOI + {c['RAIN_BUFFER']/1000:.0f} km), wind (ERA5 {'point series from Module 0 (CDS)' if c['WIND_SOURCE'] == 'cds' else 'area mean in GEE, AOI + ' + str(c['WIND_BUFFER']//1000) + ' km'}, mean over the {c['WIND_WINDOW_H']} h ending at acquisition > {c['WIND_MAX_MS']} m/s), waves (offshore Hs, source {W['SCREEN_SOURCE']}, max over the {c['WAVE_WINDOW_H']} h ending at acquisition > {c['WAVE_MAX_HS']} m). Missing-data policy: `{json.dumps(c['MISSING_POLICY'])}`.
+    3. Date screening, mode `{c['SCREENING']}`: (i) tile metadata, no pixels processed (mean over the tiles of the date: cloud ≤ {c['META_MAX_CLOUD']} %, shadow ≤ {c['META_MAX_SHADOW']} %, thin cirrus ≤ {c['META_MAX_CIRRUS']} %, glint angle ≥ {c['META_MIN_GLINT_ANGLE']}°; None = not used); (ii) weather; (iii) image check in Earth Engine {'for all dates' if c['SCREENING'] == 'aoi' else 'not done' if c['SCREENING'] == 'metadata' else 'only for the dates that passed (i) and (ii), plus dates you accepted'} (water = Copernicus DEM water body mask): glint (median water B8 > {c['SCENE_MAX_NIR']}), turbidity (median water B5 > {c['SCENE_MAX_B5']}), rain ({'ERA5 at the waves point' if c['RAIN_SOURCE'] == 'era5' else f"CHIRPS, AOI + {c['RAIN_BUFFER']/1000:.0f} km"}, sum of the {c['RAIN_DAYS']} whole days before the acquisition day > {c['RAIN_MAX_MM']} mm), wind (ERA5 {'point series from Module 0 (CDS)' if c['WIND_SOURCE'] == 'cds' else 'area mean in GEE, AOI + ' + str(c['WIND_BUFFER']//1000) + ' km'}, mean over the {c['WIND_WINDOW_H']} h ending at acquisition > {c['WIND_MAX_MS']} m/s), waves (offshore Hs, source {W['SCREEN_SOURCE']}, max over the {c['WAVE_WINDOW_H']} h ending at acquisition > {c['WAVE_MAX_HS']} m). Missing-data policy: `{json.dumps(c['MISSING_POLICY'])}`.
        Per rule (evaluated / failed / missing): `{json.dumps(rule_counts)}`.
     4. Excluded dates ({len(exclude)}): {', '.join(exclude) if exclude else 'none'}.
     5. {'Median' if c['PERCENTILE'] == 50 else f"{c['PERCENTILE']}th percentile"} per pixel and tile; each tile masked where it has < {c['MIN_VALID']} clear observations **before** the tile mosaic.
@@ -632,7 +756,7 @@ def run(ctx=None, force=False):
     - Sen2Cor is not optimised for water; very shallow bright and turbid areas are less reliable (TemporalStd, QA).
 
     ## Sources
-    Copernicus Sentinel-2 (ESA); Cloud Score+ (Pasquarella et al. 2023); CHIRPS (Funk et al. 2015); ERA5 (Hersbach et al. 2020);
+    Copernicus Sentinel-2 (ESA) and its tile metadata; Cloud Score+ (Pasquarella et al. 2023); CHIRPS (Funk et al. 2015); ERA5 (Hersbach et al. 2020);
     Copernicus DEM GLO-30 water body mask; Copernicus Marine global waves (Module 0).
     """)
     if WAIT_FOR_EXPORTS:
@@ -641,3 +765,4 @@ def run(ctx=None, force=False):
         set_status('s2', 'complete' if (scr is None or (scr['screen_status'] != 'unchecked').all()) else 'partial',
                    unchecked_dates=int((scr['screen_status'] == 'unchecked').sum()) if scr is not None else None)
     return ctx
+

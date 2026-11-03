@@ -56,7 +56,10 @@ waves:
 prescreen:
   YEARS: [2000, 2026]        # years for sea-state and rain statistics (Sentinel-2 counts start in 2017)
   ORBIT: 40                  # Sentinel-2 relative orbit (null = all); use the same as the composite
-  CS_THRESHOLD: 0.65         # Cloud Score+ threshold for a clear pixel
+  SCENES: metadata           # clear sky from 'metadata' (tile cloud %, seconds, Sentinel-2 only) or 'aoi'
+                             # (Earth Engine statistics of AOI water per scene: clear share, glint, turbidity; slow)
+  CHIRPS: false              # also CHIRPS rain (Earth Engine table); ERA5 rain from the waves step is always used
+  CS_THRESHOLD: 0.65         # Cloud Score+ threshold for a clear pixel ('aoi' only)
   PIXEL_MAX_SWIR: 0.02       # SWIR reflectance above which clear water counts as glint
   COMPARE_MONTHS: [2, 4]     # a window to compare with the ranking (e.g. the months used so far)
   OVERPASS_UTC: 16.3         # typical Sentinel-2 overpass time over the AOI (h UTC)
@@ -67,9 +70,9 @@ prescreen:
   PCTL: {hs: 75, wind: 75, rain_era5: 75, rain_chirps: 75, turbidity: 75}   # good if at/below this site percentile (all months);
                              # 75 = not among the worst 25 % of days. All four together are much stricter than any one.
   ABS_CAPS: {hs: 1.5, wind: 6.0, rain_era5: 25.0, rain_chirps: 25.0}       # and never above these limits (null = none)
-  CLEAR_MIN: 0.6             # a scene is usable if at least this share of the water it covers is cloud-free ...
-  COVER_MIN: 0.5             # ... and it covers at least this share of the AOI water (partial tiles / swaths)
-  SENSORS: [S2, LANDSAT]     # scene statistics from Earth Engine: S2, LANDSAT, HLS
+  CLEAR_MIN: 0.6             # a scene is usable if at least this share is cloud-free ('metadata': of the tiles; 'aoi': of the AOI water it covers) ...
+  COVER_MIN: 0.5             # ... and ('aoi' only) it covers at least this share of the AOI water (partial tiles / swaths)
+  SENSORS: [S2, LANDSAT]     # 'aoi' only: scene statistics from Earth Engine: S2, LANDSAT, HLS
   LANDSAT_YEARS: [1984, 2026]
   OCEAN_COLOUR: true         # Copernicus Marine ocean-colour transparency (daily AOI median)
   OC_DATASETS:
@@ -84,7 +87,13 @@ prescreen:
 s2:
   YEARS: [2020, 2026]
   MONTHS: [2, 4]             # choose with the pre-screening results
-  MAX_TILE_CLOUD: 70
+  MAX_TILE_CLOUD: 70         # tile images above this cloud % are not used at all (metadata filter)
+  SCREENING: metadata+aoi    # 'metadata+aoi': metadata + weather first, image check in Earth Engine only for the
+                             # dates that pass; 'metadata': no Earth Engine check; 'aoi': image check for every date
+  META_MAX_CLOUD: 40         # date dropped if the mean tile cloud % is above this (null = not used)
+  META_MAX_SHADOW: null      # ... cloud-shadow % (null = not used)
+  META_MAX_CIRRUS: null      # ... thin-cirrus % (null = not used)
+  META_MIN_GLINT_ANGLE: null # ... if the sun-glint angle from the tile's sun/view angles is below this (deg; null = not used)
   CS_THRESHOLD: 0.65
   ORBIT: 40                  # single relative orbit; null = all
   PERCENTILE: 30
@@ -106,6 +115,7 @@ s2:
   TURBIDITY_FILTER: true
   SCENE_MAX_B5: 0.03
   RAIN_FILTER: true
+  RAIN_SOURCE: era5          # 'era5' = ERA5 point series from the waves step (no Earth Engine); 'chirps' = CHIRPS area mean (Earth Engine, image-checked dates only)
   RAIN_DAYS: 5
   RAIN_MAX_MM: 25
   RAIN_BUFFER: 40000
@@ -117,7 +127,7 @@ s2:
   WAVE_FILTER: true
   WAVE_WINDOW_H: 6
   WAVE_MAX_HS: 1.5
-  MISSING_POLICY: {waves: drop, wind: drop, rain: drop, water: drop}
+  MISSING_POLICY: {waves: drop, wind: drop, rain: drop, water: drop, meta: drop}
   SCENE_STAT_SCALE: 200
   B1_FROM_B2: false
   EXCLUDE_DATES: null

@@ -256,8 +256,20 @@ def setup(project=None, run=None, mount_drive=True, login=True):
         except ImportError:
             pass
     os.makedirs(os.path.join(ctx.drive_root, ctx.folders['cache']), exist_ok=True)
+    print(f"Outputs: {ctx.drive_root}")
+    _check_duplicate_folders(ctx)
     _init_ee_objects(ctx)
     return ctx
+
+def _check_duplicate_folders(ctx):
+    """Earth Engine finds export folders by NAME anywhere in Drive. Folders of this project at the top of My Drive
+    (e.g. from earlier runs) could receive exports meant for the outputs folder."""
+    if os.path.normpath(ctx.drive_root) == os.path.normpath(MYDRIVE) or not os.path.isdir(MYDRIVE): return
+    root = ctx.cfg['project']['FOLDER_ROOT'] + '__'
+    dup = sorted(f for f in os.listdir(MYDRIVE) if f.startswith(root) and os.path.isdir(os.path.join(MYDRIVE, f)))
+    if dup:
+        print(f"  NOTE: {len(dup)} folder(s) named {root}* are at the top of My Drive (e.g. {dup[0]}). Earth Engine finds "
+              f"export folders by name, so move them into {ctx.drive_root} (results are then re-used) or rename them.")
 
 def use(ctx=None):
     global CTX
@@ -489,15 +501,25 @@ def task_files(name):
     pat = re.compile(rf'^{re.escape(name)}(-\d{{10}}-\d{{10}})?\.{t["ext"]}$')
     t_min = (t.get('creation_timestamp_ms', 0) / 1000) - 120
     deadline = time.time() + CTX.cfg['run']['DRIVE_SYNC_TIMEOUT_S']
+    # Earth Engine writes into an existing Drive folder with this name (anywhere in Drive), or creates one at the
+    # top of My Drive if it cannot find it yet: look there too and move the files into the step folder.
+    alt = os.path.join(MYDRIVE, t['folder'])
+    alt = alt if os.path.normpath(alt) != os.path.normpath(folder) else None
     while True:
+        for d_ in [x for x in (alt,) if x and os.path.isdir(x)]:
+            for f in [f for f in os.listdir(d_) if pat.match(f) and os.path.getmtime(os.path.join(d_, f)) >= t_min]:
+                import shutil
+                shutil.move(os.path.join(d_, f), os.path.join(folder, f))
+                print(f'  {f}: Earth Engine wrote it to My Drive/{t["folder"]}; moved into {folder}')
         hits = sorted(os.path.join(folder, f) for f in os.listdir(folder) if pat.match(f))
         fresh = [p for p in hits if os.path.getmtime(p) >= t_min]
         if fresh:
             sizes = [os.path.getsize(p) for p in fresh]; time.sleep(5)
             if sizes == [os.path.getsize(p) for p in fresh] and all(sizes): break
         if time.time() > deadline:
-            raise FileNotFoundError(f'{name}: no fresh file in {folder}. Check Drive for a duplicate folder named '
-                                    f'{t["folder"]}, or remount Drive and re-run.')
+            raise FileNotFoundError(f'{name}: no fresh file in {folder}. Earth Engine writes to the most recently '
+                                    f'modified Drive folder named {t["folder"]}: search Drive for that name, move the '
+                                    f'file into {folder}, and run the step again.')
         time.sleep(15)
     rec = []
     for p in fresh:
@@ -595,3 +617,73 @@ def aoi_shapely():
 def aoi_bbox_wgs84():
     b = CTX.aoi_info['bounds_wgs84'][0]
     return min(q[0] for q in b), min(q[1] for q in b), max(q[0] for q in b), max(q[1] for q in b)
+
+
+# =============================================================================================== Sentinel-2 metadata (no pixels)
+MYDRIVE = '/content/drive/MyDrive'
+META_PROPS = ['MGRS_TILE', 'SENSING_ORBIT_NUMBER', 'SPACECRAFT_NAME', 'CLOUDY_PIXEL_PERCENTAGE', 'CLOUD_SHADOW_PERCENTAGE',
+              'THIN_CIRRUS_PERCENTAGE', 'NODATA_PIXEL_PERCENTAGE', 'WATER_PERCENTAGE', 'MEAN_SOLAR_ZENITH_ANGLE',
+              'MEAN_SOLAR_AZIMUTH_ANGLE', 'MEAN_INCIDENCE_ZENITH_ANGLE_B8', 'MEAN_INCIDENCE_AZIMUTH_ANGLE_B8']
+
+def glint_angle(sza, saa, vza, vaa):
+    """Angle (deg) between the viewing direction and the direction of mirror reflection of the sun.
+    Small angle = the sensor looks close to the sun's reflection = sun glint likely.
+    cos θg = cos θs cos θv − sin θs sin θv cos(φs − φv), with both azimuths measured from the pixel towards the sun
+    and towards the sensor (the convention of the Sentinel-2 metadata). Tile means only: one value per tile."""
+    r = np.radians
+    c = np.cos(r(sza)) * np.cos(r(vza)) - np.sin(r(sza)) * np.sin(r(vza)) * np.cos(r(np.asarray(saa, float) - np.asarray(vaa, float)))
+    return np.degrees(np.arccos(np.clip(c, -1, 1)))
+
+def s2_tile_metadata(roi, years, months=None, orbit=None, max_cloud=None):
+    """One row per Sentinel-2 L2A tile image over the AOI, read from the image properties only (no pixels are
+    processed, so this takes seconds). Cloud, shadow and cirrus percentages refer to the whole 110 km tile."""
+    import ee
+    col = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED').filterBounds(roi)
+    if months: col = col.filter(in_months(months))
+    if orbit is not None: col = col.filter(ee.Filter.eq('SENSING_ORBIT_NUMBER', orbit))
+    if max_cloud is not None: col = col.filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', max_cloud))
+    frames = []
+    for y in range(int(years[0]), int(years[1]) + 1):
+        fc = ee.FeatureCollection(col.filterDate(f'{y}-01-01', f'{y + 1}-01-01').map(
+            lambda i: ee.Feature(ee.Feature(None, {'time_ms': i.get('system:time_start')}).copyProperties(i, META_PROPS))))
+        try:
+            df = ee.data.computeFeatures({'expression': fc, 'fileFormat': 'PANDAS_DATAFRAME'})
+        except Exception as e:                          # older earthengine-api: plain getInfo (max 5000 per year)
+            if 'computeFeatures' not in str(e) and not isinstance(e, AttributeError): raise
+            df = pd.DataFrame([f['properties'] for f in fc.getInfo()['features']])
+        if len(df):
+            df = df.drop(columns=[c for c in ('geo', 'geometry') if c in df])
+            t = pd.to_datetime(pd.to_numeric(df['time_ms']), unit='ms', utc=True)
+            frames.append(df[t.dt.year == y])
+    if not frames:
+        return pd.DataFrame(columns=['time_ms', 'date'] + META_PROPS)
+    df = pd.concat(frames, ignore_index=True)
+    df['time_ms'] = pd.to_numeric(df['time_ms']).astype('int64')
+    df['date'] = pd.to_datetime(df.time_ms, unit='ms', utc=True).dt.strftime('%Y-%m-%d')
+    m = pd.to_datetime(df.date).dt.month                 # the same filters again (also for cached / mocked tables)
+    keep = pd.Series(True, index=df.index)
+    if months:
+        a, b = months
+        keep &= m.between(a, b) if a <= b else (m >= a) | (m <= b)
+    if orbit is not None: keep &= pd.to_numeric(df.SENSING_ORBIT_NUMBER) == orbit
+    if max_cloud is not None: keep &= pd.to_numeric(df.CLOUDY_PIXEL_PERCENTAGE) < max_cloud
+    df = df[keep].copy()
+    for c in META_PROPS[3:]:
+        df[c] = pd.to_numeric(df.get(c), errors='coerce')
+    df['glint_angle'] = glint_angle(df.MEAN_SOLAR_ZENITH_ANGLE, df.MEAN_SOLAR_AZIMUTH_ANGLE,
+                                    df.MEAN_INCIDENCE_ZENITH_ANGLE_B8, df.MEAN_INCIDENCE_AZIMUTH_ANGLE_B8)
+    return df.sort_values('time_ms').reset_index(drop=True)
+
+def metadata_by_date(tiles):
+    """Tiles of the same day combined: mean cloud / shadow / cirrus / no-data, smallest glint angle."""
+    cols = ['date', 'tiles', 'tile_list', 'orbits', 't_first_ms', 't_last_ms', 'meta_cloud', 'meta_shadow', 'meta_cirrus',
+            'meta_nodata', 'glint_angle', 'sun_zenith']
+    if not len(tiles): return pd.DataFrame(columns=cols)
+    g = tiles.groupby('date').agg(
+        tiles=('MGRS_TILE', 'size'), tile_list=('MGRS_TILE', lambda s: ' '.join(sorted(set(map(str, s))))),
+        orbits=('SENSING_ORBIT_NUMBER', lambda s: ' '.join(sorted(set(str(int(x)) for x in s if pd.notna(x))))),
+        t_first_ms=('time_ms', 'min'), t_last_ms=('time_ms', 'max'), meta_cloud=('CLOUDY_PIXEL_PERCENTAGE', 'mean'),
+        meta_shadow=('CLOUD_SHADOW_PERCENTAGE', 'mean'), meta_cirrus=('THIN_CIRRUS_PERCENTAGE', 'mean'),
+        meta_nodata=('NODATA_PIXEL_PERCENTAGE', 'mean'), glint_angle=('glint_angle', 'min'),
+        sun_zenith=('MEAN_SOLAR_ZENITH_ANGLE', 'mean')).reset_index()
+    return g[cols]

@@ -69,14 +69,14 @@ class Task:
         LOG['tasks'][s.id] = (k['description'], FORCE_STATE.get(k['description'], 'COMPLETED'))
         if s.kind == 'table':
             ext = k['fileFormat'].lower(); p = os.path.join(d, f'{nm}.{ext}')
-            if 'S2_date_screening' in nm:
-                dates = pd.date_range('2020-02-01', '2026-04-30', freq='5D'); dates = dates[dates.month.isin([2, 3, 4])]
-                t = (dates + pd.Timedelta(hours=16, minutes=20)).tz_localize('UTC').as_unit('ns').asi8 // 1_000_000
-                rng = np.random.default_rng(0)
-                df = pd.DataFrame({'date': dates.strftime('%Y-%m-%d'), 'tiles': 2, 't_first_ms': t, 't_last_ms': t + 5000,
-                                   'water_nir': rng.uniform(0, 0.05, len(dates)), 'water_b5': rng.uniform(0, 0.04, len(dates)),
-                                   'n_water_px': 1000, 'rain_mm': rng.gamma(1, 10, len(dates)), 'rain_days': 5})
+            if 'S2_AOI_stats' in nm:                  # all S2 dates (the toolkit keeps only those it asked for)
+                dates = S2_DATES; rng = np.random.default_rng(0)
+                cloud = META.groupby('date').CLOUDY_PIXEL_PERCENTAGE.mean().reindex(dates.strftime('%Y-%m-%d')).values
+                df = pd.DataFrame({'date': dates.strftime('%Y-%m-%d'),
+                                   'water_nir': rng.uniform(0, 0.04, len(dates)) + cloud / 2000, 'water_b5': rng.uniform(0, 0.04, len(dates)),
+                                   'n_water_px': (1000 * (1 - cloud / 100)).round(), 'rain_mm': rng.gamma(1, 10, len(dates)), 'rain_days': 5})
                 df.loc[3, 'water_nir'] = np.nan; df.loc[5, 'rain_mm'] = np.nan
+                LOG.setdefault('aoi_exports', []).append(nm)
                 df[k.get('selectors') or df.columns].to_csv(p, index=False)
             elif '_prescreen_CHIRPS' in nm:
                 d = pd.date_range('2017-01-01', '2026-10-31', freq='D'); rng = np.random.default_rng(3)
@@ -134,7 +134,29 @@ def computePixels(req):
     x = a['translateX'] + (np.arange(w) + 0.5) * a['scaleX']
     arr = np.broadcast_to((x >= E0 + 90).astype(np.uint8)[None, :], (h, w)).copy()   # land west of E0+90 m
     return arr
-ee.data = types.SimpleNamespace(getTaskStatus=getTaskStatus, computePixels=computePixels)
+# Sentinel-2 tile metadata: two tiles every 5 days since 2017, orbit 40; cloudier in the wet season (Jun-Nov)
+S2_DATES = pd.date_range('2017-01-02', '2026-10-28', freq='5D')
+def _meta():
+    rng = np.random.default_rng(7); rows = []
+    for d in S2_DATES:
+        wet = d.month in (6, 7, 8, 9, 10, 11)
+        for tile in ('16QCD', '16PCC'):
+            t = int((d + pd.Timedelta(hours=16, minutes=20, seconds=5 * (tile == '16PCC'))).tz_localize('UTC').value // 1_000_000)
+            rows.append({'time_ms': t, 'MGRS_TILE': tile, 'SENSING_ORBIT_NUMBER': 40, 'SPACECRAFT_NAME': 'Sentinel-2A',
+                         'CLOUDY_PIXEL_PERCENTAGE': float(np.clip(rng.beta(2, 3) * 100 + (30 if wet else -10), 0, 100)),
+                         'CLOUD_SHADOW_PERCENTAGE': rng.uniform(0, 5), 'THIN_CIRRUS_PERCENTAGE': rng.uniform(0, 10),
+                         'NODATA_PIXEL_PERCENTAGE': 0.0, 'WATER_PERCENTAGE': 60.0,
+                         'MEAN_SOLAR_ZENITH_ANGLE': 40 + 15 * np.cos(2 * np.pi * d.dayofyear / 365), 'MEAN_SOLAR_AZIMUTH_ANGLE': 140.0,
+                         'MEAN_INCIDENCE_ZENITH_ANGLE_B8': rng.uniform(2, 11), 'MEAN_INCIDENCE_AZIMUTH_ANGLE_B8': rng.choice([105.0, 285.0]),
+                         'geo': None})
+    return pd.DataFrame(rows)
+META = _meta()
+META['date'] = pd.to_datetime(META.time_ms, unit='ms', utc=True).dt.strftime('%Y-%m-%d')
+def computeFeatures(params):
+    LOG['meta_calls'] = LOG.get('meta_calls', 0) + 1
+    assert params['fileFormat'] == 'PANDAS_DATAFRAME'
+    return META.drop(columns='date').copy()
+ee.data = types.SimpleNamespace(getTaskStatus=getTaskStatus, computePixels=computePixels, computeFeatures=computeFeatures)
 sys.modules['ee'] = ee
 
 # ---------------- Colab ----------------

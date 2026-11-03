@@ -148,12 +148,23 @@ edit): `ctx = st.setup(PROJECT)`, then per step an options dict passed with `ctx
 `src/seastrong_toolkit/defaults.yaml`, which only holds defaults), `st.<step>.run(ctx)` and `st.<step>.report(ctx)`
 (`diagnostics.py`: plain-language summary + suggested option changes, never applied automatically). Notebook cells
 are deliberately verbose (explanation / options / run / report per step). `core.bind()` injects options into the
-module namespace. S2 extras (0.8): Earth Engine screening table cached by a hash of the table-relevant options
-(`<FOLDER_ROOT>__cache/s2_screening`); indirect-check test (rain/wind/waves vs B5, Mann-Whitney) in run + report;
+module namespace. Drive workflow (0.9, user decision): the user downloads the repo into any Drive folder and opens the notebook
+from there; the install cell sets `TOOLKIT_DIR`, pip-installs only the dependencies (constraints file protecting
+Colab's google-* packages), puts `TOOLKIT_DIR/src` on `sys.path` (no clone, no pip install of the package) and
+`DRIVE_ROOT = TOOLKIT_DIR/outputs` (git-ignored). Updating from GitHub is an explicit opt-in (`UPDATE_FROM_GITHUB`).
+Earth Engine finds export folders by name anywhere in Drive: `core.task_files` also looks in `My Drive/<folder>` and
+moves files into the step folder; `setup` warns about same-name folders at the top of My Drive.
+Minimal Earth Engine use (0.9): Sentinel-2 tile metadata is read with `ee.data.computeFeatures` (`core.s2_tile_metadata`,
+`metadata_by_date`, glint angle from mean sun/view angles). S2 `SCREENING='metadata+aoi'` (default): metadata +
+weather (ERA5 rain/wind and waves from the waves step) first, then the Earth Engine image check (water NIR/B5) only
+for surviving dates (+ accepted dates), cached per date in `<FOLDER_ROOT>__cache/s2_screening/aoi_<hash>.csv`.
+Prescreen `SCENES='metadata'` (default) uses tile cloud only, no export; `CHIRPS` off by default.
+S2 extras (0.8): indirect-check test (rain/wind/waves vs B5, tile metadata vs NIR, Mann-Whitney) in run + report;
 'best images' threshold suggestion; `st.s2.checker(ctx)` ipywidgets gallery with Accept/Reject saved to
-`<FOLDER_ROOT>__S2_image_decisions.csv` in My Drive, included in the s2 options hash (`core.applicable_decisions`). Each step writes to `<FOLDER_ROOT>__<NN>_<Name>__<settings-hash>` in Drive with `manifest.json`.
+`<FOLDER_ROOT>__S2_image_decisions.csv` in `DRIVE_ROOT`, included in the s2 options hash (`core.applicable_decisions`).
+Each step writes to `<FOLDER_ROOT>__<NN>_<Name>__<settings-hash>` in `DRIVE_ROOT` with `manifest.json`.
 Credentials only from Colab Secrets (`EE_PROJECT`, `CDS_KEY`, `CMEMS_USERNAME`, `CMEMS_PASSWORD`, optional
-`EE_SERVICE_ACCOUNT_JSON`). The Colab notebook installs with a constraints file protecting Colab's google-* packages.
+`EE_SERVICE_ACCOUNT_JSON`).
 Offline tests with fake services: `python SDB_toolkit/tests/test_mock_run.py` and `tests/test_notebook.py` (runs the notebook cells). Full decision log:
 `sdb_bathymetrix_workflow_southern_belize.md` in the Claude Project.
 
