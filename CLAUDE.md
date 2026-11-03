@@ -143,12 +143,15 @@ this repo's `Mangroves_topography/` is that version or the earlier two-point-onl
 
 ## SDB toolkit (`SDB_toolkit/`)
 
-Package `seastrong_toolkit`: settings in YAML (`src/seastrong_toolkit/defaults.yaml` + a project file); each step module
-(`waves`, `prescreen`, `s2`, `dem`, `habitats`, `transport`, `icesat2`) has `run(ctx)`; `core.bind()` injects settings into
-the module namespace. Each step writes to `<FOLDER_ROOT>__<NN>_<Name>__<settings-hash>` in Drive with `manifest.json`.
+Package `seastrong_toolkit`. All options are set in the Colab notebook (user decision 2026-11-03: no YAML file to
+edit): `ctx = st.setup(PROJECT)`, then per step an options dict passed with `ctx.set(step, {...})` (validated against
+`src/seastrong_toolkit/defaults.yaml`, which only holds defaults), `st.<step>.run(ctx)` and `st.<step>.report(ctx)`
+(`diagnostics.py`: plain-language summary + suggested option changes, never applied automatically). Notebook cells
+are deliberately verbose (explanation / options / run / report per step). `core.bind()` injects options into the
+module namespace. Each step writes to `<FOLDER_ROOT>__<NN>_<Name>__<settings-hash>` in Drive with `manifest.json`.
 Credentials only from Colab Secrets (`EE_PROJECT`, `CDS_KEY`, `CMEMS_USERNAME`, `CMEMS_PASSWORD`, optional
 `EE_SERVICE_ACCOUNT_JSON`). The Colab notebook installs with a constraints file protecting Colab's google-* packages.
-Offline tests with fake services: `python SDB_toolkit/tests/test_mock_run.py`. Full decision log:
+Offline tests with fake services: `python SDB_toolkit/tests/test_mock_run.py` and `tests/test_notebook.py` (runs the notebook cells). Full decision log:
 `sdb_bathymetrix_workflow_southern_belize.md` in the Claude Project.
 
 ## Project background

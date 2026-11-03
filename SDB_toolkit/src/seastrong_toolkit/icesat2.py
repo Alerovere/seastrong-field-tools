@@ -958,4 +958,5 @@ def run(ctx=None, force=False):
     PhoREAL (Neuenschwander et al.); Global Mangrove Watch v4 (Bunting et al. 2022); PROJ / EGM2008 (NGA).
     """)
 
+    MANIFEST['outputs'] = _jsonable(IS2_OUT); save_manifest()
     return ctx

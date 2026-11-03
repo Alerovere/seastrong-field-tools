@@ -31,7 +31,6 @@ CMEMS_REGIONS = {
                 step_h=1, search_deg=0.1, start='1985-01-01',
                 products='MEDSEA_MULTIYEAR_WAV_006_012, MEDSEA_ANALYSISFORECAST_WAV_006_017'),
 }
-PRESCREEN_S2_KEYS = ['ORBIT', 'CS_THRESHOLD', 'MAX_TILE_CLOUD', 'PIXEL_MAX_SWIR']   # S2 settings the pre-screen uses
 
 
 # =============================================================================================== settings
@@ -52,29 +51,36 @@ def _jsonable(o):
 def _hash(o):
     return hashlib.sha256(json.dumps(_jsonable(o), sort_keys=True).encode()).hexdigest()
 
-def load_config(path=None, overrides=None):
-    """Defaults (package) <- your YAML file <- overrides dict. Adds derived wave settings."""
+def defaults():
+    """The package's default settings for every step (a fresh copy)."""
     import yaml
-    cfg = yaml.safe_load(resources.files('seastrong_toolkit').joinpath('defaults.yaml').read_text())
-    if path:
-        with open(path) as f:
-            cfg = _merge(cfg, yaml.safe_load(f) or {})
-    cfg = _merge(cfg, overrides or {})
+    return yaml.safe_load(resources.files('seastrong_toolkit').joinpath('defaults.yaml').read_text())
+
+def check_keys(section, settings, ref):
+    """Stop on misspelt option names (they would otherwise be ignored silently)."""
+    unknown = sorted(set(settings) - set(ref))
+    if unknown:
+        import difflib
+        hints = {k: difflib.get_close_matches(k, list(ref), n=1) for k in unknown}
+        raise KeyError(f"Unknown option(s) for '{section}': " +
+                       ', '.join(f"{k} (did you mean {h[0]}?)" if h else k for k, h in hints.items()))
+
+def derive(cfg):
+    """Settings computed from others (Copernicus Marine datasets of the chosen region)."""
     reg = cfg['project']['WAVE_REGION']
-    if reg not in CMEMS_REGIONS: raise ValueError(f"project.WAVE_REGION must be one of {list(CMEMS_REGIONS)}")
+    if reg not in CMEMS_REGIONS: raise ValueError(f"WAVE_REGION must be one of {list(CMEMS_REGIONS)}")
     r = CMEMS_REGIONS[reg]
     cfg['waves'].update(REGION=reg, CMEMS_DATASETS=r['datasets'], CMEMS_STEP_H=r['step_h'], CMEMS_SEARCH_DEG=r['search_deg'])
     return cfg
+
+DERIVED = {'waves': ['REGION', 'CMEMS_DATASETS', 'CMEMS_STEP_H', 'CMEMS_SEARCH_DEG']}
 
 def step_hash(cfg, step, _memo=None):
     """Hash of a step's settings + project settings + upstream step hashes."""
     _memo = {} if _memo is None else _memo
     if step in _memo: return _memo[step]
     proj = {k: v for k, v in cfg['project'].items() if k != 'DRIVE_ROOT'}
-    sec = cfg[step]
-    if step == 'prescreen':
-        sec = dict(sec, S2_USED={k: cfg['s2'][k] for k in PRESCREEN_S2_KEYS})
-    h = _hash(dict(project=proj, step=step, settings=sec,
+    h = _hash(dict(project=proj, step=step, settings=cfg[step],
                    upstream={u: step_hash(cfg, u, _memo) for u in STEPS[step][1]}))
     _memo[step] = h
     return h
@@ -132,29 +138,72 @@ def package_versions():
 
 # =============================================================================================== context
 class Context:
-    """Everything a step needs: settings, Earth Engine objects, folders, manifests."""
-    def __init__(self, cfg, config_path=None):
-        self.cfg = cfg
-        self.config_path = config_path
-        self.hashes = {s: step_hash(cfg, s) for s in STEPS}
-        p = cfg['project']
-        self.drive_root = p['DRIVE_ROOT']
-        self.folders = {s: f"{p['FOLDER_ROOT']}__{STEPS[s][0]}__{self.hashes[s][:8]}" for s in STEPS}
-        self.folders['cache'] = f"{p['FOLDER_ROOT']}__cache"
+    """Everything a step needs: settings, Earth Engine objects, folders, manifests.
+
+    Settings come from the notebook: ``ctx.set('s2', S2)`` replaces the options of one step (missing options take
+    the package default). The step's settings hash, and therefore its Drive folder, follow the current settings.
+    """
+    def __init__(self, cfg):
+        self.cfg = derive(cfg)
+        self.drive_root = cfg['project']['DRIVE_ROOT']
         self.manifests = {}
         self.current = None
         self.data = {}            # in-memory results shared between steps in one session
         self.today = dt.datetime.now(dt.timezone.utc).date()
+        self.user_set = set()     # steps whose options were given in the notebook
+
+    @property
+    def hashes(self):
+        memo = {}
+        return {s: step_hash(self.cfg, s, memo) for s in STEPS}
+
+    @property
+    def folders(self):
+        p, h = self.cfg['project'], self.hashes
+        f = {s: f"{p['FOLDER_ROOT']}__{STEPS[s][0]}__{h[s][:8]}" for s in STEPS}
+        f['cache'] = f"{p['FOLDER_ROOT']}__cache"
+        return f
+
+    def set(self, step, settings=None, quiet=False):
+        """Use these options for a step (options not given take the package default; misspelt names stop)."""
+        if step not in STEPS and step != 'run': raise KeyError(f'unknown step {step}; steps: {list(STEPS)}')
+        ref = defaults()[step]
+        settings = dict(settings or {})
+        check_keys(step, settings, ref)
+        self.cfg[step] = _merge(ref, settings)
+        derive(self.cfg)
+        self.user_set.add(step)
+        if not quiet and step in STEPS:
+            folder = self.folders[step]
+            done = os.path.exists(os.path.join(self.drive_root, folder, 'manifest.json'))
+            changed = {k: v for k, v in settings.items() if ref.get(k) != v}
+            print(f"[{step}] {len(settings)} options set ({len(changed)} differ from the defaults: {', '.join(changed) or 'none'})")
+            print(f"  output folder: {folder}  ->  " + ('exists: finished parts will be re-used' if done else 'new (these settings were not run before)'))
+            down = [s for s, (_, up) in STEPS.items() if step in up]
+            if down: print(f"  steps that use these results: {', '.join(down)}")
+        return self
+
+    def show(self, step):
+        """Print the options a step will use, marking those that differ from the default."""
+        ref = defaults()[step]
+        for k, v in self.cfg[step].items():
+            if k in DERIVED.get(step, []): continue
+            print(f"  {'*' if ref.get(k) != v else ' '} {k:22s} = {v!r}")
 
     def __repr__(self):
-        return 'Context(' + ', '.join(f'{s}={self.hashes[s][:8]}' for s in STEPS) + ')'
+        h = self.hashes
+        return 'Context(' + ', '.join(f'{s}={h[s][:8]}' for s in STEPS) + ')'
 
-def setup(config_path=None, overrides=None, mount_drive=True, login=True):
-    """Load settings, log in to Earth Engine (Colab Secrets), mount Drive, read the AOI, prepare the grid.
-    Returns the Context used by every step."""
+def setup(project=None, run=None, mount_drive=True, login=True):
+    """Project options (dict), Earth Engine log-in (Colab Secrets), Drive, AOI, export grid.
+    Returns the Context used by every step. Step options are given later with ctx.set(step, {...})."""
     global CTX
-    cfg = load_config(config_path, overrides)
-    ctx = Context(cfg, config_path)
+    cfg = defaults()
+    check_keys('project', project or {}, cfg['project'])
+    check_keys('run', run or {}, cfg['run'])
+    cfg['project'] = _merge(cfg['project'], project or {})
+    cfg['run'] = _merge(cfg['run'], run or {})
+    ctx = Context(cfg)
     CTX = ctx
     if login:
         ctx.ee_project = ee_login()
@@ -168,23 +217,12 @@ def setup(config_path=None, overrides=None, mount_drive=True, login=True):
             pass
     os.makedirs(os.path.join(ctx.drive_root, ctx.folders['cache']), exist_ok=True)
     _init_ee_objects(ctx)
-    print('Steps and their output folders (same settings = same folder, re-used):')
-    for s in STEPS: print(f'  {s:10s} {ctx.folders[s]}')
     return ctx
-
-def write_example_config(path):
-    """Copy the example settings file to `path` (e.g. in your Drive) if it does not exist yet."""
-    if not os.path.exists(path):
-        os.makedirs(os.path.dirname(path) or '.', exist_ok=True)
-        with open(path, 'w') as f:
-            f.write(resources.files('seastrong_toolkit').joinpath('example_config.yaml').read_text())
-        print('example settings written to', path, '- edit it, then run setup again')
-    return path
 
 def use(ctx=None):
     global CTX
     if ctx is not None: CTX = ctx
-    if CTX is None: raise RuntimeError('Call seastrong_toolkit.setup(...) first')
+    if CTX is None: raise RuntimeError('Run the project cell (st.setup(...)) first')
     return CTX
 
 def _init_ee_objects(ctx):
@@ -238,26 +276,30 @@ def drive_path(folder_key, filename):
     return os.path.join(CTX.drive_root, CTX.folders[folder_key], filename)
 
 def manifest(step, ctx=None):
-    """The manifest of a step (loaded from its folder if it exists)."""
+    """The manifest of a step for its CURRENT settings (loaded from its folder if it exists)."""
     ctx = use(ctx)
-    if step not in ctx.manifests:
-        os.makedirs(os.path.join(ctx.drive_root, ctx.folders[step]), exist_ok=True)
-        p = drive_path(step, 'manifest.json')
+    h = ctx.hashes[step]
+    m = ctx.manifests.get(step)
+    if m is None or m.get('settings_hash') != h:
+        folder = ctx.folders[step]
+        os.makedirs(os.path.join(ctx.drive_root, folder), exist_ok=True)
+        p = os.path.join(ctx.drive_root, folder, 'manifest.json')
         if os.path.exists(p):
             with open(p) as f: m = json.load(f)
         else:
-            m = dict(step=step, settings_hash=ctx.hashes[step], created_utc=dt.datetime.now(dt.timezone.utc).isoformat(),
+            m = dict(step=step, settings_hash=h, created_utc=dt.datetime.now(dt.timezone.utc).isoformat(),
                      project=ctx.cfg['project'], settings=ctx.cfg[step],
                      upstream={u: ctx.hashes[u] for u in STEPS[step][1]}, versions=package_versions(),
                      stages={}, tasks={}, files={}, coverage={}, status={}, outputs={})
+        m['folder'] = folder
         ctx.manifests[step] = m
     return ctx.manifests[step]
 
 def save_manifest(step=None):
-    """Atomic write (temp file + rename). Without a step: the current step."""
+    """Atomic write (temp file + rename) into the manifest's own folder. Without a step: the current step."""
     step = step or CTX.current
     m = CTX.manifests[step]
-    p = drive_path(step, 'manifest.json'); tmp = p + '.tmp'
+    p = os.path.join(CTX.drive_root, m['folder'], 'manifest.json'); tmp = p + '.tmp'
     with open(tmp, 'w') as f:
         json.dump(_jsonable(m), f, indent=1, default=str)
     os.replace(tmp, p)
@@ -282,9 +324,12 @@ def step_done(step):
 
 def require(step):
     """Stop with a clear message if an upstream step has not finished with the current settings."""
+    if step not in CTX.user_set:
+        print(f"  NOTE: options of '{step}' were not set in this session: using the package defaults to find its results. "
+              f"Run the '{step}' options cell first if you changed them.")
     if not step_done(step):
-        raise RuntimeError(f"Step '{step}' has not been run with the current settings (folder {CTX.folders[step]}). "
-                           f"Run seastrong_toolkit.{step}.run(ctx) first.")
+        raise RuntimeError(f"Step '{step}' has not been run with the current options (folder {CTX.folders[step]}). "
+                           f"Run its options cell and st.{step}.run(ctx) first.")
     return manifest(step)
 
 

@@ -107,6 +107,8 @@ class Task:
             p = os.path.join(d, f'{nm}.tif')
             if '12band' in nm: _write_tif(p, 12, 'float32', -9999, comp_fill)
             elif 'Median_B1-B4' in nm: _write_tif(p, 4, 'float32', -9999, lambda c, h, w, s: comp_fill(12, h, w, s)[:4] * 1.02)
+            elif nm.endswith('_QA'):
+                _write_tif(p, 3, 'int16', -1, lambda c, h, w, s: np.stack([np.full((h, w), 9), np.ones((h, w)), np.zeros((h, w))]))
             elif 'FABDEM' in nm or 'DeltaDTM' in nm or 'DSM' in nm:
                 _write_tif(p, 1, 'float32', -9999, lambda c, h, w, s: np.full((1, h, w), 1.5))
             else: _write_tif(p, 1, 'float32', -9999, lambda c, h, w, s: np.zeros((1, h, w)))

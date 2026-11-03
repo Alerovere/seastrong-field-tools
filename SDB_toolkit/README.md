@@ -26,21 +26,20 @@ Python package behind the SEASTRONG WP1 Colab workflow (Earth Engine + Copernicu
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Alerovere/seastrong-field-tools/blob/main/SDB_toolkit/notebooks/seastrong_toolkit_colab.ipynb)
 
-Open `notebooks/seastrong_toolkit_colab.ipynb` (button above) and set `CONFIG` in its first cell (the repository and
-folder are already set). The notebook then:
-
-1. clones this repository and installs the package from `SDB_toolkit/`, using a constraints file so Colab's own `google-auth` and related packages are never replaced;
-2. writes an example settings file to your Drive if you don't have one yet;
-3. runs the steps:
+All options are set **in the notebook**: every step has an explanation cell, an options cell listing every option
+with its default and a comment, a run cell and a report cell. The report summarises the results in plain language and
+suggests option changes when something looks unusual; nothing is changed automatically.
 
 ```python
 import seastrong_toolkit as st
-ctx = st.setup('/content/drive/MyDrive/SEASTRONG/config_belize_south.yaml')
-st.waves.run(ctx)
-st.prescreen.run(ctx)    # look at the ranking, then set s2.MONTHS in the YAML
-ctx = st.setup(CONFIG, login=False, mount_drive=False)   # reload edited settings
-st.s2.run(ctx)
+ctx = st.setup(PROJECT)                  # PROJECT = dict(AOI_ASSET=..., CRS=..., PREFIX=..., FOLDER_ROOT=..., ...)
+ctx.set('waves', WAVES); st.waves.run(ctx); st.waves.report(ctx)
+ctx.set('prescreen', PRESCREEN); st.prescreen.run(ctx); st.prescreen.report(ctx)
+ctx.set('s2', S2); st.s2.run(ctx); st.s2.report(ctx)      # S2['MONTHS'] chosen from the pre-screening
 ```
+
+`ctx.show('s2')` prints the options a step will use and marks those that differ from the defaults
+(`src/seastrong_toolkit/defaults.yaml`). A misspelt option name stops with a hint.
 
 **Credentials** come only from Colab Secrets (key icon on the left):
 
@@ -51,32 +50,29 @@ st.s2.run(ctx)
 | `CDS_KEY` (+ optional `CDS_URL`) | ERA5 from the Climate Data Store |
 | `CMEMS_USERNAME`, `CMEMS_PASSWORD` | Copernicus Marine |
 
-They are never written to code, settings files or outputs.
+They are never written to code, notebooks or outputs.
 
-## Settings and re-runs
+## Options and re-runs
 
-- `src/seastrong_toolkit/defaults.yaml` lists every setting and what it means. Your YAML only needs the values that differ.
-- Each step's folder name contains a **hash of its settings**, of the project settings and of the steps it uses. So:
-  - **same settings:** the step re-uses its folder, and finished Earth Engine exports and stages are not repeated;
-  - **changed settings** (e.g. `s2.MONTHS`): only that step and the steps downstream of it (`icesat2`) get new folders.
-- Every folder has a `manifest.json` with:
-  - settings and package versions;
-  - Earth Engine task IDs;
-  - files with SHA-256 and raster grid;
-  - coverage and status.
+- Each step's Drive folder name contains a **hash of its options**, of the project options and of the steps it uses. So:
+  - **same options:** the step re-uses its folder, and finished Earth Engine exports and downloads are not repeated;
+  - **changed options** (e.g. `S2['MONTHS']`): only that step and the steps downstream of it (`icesat2`) get new folders.
+- Every folder has a `manifest.json` with the options, package versions, Earth Engine task IDs, files (SHA-256, raster
+  grid), coverage and status, and a `README_*.md` describing the method and limitations.
 - ERA5 and SlideRule downloads are cached in `<FOLDER_ROOT>__cache` by request hash.
-- `run(ctx, force=True)` repeats a step anyway.
-- `project.RUN_TAG` forces new folders for everything.
+- `st.<step>.run(ctx, force=True)` repeats a step anyway; `PROJECT['RUN_TAG']` forces new folders for everything.
 
 ## Developing
 
 - Set `DEV_CLONE` in the notebook to clone the repository into Drive and install it in editable mode.
 - With `%autoreload`, an edited `.py` file is picked up without restarting.
-- Offline end-to-end tests with fake services:
+- After editing the code without autoreload: `st.reload()`, then run the project and options cells again.
+- Offline end-to-end tests with fake services (the second one runs the notebook's own cells):
 
 ```bash
 cd SDB_toolkit && pip install -e .[test]
-python tests/test_mock_run.py      # or: pytest -q tests
+python tests/test_mock_run.py
+python tests/test_notebook.py
 ```
 
 ## Data sources

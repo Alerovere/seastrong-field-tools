@@ -76,9 +76,9 @@ def wave_periods(end, source):
         start = W['ERA5_START'] if source == 'era5' else (W['CMEMS_START'] or CMEMS_REGIONS[W['REGION']]['start'])
         return [(dt.date.fromisoformat(start), end)]
     out = []
-    for y in range(S2['YEARS'][0], S2['YEARS'][1] + 1):
-        a = dt.date(y, S2['MONTHS'][0], 1) - dt.timedelta(days=1)
-        b = dt.date(y, S2['MONTHS'][1], calendar.monthrange(y, S2['MONTHS'][1])[1])
+    for y in range(W['SCREENING_YEARS'][0], W['SCREENING_YEARS'][1] + 1):
+        a = dt.date(y, W['SCREENING_MONTHS'][0], 1) - dt.timedelta(days=1)
+        b = dt.date(y, W['SCREENING_MONTHS'][1], calendar.monthrange(y, W['SCREENING_MONTHS'][1])[1])
         if a <= end: out.append((a, min(b, end)))
     return out
 def month_specs(periods):
@@ -561,7 +561,7 @@ def run(ctx=None, force=False):
                           showfliers=False, medianprops=dict(color='k', lw=0.8), whiskerprops=dict(lw=0.6), capprops=dict(lw=0.6))
         for b in bp['boxes']: b.set(facecolor=col, alpha=0.7, lw=0.5)
         ax_c.plot([], [], 's', color=col, alpha=0.7, label=lab)
-    ax_c.axvspan(S2['MONTHS'][0] - 0.5, S2['MONTHS'][1] + 0.5, color='0.85', zorder=0, label='composite months')
+    ax_c.axvspan(W['SCREENING_MONTHS'][0] - 0.5, W['SCREENING_MONTHS'][1] + 0.5, color='0.85', zorder=0, label='composite months (SCREENING_MONTHS)')
     ax_c.set_xticks(months); ax_c.set_xticklabels(list('JFMAMJJASOND'))
     ax_c.set_ylabel('$H_s$ (m)'); ax_c.set_title('Monthly distribution', loc='left')
     ax_c.legend(loc='upper center', bbox_to_anchor=(0.5, -0.12), ncol=3)
@@ -591,7 +591,7 @@ def run(ctx=None, force=False):
     for d, lab, col in [(WAVES_ERA5, 'ERA5', OKABE_ITO[0]), (WAVES_CMEMS, 'CMEMS', OKABE_ITO[1])]:
         if d is None: continue
         x = np.sort(d['hs'].dropna().values); ax_e.plot(x, 1 - np.arange(len(x)) / len(x), color=col, label=lab)
-    ax_e.axvline(S2['WAVE_MAX_HS'], color=OKABE_ITO[3], ls='--', lw=0.9, label=f"screen threshold {S2['WAVE_MAX_HS']} m")
+    ax_e.axvline(W['PLOT_HS_THRESHOLD'], color=OKABE_ITO[3], ls='--', lw=0.9, label=f"screen threshold {W['PLOT_HS_THRESHOLD']} m")
     ax_e.set_yscale('log'); ax_e.set_xlabel('$H_s$ (m)'); ax_e.set_ylabel('exceedance probability')
     ax_e.set_title('Exceedance', loc='left'); ax_e.legend(loc='lower left')
     panel_labels([ax_a, ax_b, ax_c, ax_d, ax_e])

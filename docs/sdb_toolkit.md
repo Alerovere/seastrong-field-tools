@@ -50,36 +50,35 @@ You also need the **area of interest (AOI)** as an Earth Engine table asset or a
 ## Running the toolkit
 
 1. Open the notebook: [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Alerovere/seastrong-field-tools/blob/main/SDB_toolkit/notebooks/seastrong_toolkit_colab.ipynb)
-2. In the first cell, set `CONFIG` to where your settings file should live in Drive.
-3. Run the install cell, then the setup cell. The first time, an **example settings file** is written to `CONFIG`:
-   edit it (AOI, file prefix, wave point, region), then run the setup cell again.
-4. Run the steps in order: `waves` → `prescreen` → (choose months) → `s2` → `dem`, `habitats` → `icesat2`.
+2. Run the install cell and the import cell.
+3. In the **project cell**, set the area of interest, the map projection (UTM zone), the file and folder names and the
+   Copernicus Marine region, then run it (this logs in to Earth Engine and mounts Google Drive).
+4. Go through the steps in order: `waves` → `prescreen` → (choose the months) → `s2` → `dem`, `habitats` → `icesat2`.
    `transport` is independent and slow (hours of Earth Engine exports).
 
-### Settings file
+### How each step is laid out
 
-The settings file only contains what differs from the defaults. The most important entries:
+Every step has four cells:
 
-| Setting | Meaning |
+| Cell | What it contains |
 | --- | --- |
-| `project: AOI_ASSET` or `AOI_GEOJSON` | the area of interest |
-| `project: WAVE_REGION` | `global` (e.g. Belize, Seychelles, Fiji) or `med` (Mediterranean Copernicus Marine model) |
-| `waves: POINT` | longitude, latitude of a deep-water point seaward of the reef |
-| `s2: MONTHS` | first and last month of the composite (choose with the pre-screening) |
-| `s2: YEARS` | years of the composite |
-| `s2: ORBIT` | Sentinel-2 relative orbit (one orbit avoids seams between viewing geometries) |
+| Explanation | what the step does, which data it uses, how to choose each option |
+| Options | a Python dictionary with **every** option of the step, its default value and a comment; change values here |
+| Run | runs the step and saves the results to Google Drive |
+| Report | a plain-language summary of the results and, where something looks unusual, a **suggested option change** with the reason |
 
-All other settings, with explanations, are in `SDB_toolkit/src/seastrong_toolkit/defaults.yaml`.
+Nothing is changed automatically: you read the report, decide, edit the options cell and run the step again. A misspelt
+option name stops with a hint instead of being ignored. `ctx.show('s2')` lists the options a step will use and marks
+those that differ from the defaults.
 
 ### Re-running steps
 
-Every step writes to its own Google Drive folder, named with a short code of its settings, e.g.
-`SEASTRONG_Belize_south__01_S2_composite_SDB__6b029b39`. If you run a step again **with the same settings**, it
-re-uses that folder and does not repeat finished downloads or exports. If you **change** a setting (e.g. the
+Every step writes to its own Google Drive folder, named with a short code of its options, e.g.
+`SEASTRONG_Belize_south__01_S2_composite_SDB__6b029b39`. If you run a step again **with the same options**, it
+re-uses that folder and does not repeat finished downloads or exports. If you **change** an option (e.g. the
 composite months), the step and the steps that depend on it get new folders; older results are never overwritten.
-After editing the settings file, reload it with the cell under *After editing the settings file*.
 
-Each folder contains a `README_*.md` (method, settings, limitations, sources) and a `manifest.json` (all settings,
+Each folder contains a `README_*.md` (method, options, limitations, sources) and a `manifest.json` (all options,
 software versions, Earth Engine task IDs and file checksums).
 
 ---
@@ -95,8 +94,8 @@ transparency (Copernicus Marine).
 - A **usable Sentinel-2 image** is taken on a good day, with at least 60 % of the AOI water cloud-free and low turbidity.
 
 The step shows a calendar of good days, a month-by-condition chart and a ranking of 2-, 3- and 4-month windows by the
-number of usable images per year (with the spread between years). Pick a window, write it into `s2: MONTHS`, reload the
-settings and run `s2`. Within the chosen months, `s2` still removes the individual bad dates.
+number of usable images per year (with the spread between years). Pick a window, write it into `MONTHS` in the Sentinel-2
+options cell and run step 1. Within the chosen months, `s2` still removes the individual bad dates.
 
 ---
 

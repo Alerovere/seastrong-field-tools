@@ -25,7 +25,7 @@ inside the window.
 **Caveats.** Percentile thresholds are relative to this site: "calm" means calm for here. Turbidity from red
 surface reflectance is a relative index, compared within one sensor family only. Copernicus Marine ocean colour is
 4 km (global) / 300 m (Med): it describes offshore plumes, not the lagoon. Scene counts depend on the relative orbit
-setting of Module 1 (`s2.ORBIT`).
+(`ORBIT`): use the same orbit as the Sentinel-2 composite.
 """
 import os, json, datetime as dt
 import numpy as np
@@ -54,7 +54,7 @@ LABELS = {'hs': 'waves $H_s$', 'wind': 'wind', 'rain_era5': 'rain ERA5', 'rain_c
 def _scene_feature(img, red, nir, swir, clear, sensor):
     w = water.rename('w')
     cw = w.And(clear)
-    glint = cw.And(swir.gt(S2['PIXEL_MAX_SWIR']))
+    glint = cw.And(swir.gt(P['PIXEL_MAX_SWIR']))
     good = cw.And(glint.Not())
     counts = ee.Image.cat([w, cw.rename('c'), glint.rename('g')]).unmask(0).reduceRegion(
         reducer=ee.Reducer.sum(), geometry=roi, scale=P['STAT_SCALE'], maxPixels=1e10, tileScale=4)
@@ -70,12 +70,12 @@ def s2_scenes():
     y = P['YEARS']
     col = (ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED').filterBounds(roi)
            .filterDate(f'{y[0]}-01-01', f'{y[1] + 1}-01-01'))          # no cloud pre-filter: clear-sky statistics
-    if S2['ORBIT'] is not None:
-        col = col.filter(ee.Filter.eq('SENSING_ORBIT_NUMBER', S2['ORBIT']))
+    if P['ORBIT'] is not None:
+        col = col.filter(ee.Filter.eq('SENSING_ORBIT_NUMBER', P['ORBIT']))
     col = col.linkCollection(ee.ImageCollection('GOOGLE/CLOUD_SCORE_PLUS/V1/S2_HARMONIZED'), ['cs_cdf'])
     def f(img):
         b = lambda n: img.select(n).divide(10000)
-        return _scene_feature(img, b('B4'), b('B8'), b('B11'), img.select('cs_cdf').gte(S2['CS_THRESHOLD']), 'S2')
+        return _scene_feature(img, b('B4'), b('B8'), b('B11'), img.select('cs_cdf').gte(P['CS_THRESHOLD']), 'S2')
     return ee.FeatureCollection(col.map(f))
 
 LS = [('LANDSAT/LT05/C02/T1_L2', 'SR_B3', 'SR_B4', 'SR_B5', 'L5'), ('LANDSAT/LE07/C02/T1_L2', 'SR_B3', 'SR_B4', 'SR_B5', 'L7'),
@@ -279,6 +279,7 @@ def run(ctx=None, force=False):
     if P['OCEAN_COLOUR']:
         oc = ocean_colour_daily()
         if oc is not None: DAILY = DAILY.join(oc, how='left')
+    DAILY.index.name = 'date'
     THRESHOLDS = th = thresholds(DAILY)
     DAILY['good_day'] = good_days(DAILY, th)
     print('  thresholds (site percentile, cap, used):', {k: (round(v['value'], 2), v['cap'], round(v['used'], 2)) for k, v in th.items()})
@@ -316,7 +317,7 @@ def run(ctx=None, force=False):
         M[f'{c}_median'] = D.groupby('month')[c].median()
     MONTHLY = M
     WINDOWS = rank_windows(s2[s2.usable][['date']], DAILY['good_day'], (max(y[0], 2017), y[1]))
-    cur = WINDOWS[(WINDOWS.length == S2['MONTHS'][1] - S2['MONTHS'][0] + 1) & (WINDOWS.start == S2['MONTHS'][0])]
+    cur = WINDOWS[(WINDOWS.length == (P['COMPARE_MONTHS'][1] - P['COMPARE_MONTHS'][0]) % 12 + 1) & (WINDOWS.start == P['COMPARE_MONTHS'][0])]
 
     # ---- files
     for df, nm, idx in ((DAILY, 'daily_conditions', True), (SCENES, 'scenes_by_date', False), (MONTHLY, 'monthly_summary', True),
@@ -328,7 +329,7 @@ def run(ctx=None, force=False):
         print(f'  {L} months: ' + ' | '.join(f"{r.label}: {r.usable_mean:.1f} ± {r.usable_std:.1f} ({r.usable_min:.0f}–{r.usable_max:.0f}); {r.usable_per_month:.1f}/mo"
                                              for r in g.itertuples()))
     if len(cur):
-        r = cur.iloc[0]; print(f"  current s2.MONTHS {S2['MONTHS']}: {r.usable_mean:.1f} ± {r.usable_std:.1f}")
+        r = cur.iloc[0]; print(f"  months to compare (COMPARE_MONTHS) {P['COMPARE_MONTHS']}: {r.usable_mean:.1f} ± {r.usable_std:.1f}")
 
     # ---- figure 1: calendar of good days, month x variable ranks
     fig = plt.figure(figsize=(7.2, 7.0))
@@ -355,8 +356,9 @@ def run(ctx=None, force=False):
         hm = ax2.imshow(np.vstack(rows), aspect='auto', cmap='cividis', vmin=0, vmax=100)
         ax2.set_yticks(range(len(labs))); ax2.set_yticklabels(labs, fontsize=7); ax2.set_xticks(range(12)); ax2.set_xticklabels(MONTHS)
         ax2.grid(False); fig.colorbar(hm, ax=ax2, label='monthly median rank / % (low = favourable)', shrink=0.9)
-        ms = S2['MONTHS']; ax2.axvspan(ms[0] - 1.5, ms[1] - 0.5, fill=False, ec=OKABE_ITO[1], lw=1.5)
-    ax2.set_title('Conditions by month (all years; box = current s2.MONTHS)', loc='left')
+        ms = P['COMPARE_MONTHS']
+        if ms[1] >= ms[0]: ax2.axvspan(ms[0] - 1.5, ms[1] - 0.5, fill=False, ec=OKABE_ITO[1], lw=1.5)
+    ax2.set_title('Conditions by month (all years; box = months to compare (COMPARE_MONTHS))', loc='left')
     panel_labels([ax, ax2]); save_fig(fig, 'prescreen', f'{PREFIX}_Fig_prescreen_calendar_conditions'); plt.show()
 
     # ---- figure 2: usable images per month, probabilities, ranked windows
@@ -380,12 +382,12 @@ def run(ctx=None, force=False):
     axs[2].set_yticks(range(len(t3))); axs[2].set_yticklabels(t3.lab, fontsize=6.5); axs[2].invert_yaxis()
     axs[2].set_xlabel('usable images per season'); axs[2].set_title('Best windows', loc='left')
     if len(cur):
-        axs[2].axvline(cur.iloc[0].usable_mean, color='k', ls='--', lw=0.8, label=f"current s2.MONTHS ({cur.iloc[0].label})")
+        axs[2].axvline(cur.iloc[0].usable_mean, color='k', ls='--', lw=0.8, label=f"months to compare (COMPARE_MONTHS) ({cur.iloc[0].label})")
         axs[2].legend(fontsize=6.5, loc='lower right')
     panel_labels(axs, x=-0.18); save_fig(fig, 'prescreen', f'{PREFIX}_Fig_prescreen_usable_images_windows'); plt.show()
 
     best = {int(L): g.iloc[0].label for L, g in WINDOWS.groupby('length')}
-    MANIFEST['outputs'] = dict(best_windows=best, thresholds=th, current_months=S2['MONTHS'],
+    MANIFEST['outputs'] = dict(best_windows=best, thresholds=th, current_months=P['COMPARE_MONTHS'],
                                top=top[['length', 'label', 'month_list', 'usable_mean', 'usable_std', 'usable_min', 'usable_max', 'usable_per_month', 'p_good_day']].to_dict('records'))
     save_manifest()
     tbl = top[['length', 'label', 'usable_mean', 'usable_std', 'usable_min', 'usable_max', 'usable_per_month', 'p_good_day', 'seasons']].round(2).to_markdown(index=False)
@@ -393,12 +395,12 @@ def run(ctx=None, force=False):
     write_readme('prescreen', 'README_00b_Prescreen', f"""
     # Pre-screening: which months suit a Sentinel-2 composite?
 
-    ## Suggestion (you decide; write your choice into `s2.MONTHS`)
+    ## Suggestion (you decide; write your choice into the Sentinel-2 options, `MONTHS`)
     {tbl}
 
-    Current `s2.MONTHS` {S2['MONTHS']}: {f"{cur.iloc[0].usable_mean:.1f} ± {cur.iloc[0].usable_std:.1f} usable images per season" if len(cur) else 'not a contiguous window'}.
+    Months compared (`COMPARE_MONTHS`) {P['COMPARE_MONTHS']}: {f"{cur.iloc[0].usable_mean:.1f} ± {cur.iloc[0].usable_std:.1f} usable images per season" if len(cur) else 'not a contiguous window'}.
     Usable = good sea-state day + ≥ {P['CLEAR_MIN']:.0%} of AOI water cloud-free + turbidity at or below the Sentinel-2 P{P['PCTL'].get('turbidity', 50)}.
-    Sentinel-2 years {max(y[0], 2017)}–{y[1]}, relative orbit {S2['ORBIT'] if S2['ORBIT'] is not None else 'all'}.
+    Sentinel-2 years {max(y[0], 2017)}–{y[1]}, relative orbit {P['ORBIT'] if P['ORBIT'] is not None else 'all'}.
 
     ## Thresholds (site percentiles over all months, capped)
     {thr}
@@ -414,7 +416,7 @@ def run(ctx=None, force=False):
 
     ## Method
     - Waves: {W['SCREEN_SOURCE']} of ERA5 / Copernicus Marine ({W['REGION']}) at {W['POINT']}; wind and rain: ERA5 at the nearest cell; CHIRPS: mean over AOI + {P['RAIN_BUFFER'] / 1000:.0f} km.
-    - Scenes: Sentinel-2 L2A (Cloud Score+ ≥ {S2['CS_THRESHOLD']}), {', '.join(P['SENSORS'])}; glint = clear water with SWIR > {S2['PIXEL_MAX_SWIR']}; statistics at {P['STAT_SCALE']} m over the Copernicus DEM water mask.
+    - Scenes: Sentinel-2 L2A (Cloud Score+ ≥ {P['CS_THRESHOLD']}), {', '.join(P['SENSORS'])}; glint = clear water with SWIR > {P['PIXEL_MAX_SWIR']}; statistics at {P['STAT_SCALE']} m over the Copernicus DEM water mask.
     - Ocean colour: {P['OC_DATASETS'][W['REGION']]['id'] if P['OCEAN_COLOUR'] else 'not used'} (daily AOI median, shown in the heatmap; not part of the usable count).
 
     ## Limitations
