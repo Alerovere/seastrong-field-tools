@@ -1,0 +1,19 @@
+# SEASTRONG southern Belize — only the values that differ from the package defaults
+# (see src/seastrong_toolkit/defaults.yaml for every setting and its meaning).
+project:
+  AOI_ASSET: projects/YOUR_PROJECT/assets/belize_south_aoi
+  PREFIX: Belize_south
+  FOLDER_ROOT: SEASTRONG_Belize_south
+  WAVE_REGION: global        # 'global' or 'med'
+
+waves:
+  POINT: [-88.30, 16.10]
+
+prescreen:
+  YEARS: [2017, 2026]
+
+s2:
+  YEARS: [2020, 2026]
+  MONTHS: [2, 4]             # update after looking at the pre-screening suggestion
+  ORBIT: 40
+  GROUPS: [16QCD, 16PCC, 16PBC, 16QBD]
