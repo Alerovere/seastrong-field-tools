@@ -10,7 +10,7 @@ waves:
   POINT: [-88.30, 16.10]
 
 prescreen:
-  YEARS: [2017, 2026]
+  YEARS: [2000, 2026]
 
 s2:
   YEARS: [2020, 2026]
