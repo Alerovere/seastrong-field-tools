@@ -31,6 +31,7 @@ seastrong-field-tools.readthedocs.io).
 | `Mangroves_topography/` | Transect topography reconstruction (`mangrove_transect_topography.ipynb`, `transect_demo.csv`) | **none yet** — see below |
 | `Wave_data_processing/` | Pressure-sensor calibration + OCEANLYZ wave processing (`pressure_calibrate_and_prepare.ipynb`, `run_oceanlyz.ipynb`) | **none yet** — see below |
 | `Wave_climate/` | Python package `wave_climate` (`src/` layout) + Colab runner `notebooks/wave_climate_colab.ipynb`: ERA5 + Copernicus Marine waves/wind, GTSM tide/surge, seasonal tables, XBeach cases (no Earth Engine). Released as `Wave_climate.zip` (tag `wave-climate-v*`) | `docs/wave_climate.md` |
+| `ICESat2_tool/` | Python package `icesat2_tool` (`src/` layout) + Colab runner `notebooks/icesat2_colab.ipynb`: ATL24 QC + locked RGT hold-out (Bathymetrix-AI train/valid), ATL08/PhoREAL ground & canopy; SlideRule, no Earth Engine; optional shoreline / mangrove / DEM files. Released as `ICESat2_tool.zip` (tag `icesat2-tool-v*`) | `docs/icesat2_tool.md` |
 | `SDB_toolkit/` | Python package `seastrong_toolkit` (pip-installable, `src/` layout) + Colab runner `notebooks/seastrong_toolkit_colab.ipynb`: waves/ERA5, pre-screening of S2 months, S2 composite for Bathymetrix-AI, DEMs, habitats, transport tracers, ICESat-2 | `docs/sdb_toolkit.md` |
 
 **Known gap:** `Mangroves_topography/` and `Wave_data_processing/` aren't yet listed in

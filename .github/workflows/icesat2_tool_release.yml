@@ -1,0 +1,59 @@
+# Builds ICESat2_tool.zip (only the ICESat2_tool folder, without tests) when a release with a tag
+# icesat2-tool-v<version> is published, e.g. icesat2-tool-v0.1.0, and attaches it:
+#   - to that release (a fixed version), and
+#   - to the rolling release 'icesat2-tool-latest', so this link always gives the newest version:
+#     https://github.com/Alerovere/seastrong-field-tools/releases/download/icesat2-tool-latest/ICESat2_tool.zip
+# The tag must match the version in ICESat2_tool/pyproject.toml.
+name: ICESat-2 tool zip
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing release tag to (re)build the zip for, e.g. icesat2-tool-v0.1.0'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  zip:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'icesat2-tool-v')
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.tag }}
+
+      - name: Check that the tag matches the package version
+        run: |
+          v=$(python3 -c "import tomllib; print(tomllib.load(open('ICESat2_tool/pyproject.toml','rb'))['project']['version'])")
+          if [ "$TAG" != "icesat2-tool-v$v" ]; then
+            echo "::error::Tag $TAG does not match ICESat2_tool/pyproject.toml version $v (expected icesat2-tool-v$v)"; exit 1
+          fi
+          echo "VERSION=$v" >> "$GITHUB_ENV"
+
+      - name: Build ICESat2_tool.zip
+        run: |
+          zip -r -q ICESat2_tool.zip ICESat2_tool \
+            -x 'ICESat2_tool/tests/*' 'ICESat2_tool/outputs/*' 'ICESat2_tool/_backup_src_*' \
+               '*/__pycache__/*' '*.egg-info/*' '*.DS_Store'
+          unzip -l ICESat2_tool.zip
+
+      - name: Attach to this release
+        run: gh release upload "$TAG" ICESat2_tool.zip --clobber
+
+      - name: Attach to the rolling release icesat2-tool-latest
+        run: |
+          notes="ICESat-2 tool only (the ICESat2_tool folder of this repository), currently version $VERSION (release $TAG). Download ICESat2_tool.zip, unzip it into a folder of your Google Drive and open notebooks/icesat2_colab.ipynb from there."
+          if gh release view icesat2-tool-latest >/dev/null 2>&1; then
+            gh release edit icesat2-tool-latest --title "ICESat-2 tool (latest: $VERSION)" --notes "$notes" --latest=false
+          else
+            gh release create icesat2-tool-latest --target "$GITHUB_SHA" --title "ICESat-2 tool (latest: $VERSION)" --notes "$notes" --latest=false
+          fi
+          gh release upload icesat2-tool-latest ICESat2_tool.zip --clobber
