@@ -8,7 +8,7 @@ Su Mac, aprire `Open SEASTRONG Form.command`. Su Windows, aprire `Open SEASTRONG
 
 Per collegare Google, usare questo indirizzo locale: l'apertura diretta di `index.html` dal Finder non permette ai moduli JavaScript e all'autorizzazione Google di funzionare correttamente.
 
-Prima provare un piccolo rilievo identificabile come test. Premere **Connect Google Drive** e accedere con l'account istituzionale. Il sito prova a collegarsi direttamente alla cartella SEASTRONG configurata. Se questa non e ancora autorizzata all'app, Google mostra una conferma limitata alla cartella **Survey submissions**, con la navigazione laterale nascosta. Confermarla per concedere all'app l'accesso tramite l'ambito limitato `drive.file`. Ai collegamenti successivi, quando Google permette gia l'accesso, il selettore non viene aperto. Il sito verifica che la cartella sia in un Drive condiviso e che sia possibile aggiungere file.
+Prima provare un piccolo rilievo identificabile come test. Premere **Sign in with Google** e accedere con l'account istituzionale. Il sito prova a collegarsi direttamente alla cartella SEASTRONG configurata. Se questa non e ancora autorizzata all'app, Google mostra una conferma limitata alla cartella **Survey submissions**, con la navigazione laterale nascosta. Confermarla per concedere all'app l'accesso tramite l'ambito limitato `drive.file`. Ai collegamenti successivi, quando Google permette gia l'accesso, il selettore non viene aperto. Il sito verifica che la cartella sia in un Drive condiviso e che sia possibile aggiungere file.
 
 Compilare i dati, selezionare pochi file e inviare. Aprire la cartella risultante e controllare che siano presenti JSON, CSV, PDF e originali. Una prova locale esegue veri caricamenti solo dopo **Submit to Shared Drive**. La conferma finale viene mostrata dopo la verifica di ID, cartella di appartenenza e dimensione dei file.
 
@@ -29,6 +29,12 @@ Nel progetto Google Cloud **SEASTRONG Field Portal**:
 Collegamenti diretti: [Branding](https://console.cloud.google.com/auth/branding?hl=it), [Pubblico](https://console.cloud.google.com/auth/audience?hl=it), [Accesso ai dati](https://console.cloud.google.com/auth/scopes?hl=it). Controllare sempre il progetto selezionato in alto.
 
 La documentazione di riferimento e la [guida Google al consenso OAuth](https://developers.google.com/workspace/guides/configure-oauth-consent?hl=it) e la [guida Google Picker](https://developers.google.com/workspace/drive/picker/guides/web-picker-sample). Prima di estendere l'accesso al consorzio, completare gli eventuali requisiti di pubblicazione/verifica richiesti da Google. Lo stato **Esterno** non rende pubblici i dati e non concede automaticamente permessi sul Drive.
+
+## Accesso iniziale al portale
+
+Il modulo e l'elenco dei record vengono mostrati soltanto dopo l'accesso Google e la verifica del permesso di aggiungere file alla cartella configurata. **Lock portal** nasconde il modulo e rimuove la sessione dalla memoria; anche la scadenza della sessione riporta alla schermata iniziale. I draft locali sono separati per account Google. Un vecchio draft senza autore non viene aperto automaticamente: puo essere importato dopo l'accesso. I record gia inviati restano disponibili da **My records**.
+
+Questo controllo dell'interfaccia non rende privati i file statici di GitHub Pages o il codice del repository pubblico. I record sul Drive restano soggetti ai permessi Google.
 
 ## Permessi dei collaboratori
 
@@ -55,6 +61,8 @@ Survey submissions/
           BZ140327C1reef_camB/
           BZ140327C1reef_field_sheets/
 ```
+
+Il campo facoltativo **Corridor name** conserva il nome locale (per esempio Mangrove Bay) nel JSON, nei CSV, nel rapporto PDF e nelle revisioni. Il codice C1-C6 e l'identificativo automatico restano invariati. Le nuove tabelle CSV includono `corridor_name`; rimane possibile importare i precedenti modelli senza questa colonna.
 
 I nomi dei file originali ricevono il prefisso del survey ID, senza modificare i contenuti. Il manifest conserva il percorso originale, il nome salvato, la dimensione e l'ID del file su Drive. Le sottocartelle selezionate vengono mantenute. Per un secondo rilievo dello stesso tipo nello stesso corridoio/giorno, scegliere il suffisso B, C o D. Il servizio Google permette nomi duplicati: il portale distingue ogni consegna con un ID univoco e rifiuta una gerarchia gia ambigua; non garantisce l'unicita globale del nome in caso di creazione simultanea da computer diversi.
 

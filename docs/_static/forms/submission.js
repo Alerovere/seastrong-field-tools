@@ -8,12 +8,15 @@ import {AREAS,VERSION,escapeHTML as esc,surveyId,newDraft,validateDetails,valida
 
 const root=document.getElementById('seastrong-submission');
 const $=s=>root.querySelector(s);
-const storageKey='seastrong.field-submission.v1';
+const legacyStorageKey='seastrong.field-submission.v1';
+let storageKey='',activeAccountId=null,connecting=false,sessionTimer;
+const gate=document.getElementById('seastrong-login');
+const loginButton=document.getElementById('seastrong-login-button');
+const loginFeedback=document.getElementById('seastrong-login-feedback');
 const drive=new DriveClient(CONFIG);
 const selectedFiles=new Map();
 let storage;try{storage=localStorage;}catch{storage=null;}
-let state=storage?await readDraft(storage,storageKey,SURVEYS):null;
-state=state||newDraft();
+let state=newDraft();
 let tableChoice='',fileGroup='',busy=false,controller=null,saveTimer,sessionProgress='';
 let view='form',recordFiles=[],recordDetail=null,recordsLoading=false,recordsError='',recordsEpoch=0;
 const openHistory=new Set();
@@ -24,8 +27,43 @@ function getTables(){return visibleTables(state.type,state.values);}
 function seedTables(){for(const t of TABLES[state.type])if(!state.tables[t.id])state.tables[t.id]=t.seed.map(r=>r.slice());}
 function status(text,error=false){$('.ss-status').textContent=text;$('.ss-status').classList.toggle('ss-error',error);}
 function saveDraft(quiet=true){
+  if(!activeAccountId)return;
   try{if(!storage)throw new Error();storage.setItem(storageKey,JSON.stringify(state));if(!quiet)status('Draft saved on this browser.');}
   catch{status('Browser storage is unavailable or full. Download your draft to keep a copy.',true);}
+}
+function authorised(){return drive.connected&&!!activeAccountId&&drive.user?.permissionId===activeAccountId&&!connecting;}
+function setAccessState(){
+  const allowed=authorised();root.hidden=!allowed;gate.hidden=allowed;loginButton.disabled=connecting||busy;
+  loginButton.textContent=connecting?'Connecting…':'Sign in with Google';
+  if(!allowed){$('.ss-panels').replaceChildren();$('.ss-records-view').replaceChildren();$('.ss-tree').replaceChildren();$('.ss-connection').textContent='';$('.ss-status').textContent='';}
+  return allowed;
+}
+async function loadAccountDraft(){
+  const actor=accountIdentity(drive.user);
+  if(activeAccountId===actor.permissionId){saveDraft();return;}
+  saveDraft();clearTimeout(saveTimer);selectedFiles.clear();
+  activeAccountId=actor.permissionId;storageKey=legacyStorageKey+'.'+actor.permissionId;
+  let draft=storage?await readDraft(storage,storageKey,SURVEYS):null;
+  if(!draft&&storage){const earlier=await readDraft(storage,legacyStorageKey,SURVEYS);if(earlier?.submittedBy?.permissionId===actor.permissionId)draft=earlier;}
+  state=draft||{...newDraft(),filledBy:actor.displayName};
+  tableChoice='';fileGroup='';recordFiles=[];recordDetail=null;recordsError='';recordsLoading=false;openHistory.clear();
+  saveDraft();
+}
+function lockPortal(message='Portal locked. Sign in again to continue.'){
+  controller?.abort();saveDraft();clearTimeout(saveTimer);clearTimeout(sessionTimer);recordsEpoch++;
+  drive.disconnect();activeAccountId=null;selectedFiles.clear();recordFiles=[];recordDetail=null;recordsLoading=false;
+  loginFeedback.textContent=message;render();
+}
+async function connectGoogle(){
+  if(connecting||busy)return;
+  connecting=true;recordsEpoch++;recordFiles=[];recordDetail=null;loginFeedback.textContent='Checking access to the SEASTRONG submission folder…';setAccessState();
+  try{
+    await drive.connect();await loadAccountDraft();clearTimeout(sessionTimer);
+    sessionTimer=setTimeout(()=>lockPortal('Your Google session expired. Sign in again to continue.'),Math.max(0,drive.expires-Date.now()));
+    loginFeedback.textContent='';
+  }catch(error){drive.disconnect();loginFeedback.textContent=error.message||String(error);}
+  finally{connecting=false;render();}
+  if(authorised()&&view==='records')await loadRecords();
 }
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveDraft(),400);}
 function link(id){return 'https://drive.google.com/drive/folders/'+encodeURIComponent(id);}
@@ -36,7 +74,7 @@ function input(label,key,value,{type='text',choices,full=false,help='',scope='ba
 }
 function details(){
   const offsets=Array.from({length:105},(_,i)=>{const mins=-12*60+i*15;const value='UTC'+(mins>=0?'+':'-')+String(Math.floor(Math.abs(mins)/60)).padStart(2,'0')+':'+String(Math.abs(mins)%60).padStart(2,'0');return value;});
-  return `<section class="ss-panel"><div class="ss-panel-head"><h2>Where and what did you survey?</h2><p>Choose a survey type to see its measurements and file requirements.</p></div><div class="ss-field">Survey type</div><div class="ss-types">${Object.entries(SURVEYS).map(([k,s])=>`<button type="button" class="ss-type" data-type="${k}" aria-pressed="${state.type===k}"${state.upload.packageFolderId?' disabled':''}><span class="ss-glyph" aria-hidden="true">${glyph[k]}</span><span>${s.name}</span></button>`).join('')}</div><div class="ss-fields">${input('Study area','area',state.area,{choices:Object.entries(AREAS),required:true})}${input('Corridor','corridor',state.corridor,{choices:Array.from({length:6},(_,i)=>['C'+(i+1),'Corridor '+(i+1)]),required:true})}${input(state.type==='waves'?'Deployment date':'Survey date','date',state.date,{type:'date',required:true,help:'Stored as YYYY-MM-DD. Survey ID uses DDMMYY.'})}${input('Time zone of field clock','timezone',state.timezone,{choices:offsets,required:true,help:'The UTC offset actually used by the watch, camera or phone.'})}${input('Operators','operators',state.operators,{full:true,required:true})}${input('Filled in by','filledBy',state.filledBy,{required:true})}${input('Survey occurrence','suffix',state.suffix,{choices:[['','First survey of this type today'],['B','Second survey · suffix B'],['C','Third survey · suffix C'],['D','Fourth survey · suffix D']]})}${state.type==='waves'?input('Record stage','recordStage',state.recordStage,{choices:['Deployment','Retrieval','Post-site report']}):''}</div><div class="ss-id-box"><span>Automatic survey ID</span><span class="ss-code" data-id>${surveyId(state)||'Complete the survey details'}</span></div><p class="ss-muted" style="margin-top:14px"><a href="./${schema().pdf}" target="_blank" rel="noopener">Open the printable ${schema().name.toLowerCase()} field sheet ↗</a></p></section>`;
+  return `<section class="ss-panel"><div class="ss-panel-head"><h2>Where and what did you survey?</h2><p>Choose a survey type to see its measurements and file requirements.</p></div><div class="ss-field">Survey type</div><div class="ss-types">${Object.entries(SURVEYS).map(([k,s])=>`<button type="button" class="ss-type" data-type="${k}" aria-pressed="${state.type===k}"${state.upload.packageFolderId?' disabled':''}><span class="ss-glyph" aria-hidden="true">${glyph[k]}</span><span>${s.name}</span></button>`).join('')}</div><div class="ss-fields">${input('Study area','area',state.area,{choices:Object.entries(AREAS),required:true})}${input('Corridor','corridor',state.corridor,{choices:Array.from({length:6},(_,i)=>['C'+(i+1),'Corridor '+(i+1)]),required:true})}${input('Corridor name (optional)','corridorName',state.corridorName,{full:true,help:'Local name of the corridor or survey area, e.g. Mangrove Bay.'})}${input(state.type==='waves'?'Deployment date':'Survey date','date',state.date,{type:'date',required:true,help:'Stored as YYYY-MM-DD. Survey ID uses DDMMYY.'})}${input('Time zone of field clock','timezone',state.timezone,{choices:offsets,required:true,help:'The UTC offset actually used by the watch, camera or phone.'})}${input('Operators','operators',state.operators,{full:true,required:true})}${input('Filled in by','filledBy',state.filledBy,{required:true})}${input('Survey occurrence','suffix',state.suffix,{choices:[['','First survey of this type today'],['B','Second survey · suffix B'],['C','Third survey · suffix C'],['D','Fourth survey · suffix D']]})}${state.type==='waves'?input('Record stage','recordStage',state.recordStage,{choices:['Deployment','Retrieval','Post-site report']}):''}</div><div class="ss-id-box"><span>Automatic survey ID</span><span class="ss-code" data-id>${surveyId(state)||'Complete the survey details'}</span></div><p class="ss-muted" style="margin-top:14px"><a href="./${schema().pdf}" target="_blank" rel="noopener">Open the printable ${schema().name.toLowerCase()} field sheet ↗</a></p></section>`;
 }
 function measurementFields(){
   const sections=new Map();
@@ -73,16 +111,17 @@ function reviewIssues(){
 function review(){
   if(state.done)return `<section class="ss-panel"><div class="ss-success"><div class="ss-success-mark">✓</div><h2>Your survey package is saved</h2><span class="ss-code">${surveyId(state)}</span><p>${state.files.length} original files verified on Google Drive.</p><a class="ss-btn ss-primary" href="${link(state.upload.packageFolderId)}" target="_blank" rel="noopener">Open submission folder ↗</a><button type="button" class="ss-btn" data-action="revision">Edit this record</button><button type="button" class="ss-btn" data-view="records">View my records</button><button type="button" class="ss-small-btn" data-action="new">Start another survey</button></div></section>`;
   const rows=getTables().reduce((n,t)=>n+(state.tables[t.id]||[]).filter(r=>r.some(v=>String(v).trim())).length,0);
-  return `<section class="ss-panel"><div class="ss-panel-head"><h2>Review the survey package</h2><p>Uploads go to the fixed institutional destination shown on the right.</p></div>${[['Survey ID',surveyId(state)||'Incomplete'],['Survey',schema().name],['Location',AREAS[state.area]+' · '+state.corridor],['Survey date',state.date],['Operators',state.operators||'Missing'],['Filled in by',state.filledBy||'Missing'],['Record stage',state.recordStage],['Field survey complete',state.surveyComplete||'Not recorded'],['Table rows (including position labels)',rows],['Original files',state.files.length],['Total original file size',formatBytes(state.files.reduce((n,f)=>n+f.size,0))]].map(([k,v])=>`<div class="ss-review-row"><span>${k}</span><span>${esc(v)}</span></div>`).join('')}<label class="ss-check"><input type="checkbox" data-field="confirmed" data-scope="base"${state.confirmed?' checked':''}><span>I have checked the survey details and selected the intended files.</span></label><div class="ss-notice">Submitting saves the originals, JSON metadata, CSV tables, PDF report and a file manifest. “Complete” means the upload package is verified, not that the field survey met every protocol requirement.</div><div class="ss-review-errors" role="alert"></div><div class="ss-upload-progress"${busy?'':' hidden'}><div class="ss-progress" role="progressbar" aria-label="Upload progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="ss-progress-fill"></div></div><p class="ss-muted" data-upload-message aria-live="polite">${esc(sessionProgress)}</p></div><button type="button" class="ss-small-btn" data-action="report">Download report preview ↓</button></section>`;
+  return `<section class="ss-panel"><div class="ss-panel-head"><h2>Review the survey package</h2><p>Uploads go to the fixed institutional destination shown on the right.</p></div>${[['Survey ID',surveyId(state)||'Incomplete'],['Survey',schema().name],['Location',AREAS[state.area]+' · '+state.corridor],['Corridor name',state.corridorName||'Not recorded'],['Survey date',state.date],['Operators',state.operators||'Missing'],['Filled in by',state.filledBy||'Missing'],['Record stage',state.recordStage],['Field survey complete',state.surveyComplete||'Not recorded'],['Table rows (including position labels)',rows],['Original files',state.files.length],['Total original file size',formatBytes(state.files.reduce((n,f)=>n+f.size,0))]].map(([k,v])=>`<div class="ss-review-row"><span>${k}</span><span>${esc(v)}</span></div>`).join('')}<label class="ss-check"><input type="checkbox" data-field="confirmed" data-scope="base"${state.confirmed?' checked':''}><span>I have checked the survey details and selected the intended files.</span></label><div class="ss-notice">Submitting saves the originals, JSON metadata, CSV tables, PDF report and a file manifest. “Complete” means the upload package is verified, not that the field survey met every protocol requirement.</div><div class="ss-review-errors" role="alert"></div><div class="ss-upload-progress"${busy?'':' hidden'}><div class="ss-progress" role="progressbar" aria-label="Upload progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="ss-progress-fill"></div></div><p class="ss-muted" data-upload-message aria-live="polite">${esc(sessionProgress)}</p></div><button type="button" class="ss-small-btn" data-action="report">Download report preview ↓</button></section>`;
 }
 function summary(){
   const sid=surveyId(state)||'Survey ID pending';
-  $('.ss-tree').innerHTML=`<div>Survey submissions</div><div>${esc(AREAS[state.area]||'Study area')}</div><div>${esc(state.corridor)}</div><div><span class="ss-code">${esc(sid)}</span></div>`;
+  $('.ss-tree').innerHTML=`<div>Survey submissions</div><div>${esc(AREAS[state.area]||'Study area')}</div><div>${esc(state.corridor)}${state.corridorName?'<span class="ss-corridor-name">'+esc(state.corridorName)+'</span>':''}</div><div><span class="ss-code">${esc(sid)}</span></div>`;
   root.querySelectorAll('[data-id]').forEach(el=>el.textContent=sid);
   const connected=drive.connected;$('.ss-connection').textContent=connected?'Connected to '+(drive.user?.emailAddress||'Google Drive')+' · '+drive.root.name:drive.configured?'Draft mode · connect Google Drive when you are ready to upload.':'Google setup is not finished. You can complete and download a local draft.';
   $('[data-action="connect"]').textContent=connected?'Reconnect Google Drive':'Connect Google Drive';
 }
 function render(){
+  if(!setAccessState())return;
   root.querySelectorAll('input,textarea,select,button').forEach(el=>{el.disabled=false;});
   seedTables();state.step=Math.min(3,Math.max(0,Number(state.step)||0));
   $('.ss-steps').innerHTML=steps.map((name,i)=>`<button type="button" class="ss-step" data-step="${i}"${i===state.step?' aria-current="step"':''}><span class="ss-step-num">${i+1}</span><span>${name}</span></button>`).join('');
@@ -106,16 +145,17 @@ function recordRow(file,history=false){
   const sid=props.surveyId||file.name.replace(/_submission\.json$/,'');
   const statusText=legacy?'Earlier format':props.recordStatus==='complete'?'Saved':'Upload incomplete';
   const version=Number(props.revisionNumber)||1;
-  return `<div class="ss-record-row${history?' ss-record-older':''}"><div class="ss-record-name"><span class="ss-code">${esc(sid)}</span><span class="ss-muted">${esc(SURVEYS[props.surveyType]?.name||'Earlier record')} · Version ${version}</span></div><div class="ss-muted">${esc(savedTime(file.modifiedTime))}<br>${esc(props.recordStage||'')}</div><div><span class="ss-tag">${statusText}</span></div><div class="ss-record-actions"><button type="button" class="ss-btn" data-open-record="${esc(file.id)}">View</button><button type="button" class="ss-btn" data-edit-record="${esc(file.id)}"${!legacy&&props.recordStatus!=='complete'?' disabled':''}>Edit</button></div></div>`;
+  return `<div class="ss-record-row${history?' ss-record-older':''}"><div class="ss-record-name"><span class="ss-code">${esc(sid)}</span><span class="ss-muted">${esc(SURVEYS[props.surveyType]?.name||'Earlier record')}${props.corridorName?' · '+esc(props.corridorName):''} · Version ${version}</span></div><div class="ss-muted">${esc(savedTime(file.modifiedTime))}<br>${esc(props.recordStage||'')}</div><div><span class="ss-tag">${statusText}</span></div><div class="ss-record-actions"><button type="button" class="ss-btn" data-open-record="${esc(file.id)}">View</button><button type="button" class="ss-btn" data-edit-record="${esc(file.id)}"${!legacy&&props.recordStatus!=='complete'?' disabled':''}>Edit</button></div></div>`;
 }
 function recordDetailMarkup(){
   const {file,record,draft}=recordDetail,legacy=!record.submittedBy?.permissionId;
   const fields=schemaForRecord(record).fields.filter(f=>String(draft.values[f.id]||'').trim());
   const tables=visibleTables(draft.type,draft.values);
-  return `<article class="ss-panel"><div class="ss-record-heading"><div><div class="ss-eyebrow">SAVED RECORD · VERSION ${esc(record.revisionNumber||1)}</div><h2>${esc(record.surveyId)}</h2><p class="ss-muted">${esc(SURVEYS[draft.type].name)} · ${esc(savedTime(record.savedAt||file.modifiedTime))}</p></div><button type="button" class="ss-btn" data-action="records-back">← My records</button></div>${legacy?'<div class="ss-notice">Earlier record: the form did not yet save an account ID. This record was matched using the Google account that last saved its metadata.</div>':''}<dl class="ss-record-meta">${[['Study area',AREAS[draft.area]],['Corridor',draft.corridor],['Survey date',draft.date],['Operators',draft.operators],['Filled in by',draft.filledBy],['Google account',record.submittedBy?.emailAddress||file.lastModifyingUser?.emailAddress||'Matched current account'],['Record stage',draft.recordStage],['Field survey complete',draft.surveyComplete],['Upload package',record.status],...fields.map(f=>[f.label,draft.values[f.id]])].map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value||'Not recorded')}</dd></div>`).join('')}</dl>${tables.map(table=>`<details class="ss-details"><summary>${esc(table.name)} · ${(draft.tables[table.id]||[]).length} row${(draft.tables[table.id]||[]).length===1?'':'s'}</summary><div class="ss-tablewrap"><table><thead><tr>${table.columns.map(c=>`<th scope="col">${esc(c)}</th>`).join('')}</tr></thead><tbody>${(draft.tables[table.id]||[]).map(row=>`<tr>${row.map(cell=>`<td>${esc(cell||'—')}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`).join('')}<details class="ss-details"><summary>Field checks and quality flags</summary>${schemaForRecord(record).checklists.map((list,li)=>`<h3>${esc(list.title)}</h3>${list.items.map((text,i)=>`<p class="ss-muted">${draft.checks[li+'-'+i]?'✓':'—'} ${esc(text)}</p>`).join('')}`).join('')}</details><h3 style="margin-top:20px">Notes</h3><p class="ss-record-text">${esc(draft.notes||'None recorded.')}</p><h3 style="margin-top:18px">Missing or pending files</h3><p class="ss-record-text">${esc(draft.missingFilesReason||'None reported.')}</p><details class="ss-details"><summary>Original files · ${draft.files.length}</summary>${draft.files.slice(0,50).map(f=>`<div class="ss-file-row"><div class="ss-file-info"><a href="https://drive.google.com/file/d/${encodeURIComponent(f.driveFileId)}/view" target="_blank" rel="noopener">${esc(f.group+'/'+f.path)}</a><div class="ss-muted">${formatBytes(f.size)}${f.inherited?' · earlier original':''}</div></div></div>`).join('')}${draft.files.length>50?'<p class="ss-muted">Showing the first 50 files. Download the record data for the complete manifest.</p>':''}</details><div class="ss-record-footer"><button type="button" class="ss-btn ss-primary" data-edit-record="${esc(file.id)}"${record.status!=='complete'?' disabled':''}>Edit as a new version</button><a class="ss-btn" href="${link(record.packageFolderId)}" target="_blank" rel="noopener">Open folder ↗</a><button type="button" class="ss-small-btn" data-action="download-record">Download record data ↓</button></div>${record.status!=='complete'?'<p class="ss-muted">This upload is incomplete. Resume the draft in its original browser, or import its downloaded draft.</p>':''}</article>`;
+  return `<article class="ss-panel"><div class="ss-record-heading"><div><div class="ss-eyebrow">SAVED RECORD · VERSION ${esc(record.revisionNumber||1)}</div><h2>${esc(record.surveyId)}</h2><p class="ss-muted">${esc(SURVEYS[draft.type].name)} · ${esc(savedTime(record.savedAt||file.modifiedTime))}</p></div><button type="button" class="ss-btn" data-action="records-back">← My records</button></div>${legacy?'<div class="ss-notice">Earlier record: the form did not yet save an account ID. This record was matched using the Google account that last saved its metadata.</div>':''}<dl class="ss-record-meta">${[['Study area',AREAS[draft.area]],['Corridor',draft.corridor],['Corridor name',draft.corridorName],['Survey date',draft.date],['Operators',draft.operators],['Filled in by',draft.filledBy],['Google account',record.submittedBy?.emailAddress||file.lastModifyingUser?.emailAddress||'Matched current account'],['Record stage',draft.recordStage],['Field survey complete',draft.surveyComplete],['Upload package',record.status],...fields.map(f=>[f.label,draft.values[f.id]])].map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value||'Not recorded')}</dd></div>`).join('')}</dl>${tables.map(table=>`<details class="ss-details"><summary>${esc(table.name)} · ${(draft.tables[table.id]||[]).length} row${(draft.tables[table.id]||[]).length===1?'':'s'}</summary><div class="ss-tablewrap"><table><thead><tr>${table.columns.map(c=>`<th scope="col">${esc(c)}</th>`).join('')}</tr></thead><tbody>${(draft.tables[table.id]||[]).map(row=>`<tr>${row.map(cell=>`<td>${esc(cell||'—')}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`).join('')}<details class="ss-details"><summary>Field checks and quality flags</summary>${schemaForRecord(record).checklists.map((list,li)=>`<h3>${esc(list.title)}</h3>${list.items.map((text,i)=>`<p class="ss-muted">${draft.checks[li+'-'+i]?'✓':'—'} ${esc(text)}</p>`).join('')}`).join('')}</details><h3 style="margin-top:20px">Notes</h3><p class="ss-record-text">${esc(draft.notes||'None recorded.')}</p><h3 style="margin-top:18px">Missing or pending files</h3><p class="ss-record-text">${esc(draft.missingFilesReason||'None reported.')}</p><details class="ss-details"><summary>Original files · ${draft.files.length}</summary>${draft.files.slice(0,50).map(f=>`<div class="ss-file-row"><div class="ss-file-info"><a href="https://drive.google.com/file/d/${encodeURIComponent(f.driveFileId)}/view" target="_blank" rel="noopener">${esc(f.group+'/'+f.path)}</a><div class="ss-muted">${formatBytes(f.size)}${f.inherited?' · earlier original':''}</div></div></div>`).join('')}${draft.files.length>50?'<p class="ss-muted">Showing the first 50 files. Download the record data for the complete manifest.</p>':''}</details><div class="ss-record-footer"><button type="button" class="ss-btn ss-primary" data-edit-record="${esc(file.id)}"${record.status!=='complete'?' disabled':''}>Edit as a new version</button><a class="ss-btn" href="${link(record.packageFolderId)}" target="_blank" rel="noopener">Open folder ↗</a><button type="button" class="ss-small-btn" data-action="download-record">Download record data ↓</button></div>${record.status!=='complete'?'<p class="ss-muted">This upload is incomplete. Resume the draft in its original browser, or import its downloaded draft.</p>':''}</article>`;
 }
 function schemaForRecord(record){return SURVEYS[record.surveyType];}
 function renderRecords(){
+  if(!setAccessState())return;
   const panel=$('.ss-records-view');
   if(!drive.connected){panel.innerHTML=`<section class="ss-panel"><h2>My records</h2><p class="ss-lead">Connect Google Drive above to find records saved by your Google account.</p>${recordsError?`<p class="ss-record-error" role="alert">${esc(recordsError)}</p>`:''}</section>`;return;}
   const title=`<div class="ss-record-heading"><div><h2>My records</h2><p class="ss-muted">${esc(drive.user?.emailAddress||drive.user?.displayName||'Your Google account')} · SEASTRONG submissions</p></div><button type="button" class="ss-btn" data-action="refresh-records"${recordsLoading?' disabled':''}>Refresh</button></div>`;
@@ -140,7 +180,9 @@ async function openRecord(id){
 }
 async function editRecord(id){
   if(!drive.connected)throw new Error('Reconnect Google Drive to edit a saved record.');
+  const account=activeAccountId;
   const {file,record}=await drive.readRecord(id);
+  if(!authorised()||activeAccountId!==account)throw new Error('Sign in again to edit your record.');
   const draft=editAsRevision(record,file,drive.user,CONFIG.rootFolderId,SURVEYS);
   const unfinished=!state.done&&(state.operators.trim()||Object.keys(state.values).length||state.files.length);
   if(unfinished&&!confirm('Replace the current browser draft with a new version of this saved record? Download your current draft first if you want to keep it.'))return;
@@ -158,12 +200,19 @@ function parseCSV(text){
 }
 async function importCSV(file){
   if(file.size>10*1024*1024)throw new Error('This measurement CSV is larger than 10 MB. Split it into smaller tables.');
-  const table=getTables().find(t=>t.id===tableChoice);const rows=parseCSV(await file.text());const head=rows.shift();if(!head)throw new Error('The CSV is empty.');
+  const account=activeAccountId,draftId=state.uid;
+  const table=getTables().find(t=>t.id===tableChoice);const rows=parseCSV(await file.text());
+  if(!authorised()||activeAccountId!==account||state.uid!==draftId)throw new Error('Reopen your draft before importing a CSV.');
+  const head=rows.shift();if(!head)throw new Error('The CSV is empty.');
   let offset=head[0]==='survey_id'?1:0;
+  const hasCorridorName=offset===1&&head[1]==='corridor_name';if(hasCorridorName)offset++;
   if(JSON.stringify(head.slice(offset))!==JSON.stringify(table.columns))throw new Error('CSV headings do not match this table. Download its CSV template first.');
   if(rows.some(r=>r.length!==head.length))throw new Error('Some CSV rows have a different number of columns.');
   if(offset&&rows.some(r=>r[0]&&r[0]!==surveyId(state)))throw new Error('The CSV contains another survey ID.');
+  const corridorNames=hasCorridorName?[...new Set(rows.map(r=>r[1]).filter(Boolean))]:[];
+  if(corridorNames.length>1||(corridorNames.length&&state.corridorName&&corridorNames[0]!==state.corridorName))throw new Error('The CSV contains a different corridor name.');
   if(!confirm('Replace the current '+table.name+' table with '+rows.length+' imported rows?'))return;
+  if(corridorNames.length&&!state.corridorName)state.corridorName=corridorNames[0];
   state.tables[table.id]=rows.map(r=>r.slice(offset));state.confirmed=false;saveDraft();render();status('CSV imported.');
 }
 function addFiles(files){
@@ -220,11 +269,11 @@ async function submit(){
       entry.driveFileId=remote.id;entry.uploaded=true;completedBytes+=entry.size;saveDraft();
     }
     progress('Saving measurement tables and the report…',1,1);
-    for(const table of getTables())await putArtifact(sid+'_'+table.id+'.csv',new Blob([tableCSV(table.columns,state.tables[table.id]||[],sid)],{type:'text/csv;charset=utf-8'}));
+    for(const table of getTables())await putArtifact(sid+'_'+table.id+'.csv',new Blob([tableCSV(table.columns,state.tables[table.id]||[],sid,{corridorName:state.corridorName})],{type:'text/csv;charset=utf-8'}));
     const record=metadata(state,schema(),'complete');record.qualityReviewed=!!state.qualityReviewed;
     await putArtifact(sid+'_field_report.pdf',await makeReport(record,schema(),getTables()));
     await putArtifact(sid+'_file_manifest.json',new Blob([JSON.stringify({submissionId:state.uid,surveyId:sid,files:record.files,verification:'Drive file ID, parent and byte size checked after upload'},null,2)],{type:'application/json'}));
-    await putArtifact(sid+'_file_links.csv',new Blob([tableCSV(['Category','Original path','Size (bytes)','Drive link','Earlier original'],state.files.map(f=>[f.group,f.path,String(f.size),'https://drive.google.com/file/d/'+f.driveFileId+'/view',f.inherited?'Yes':'No']),sid)],{type:'text/csv;charset=utf-8'}));
+    await putArtifact(sid+'_file_links.csv',new Blob([tableCSV(['Category','Original path','Size (bytes)','Drive link','Earlier original'],state.files.map(f=>[f.group,f.path,String(f.size),'https://drive.google.com/file/d/'+f.driveFileId+'/view',f.inherited?'Yes':'No']),sid,{corridorName:state.corridorName})],{type:'text/csv;charset=utf-8'}));
     // This final write is the completion marker. Failures above leave status=uploading.
     await putArtifact(sid+'_submission.json',new Blob([JSON.stringify(record,null,2)],{type:'application/json'}));
     await drive.updateProperties(metadataId,recordProperties(state,drive.user,CONFIG.rootFolderId,'complete'));
@@ -234,14 +283,14 @@ async function submit(){
   finally{busy=false;controller=null;render();}
 }
 function dirty(){state.confirmed=false;scheduleSave();}
-root.addEventListener('input',e=>{const t=e.target;
+root.addEventListener('input',e=>{if(!authorised())return;const t=e.target;
   if(t.dataset.table){state.tables[t.dataset.table][+t.dataset.row][+t.dataset.col]=t.value;dirty();return;}
   if(t.dataset.field&&t.type!=='checkbox'&&t.tagName!=='SELECT'){
     if(t.dataset.scope==='value')state.values[t.dataset.field]=t.value;else if(t.dataset.scope==='base')state[t.dataset.field]=t.value;
     dirty();if(t.dataset.field==='date')summary();
   }
 });
-root.addEventListener('change',async e=>{const t=e.target;try{
+root.addEventListener('change',async e=>{if(!authorised())return;const account=activeAccountId,draftId=state.uid,t=e.target;try{
   if(t.dataset.field){
     if(t.dataset.scope==='file'){fileGroup=t.value;render();return;}
     if(t.dataset.scope==='value')state.values[t.dataset.field]=t.value;else state[t.dataset.field]=t.type==='checkbox'?t.checked:t.value;
@@ -256,10 +305,12 @@ root.addEventListener('change',async e=>{const t=e.target;try{
   if(t.hasAttribute('data-import-draft')&&t.files[0]){
     if(t.files[0].size>20*1024*1024)throw new Error('This draft is larger than 20 MB.');
     const imported=validateDraft(JSON.parse(await t.files[0].text()),SURVEYS);
+    if(!authorised()||activeAccountId!==account||state.uid!==draftId)throw new Error('Sign in again before importing your draft.');
+    if(imported.submittedBy?.permissionId&&imported.submittedBy.permissionId!==activeAccountId)throw new Error('This draft belongs to another Google account.');
     if(confirm('Replace the draft on this browser with the imported survey?')){state=imported;selectedFiles.clear();tableChoice='';fileGroup='';saveDraft();render();status('Draft imported. Reselect original files before resuming.');}
   }
 }catch(error){errorMessage(error);}});
-root.addEventListener('click',async e=>{const button=e.target.closest('button');if(!button)return;
+root.addEventListener('click',async e=>{if(!authorised()){render();return;}const button=e.target.closest('button');if(!button)return;
   try {
     if(busy){if(button.dataset.action==='next'){controller?.abort();status('Pausing after the current request…');}return;}
     if(button.dataset.view){view=button.dataset.view;recordDetail=null;render();if(view==='records')await loadRecords();return;}
@@ -269,19 +320,20 @@ root.addEventListener('click',async e=>{const button=e.target.closest('button');
     if(button.dataset.type){
       const type=button.dataset.type;if(type===state.type)return;
       if((Object.keys(state.values).length||state.files.length)&&!confirm('Changing survey type starts a fresh set of measurements and files. Download the current draft first if you want to keep it. Continue?'))return;
-      state={...newDraft(type),area:state.area,corridor:state.corridor,date:state.date,operators:state.operators,filledBy:state.filledBy,timezone:state.timezone};selectedFiles.clear();tableChoice='';fileGroup='';saveDraft();render();return;
+      state={...newDraft(type),area:state.area,corridor:state.corridor,corridorName:state.corridorName,date:state.date,operators:state.operators,filledBy:state.filledBy,timezone:state.timezone};selectedFiles.clear();tableChoice='';fileGroup='';saveDraft();render();return;
     }
     if(button.dataset.step!==undefined){state.step=+button.dataset.step;saveDraft();render();return;}
     if(button.dataset.removeRow!==undefined){state.tables[tableChoice].splice(+button.dataset.removeRow,1);dirty();render();return;}
     if(button.dataset.clearGroup){if(!confirm('Remove these files from the draft? Already uploaded files on Drive will remain.'))return;state.files=state.files.filter(f=>f.group!==button.dataset.clearGroup);dirty();render();return;}
     switch(button.dataset.action){
-      case 'connect':button.disabled=true;recordsEpoch++;recordFiles=[];recordDetail=null;status('Connecting to the SEASTRONG submission folder…');try{await drive.connect();status('Connected. Uploads will be saved inside the SEASTRONG submission folder.');if(view==='records')await loadRecords();}finally{button.disabled=false;summary();if(view==='records')renderRecords();}break;
+      case 'connect':await connectGoogle();break;
+      case 'lock':lockPortal();break;
       case 'save':saveDraft(false);break;
       case 'export':download(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),(surveyId(state)||'SEASTRONG')+'_draft.json');break;
       case 'back':state.step--;saveDraft();render();break;
       case 'next':if(state.step===3){await submit();break;}if(state.step===0){const issues=validateDetails(state,SURVEYS);if(issues.length){status(issues.join(' '),true);return;}}state.step++;saveDraft();status('');render();break;
       case 'add-row':{const table=getTables().find(t=>t.id===tableChoice);state.tables[table.id].push(table.columns.map(()=>''));dirty();render();break;}
-      case 'template':{const table=getTables().find(t=>t.id===tableChoice);download(new Blob([tableCSV(table.columns,[],surveyId(state))],{type:'text/csv;charset=utf-8'}),table.id+'_template.csv');break;}
+      case 'template':{const table=getTables().find(t=>t.id===tableChoice);download(new Blob([tableCSV(table.columns,[],surveyId(state),{corridorName:state.corridorName})],{type:'text/csv;charset=utf-8'}),table.id+'_template.csv');break;}
       case 'report':{const record=metadata(state,schema(),'draft');download(await makeReport(record,schema(),getTables()),(surveyId(state)||'SEASTRONG')+'_report_preview.pdf');break;}
       case 'revision':{const id=state.upload.artifacts?.[surveyId(state)+'_submission.json'];if(!id)throw new Error('Open the record from My records to edit it.');await editRecord(id);break;}
       case 'refresh-records':recordDetail=null;await loadRecords();break;
@@ -292,7 +344,8 @@ root.addEventListener('click',async e=>{const button=e.target.closest('button');
   }catch(error){if(view==='records'){recordsError=error.message||String(error);renderRecords();}else errorMessage(error);}
 });
 window.addEventListener('beforeunload',e=>{if(busy){e.preventDefault();e.returnValue='';}saveDraft();});
-seedTables();render();
+loginButton.addEventListener('click',connectGoogle);
+render();
 // Load Google's libraries before the user clicks, so Safari retains the click's
 // popup permission when the token chooser opens. This does not sign in a user.
-if(drive.configured&&/^https?:$/.test(location.protocol))drive.prepare().catch(()=>{status('Google could not load. Check your connection, then use Connect Google Drive to retry.',true);});
+if(drive.configured&&/^https?:$/.test(location.protocol))drive.prepare().catch(()=>{loginFeedback.textContent='Google could not load. Check your connection, then sign in again.';});

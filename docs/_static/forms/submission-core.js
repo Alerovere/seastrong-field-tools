@@ -30,10 +30,10 @@ export function csvCell(value) {
   if (/^[\s]*[=+@-]/.test(text) && !/^[+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?$/.test(text.trim())) text="'"+text;
   return '"'+text.replaceAll('"','""')+'"';
 }
-export function tableCSV(headers,rows,sid) { return '\ufeff'+[['survey_id',...headers],...rows.filter(r=>r.some(v=>String(v).trim())).map(r=>[sid,...r])].map(r=>r.map(csvCell).join(',')).join('\r\n')+'\r\n'; }
+export function tableCSV(headers,rows,sid,context={}) { const withName=Object.hasOwn(context,'corridorName');return '\ufeff'+[['survey_id',...(withName?['corridor_name']:[]),...headers],...rows.filter(r=>r.some(v=>String(v).trim())).map(r=>[sid,...(withName?[context.corridorName||'']:[]),...r])].map(r=>r.map(csvCell).join(',')).join('\r\n')+'\r\n'; }
 export function metadata(s,schema,status='draft') {
   return {schemaVersion:VERSION,sourcePDFVersion:schema.sourceVersion,submissionId:s.uid,surveyId:surveyId(s),status,
-    studyArea:s.area,studyAreaName:AREAS[s.area],corridor:s.corridor,surveyType:s.type,surveyDate:s.date,
+    studyArea:s.area,studyAreaName:AREAS[s.area],corridor:s.corridor,corridorName:s.corridorName||'',surveyType:s.type,surveyDate:s.date,
     clockUTCOffset:s.timezone,operators:s.operators,filledInBy:s.filledBy,recordStage:s.recordStage,
     surveyComplete:s.surveyComplete,notes:s.notes,missingFilesReason:s.missingFilesReason,qualityReviewed:!!s.qualityReviewed,
     submittedBy:s.submittedBy||null,recordId:s.recordId||s.uid,revisionNumber:s.revisionNumber||1,revisionOf:s.revisionOf||null,
@@ -44,7 +44,7 @@ export function metadata(s,schema,status='draft') {
 }
 export function newDraft(type='reef') {
   const now=new Date();const localDate=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
-  return {version:VERSION,uid:crypto.randomUUID(),step:0,type,area:'BZ',corridor:'C1',date:localDate,suffix:'',
+  return {version:VERSION,uid:crypto.randomUUID(),step:0,type,area:'BZ',corridor:'C1',corridorName:'',date:localDate,suffix:'',
     operators:'',filledBy:'',timezone:'UTC-06:00',recordStage:'Post-site report',surveyComplete:'',
     values:{},tables:{},checks:{},notes:'',files:[],missingFilesReason:'',confirmed:false,upload:{},done:false,
     submittedBy:null,recordId:null,revisionNumber:1,revisionOf:null,sourceMetadataFileId:null};
@@ -53,6 +53,7 @@ export function validateDraft(value,surveys) {
   if(!value || !['1.0.0',VERSION].includes(value.version) || !surveys[value.type] || typeof value.uid!=='string' || !/^[a-f0-9-]{36}$/.test(value.uid)) throw new Error('This is not a supported SEASTRONG draft.');
   for(const key of ['values','tables','checks','upload']) if(!value[key]||typeof value[key]!=='object'||Array.isArray(value[key])) throw new Error('The draft is missing '+key+'.');
   for(const key of ['area','corridor','date','suffix','operators','filledBy','timezone','recordStage','surveyComplete','notes','missingFilesReason']) if(typeof value[key]!=='string')throw new Error('The draft has an invalid '+key+' field.');
+  if(value.corridorName!==undefined&&typeof value.corridorName!=='string')throw new Error('The draft has an invalid corridor name.');
   if(Object.values(value.values).some(v=>typeof v!=='string'))throw new Error('The draft contains an invalid field value.');
   if(Object.values(value.checks).some(v=>typeof v!=='boolean'))throw new Error('The draft contains an invalid checklist.');
   if(value.submittedBy!=null&&(typeof value.submittedBy.permissionId!=='string'||!value.submittedBy.permissionId))throw new Error('The draft contains an invalid Google account.');

@@ -18,7 +18,7 @@ export function recordProperties(state,user,rootFolderId,status) {
   return {seastrongRecord:'1',submittedBy:actor.permissionId,rootFolderId,surveyId:surveyId(state),
     surveyType:state.type,surveyDate:state.date,recordId:state.recordId||state.uid,
     submissionId:state.uid,revisionNumber:String(state.revisionNumber||1),
-    recordStatus:status,recordStage:state.recordStage};
+    recordStatus:status,recordStage:state.recordStage,corridorName:Array.from(state.corridorName||'').slice(0,24).join('')};
 }
 
 export function groupRecords(files) {
@@ -31,7 +31,7 @@ export function groupRecords(files) {
 
 export function restoreRecord(record,file,surveys) {
   if(!record||!surveys[record.surveyType]||!['1.0.0','1.1.0'].includes(record.schemaVersion))throw new Error('This record format is not supported.');
-  const draft={...newDraft(record.surveyType),uid:record.submissionId,area:record.studyArea,corridor:record.corridor,date:record.surveyDate,
+  const draft={...newDraft(record.surveyType),uid:record.submissionId,area:record.studyArea,corridor:record.corridor,corridorName:record.corridorName||'',date:record.surveyDate,
     operators:record.operators,filledBy:record.filledInBy,timezone:record.clockUTCOffset,recordStage:record.recordStage,
     surveyComplete:record.surveyComplete,notes:record.notes||'',missingFilesReason:record.missingFilesReason||'',
     qualityReviewed:!!record.qualityReviewed,values:structuredClone(record.fields),tables:structuredClone(record.tables),checks:structuredClone(record.checklists),

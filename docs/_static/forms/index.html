@@ -12,8 +12,12 @@
   <script type="module" src="./submission.js"></script>
 </head>
 <body>
-<main id="seastrong-submission" aria-label="SEASTRONG field data portal">
-  <header class="ss-header"><div class="ss-brand"><span class="ss-mark" aria-hidden="true">≋</span>SEASTRONG<span class="ss-product">Field data portal</span></div><button type="button" class="ss-btn" data-action="connect">Connect Google Drive</button></header>
+<section id="seastrong-login" aria-label="SEASTRONG sign in">
+  <header class="ss-header"><div class="ss-brand"><span class="ss-mark" aria-hidden="true">≋</span>SEASTRONG<span class="ss-product">Field data portal</span></div></header>
+  <div class="ss-login-card"><div class="ss-eyebrow">FIELD DATA · SHARED WITH YOUR TEAM</div><h1>Sign in to SEASTRONG</h1><p class="ss-lead">Connect your Google account to submit a survey or review your records.</p><button type="button" id="seastrong-login-button" class="ss-btn ss-primary">Sign in with Google</button><p id="seastrong-login-feedback" role="status" aria-live="polite"></p><p class="ss-muted">Access requires permission to add files to the SEASTRONG submission folder. Ask your project coordinator if you need access.</p></div>
+</section>
+<main id="seastrong-submission" aria-label="SEASTRONG field data portal" hidden>
+  <header class="ss-header"><div class="ss-brand"><span class="ss-mark" aria-hidden="true">≋</span>SEASTRONG<span class="ss-product">Field data portal</span></div><div class="ss-header-actions"><button type="button" class="ss-btn" data-action="connect">Reconnect Google Drive</button><button type="button" class="ss-btn" data-action="lock">Lock portal</button></div></header>
   <div class="ss-wrap">
     <div class="ss-heading"><div><div class="ss-eyebrow">FROM FIELD TO SHARED DRIVE</div><h1>Submit a field survey</h1><p class="ss-lead">The measurements, the context and the files. Together.</p></div><button type="button" class="ss-btn" data-action="save">Save draft</button></div>
     <div class="ss-connection" aria-live="polite"></div>

@@ -137,3 +137,16 @@ test('opening a record checks the account and physical folder before downloading
   nodes.meta={...f.file,appProperties:{...f.file.appProperties,submittedBy:'user-B'}};await assert.rejects(client.readRecord('meta'),/not an available record/);assert.equal(reads,1);
   nodes.meta={...f.file,parents:['outside']};nodes.outside={id:'outside',parents:[],driveId:'shared-drive'};await assert.rejects(client.readRecord('meta'),/outside the SEASTRONG/);assert.equal(reads,1);
 });
+
+test('corridor names survive JSON, CSV and revision editing without changing the survey ID',()=>{
+  const f=savedRecord();f.state.corridorName='Mangrove Bay';
+  const record=metadata(f.state,SURVEYS.reef,'complete');assert.equal(record.corridorName,'Mangrove Bay');assert.equal(record.surveyId,f.record.surveyId);
+  const revision=editAsRevision(record,f.file,f.user,'root',SURVEYS);assert.equal(revision.corridorName,'Mangrove Bay');
+  const csv=tableCSV(['Depth'],[['-1.25']],record.surveyId,{corridorName:revision.corridorName});
+  assert(csv.includes('"survey_id","corridor_name","Depth"'));assert(csv.includes('"Mangrove Bay","-1.25"'));
+  assert.equal(restoreRecord(f.record,f.file,SURVEYS).corridorName,'');
+  const legacy={...f.state,version:'1.0.0'};delete legacy.corridorName;assert.equal(validateDraft(legacy,SURVEYS).corridorName,'');
+  assert.throws(()=>validateDraft({...f.state,corridorName:{}},SURVEYS));
+  const properties=recordProperties({...f.state,corridorName:'🌊'.repeat(100)},f.user,'root','complete');
+  assert(Buffer.byteLength('corridorName'+properties.corridorName,'utf8')<=124);
+});

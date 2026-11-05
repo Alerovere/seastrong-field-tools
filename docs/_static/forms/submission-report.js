@@ -19,7 +19,7 @@ export async function makeReport(record,schema,tables) {
   function heading(text){if(y<100)addPage();y-=12;line(text,{size:12,font:bold,color:sea});y-=3;}
   addPage();line(schema.name+' - survey record',{size:20,font:bold});line('Submission '+record.submissionId,{size:8,color:muted});
   heading('Survey details');
-  for(const [label,value] of [['Study area',record.studyAreaName],['Corridor',record.corridor],['Survey date (YYYY-MM-DD)',record.surveyDate],['Clock UTC offset',record.clockUTCOffset],['Operators',record.operators],['Filled in by',record.filledInBy],['Record stage',record.recordStage],['Field survey complete',record.surveyComplete],['Package status',record.status]])line(label+': '+(value||'Not recorded'));
+  for(const [label,value] of [['Study area',record.studyAreaName],['Corridor',record.corridor],['Corridor name',record.corridorName],['Survey date (YYYY-MM-DD)',record.surveyDate],['Clock UTC offset',record.clockUTCOffset],['Operators',record.operators],['Filled in by',record.filledInBy],['Record stage',record.recordStage],['Field survey complete',record.surveyComplete],['Package status',record.status]])line(label+': '+(value||'Not recorded'));
   if(record.submittedBy)line('Submitted with Google account: '+(record.submittedBy.emailAddress||record.submittedBy.displayName||record.submittedBy.permissionId));
   line('Record version: '+(record.revisionNumber||1));
   if(record.revisionOf)line('Previous submission: '+record.revisionOf,{size:9,color:muted});
