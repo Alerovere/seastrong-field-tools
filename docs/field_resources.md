@@ -1,25 +1,16 @@
 # Field Resources
 
-Forms, naming rules and equipment lists shared by all SEASTRONG field surveys.
+Survey submission, naming rules and field preparation shared by all SEASTRONG surveys.
 
 ---
 
 ## Field forms
 
-One fillable form per survey, with the field data sheets and the post-site report. Print the field pages on waterproof paper (or copy them onto the slate), then type the data and the report into the same PDF the same day.
+Complete survey records and post-site reports in the [SEASTRONG Field Data Portal](https://alerovere.github.io/seastrong-field-tools/). Sign in with your authorised Google account, choose the survey type, enter the observations and attach the original files. The portal saves the record, measurement tables and generated report with the files in the project Shared Drive.
 
-| Survey | Form |
-| --- | --- |
-| Depth and bottom photos | {download}`Depth and bottom photos field form, v1.2 <_static/forms/depth_photos_field_form_v1.2.pdf>` |
-| Drone survey | {download}`Drone field form, v1.0 <_static/forms/drone_field_form_v1.0.pdf>` |
-| Wave sensors | {download}`Wave sensor field form, v1.0 <_static/forms/wave_sensor_field_form_v1.0.pdf>` |
-| Reef photogrammetry | {download}`Reef photogrammetry field form, v1.0 <_static/forms/reef_photogrammetry_field_form_v1.0.pdf>` |
-| Mangrove structure and topography | {download}`Mangrove field form, v1.0 <_static/forms/mangrove_field_form_v1.0.pdf>` |
-| Seagrass structure and bathymetry | {download}`Seagrass field form, v1.0 <_static/forms/seagrass_field_form_v1.0.pdf>` |
+Read the [portal guide](field_portal.md) for access, the four submission steps, drafts and **My records**. All six survey types use the same portal: depth and bottom photos, drone surveys, wave sensors, reef photogrammetry, mangroves and seagrass.
 
-**Fill the forms in with Adobe Acrobat Reader** (free, [download it here](https://get.adobe.com/reader/)). In Acrobat Reader the survey ID is filled in automatically from study area, date and corridor, and appears on every page, and the form fields are saved correctly. Other viewers (Mac Preview, browsers, phone apps) may not fill in the ID or may not save the fields.
-
-Save each filled form with the data, named `<surveyID>_field_form.pdf`.
+In the field, use slates or waterproof notes and photograph them before wiping them. Transcribe the observations and submit once you are back online, preferably the same day. Prepare the required fields from the relevant survey protocol before leaving.
 
 ---
 
@@ -38,11 +29,13 @@ Every survey has an ID made of **area + date (DDMMYY) + corridor + survey type**
 
 Examples: `BZ140327C1reef`, `BZ150327C1seagrass`, `BZ160327C1mangrove`, `BZ140327C1bathy`, `BZ150327C1drone`, `BZ140327C1waves`. If two surveys of the same type are done in the same corridor on the same day, add a letter: `BZ140327C1bathyB`.
 
+The optional **Corridor name** records a local name such as Mangrove Bay. It is saved with the record without changing the `C1`–`C6` code or the automatic survey ID.
+
 ### Files and folders
 
-Start every file and folder name with the survey ID, then the item: `<surveyID>_<item>`. For example: `FJ020627C1reef_camA/`, `BZ150327C3seagrass_Q05_photo2.jpg`, `BZ140327C1bathy_scan.csv`, `BZ140327C1bathy.gpx`, `BZ140327C1reef_field_form.pdf`.
+Start every file and folder name with the survey ID, then the item: `<surveyID>_<item>`. For example: `FJ020627C1reef_camA/`, `BZ150327C3seagrass_Q05_photo2.jpg`, `BZ140327C1bathy_scan.csv`, `BZ140327C1bathy.gpx`, `BZ140327C1reef_field_report.pdf`.
 
 ### Dates and times
 
-- In forms and field sheets, dates are written as **mm/dd/yyyy**; in the survey ID the date is **DDMMYY**.
+- Write field dates unambiguously, for example **14 March 2027**. The portal date picker follows the browser locale and saves dates as **YYYY-MM-DD**; the survey ID uses **DDMMYY**.
 - Note the **time zone** of the watch or phone used for the times written in the field.

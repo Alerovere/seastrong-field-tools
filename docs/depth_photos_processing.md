@@ -24,7 +24,7 @@ All outputs are CSV, GeoJSON or geotagged JPG files that open directly in QGIS o
 | Deeper scan (CSV) | Deeper app | Depths |
 | GPS track (GPX) | Handheld GNSS | Photo positions |
 | Bottom photos (JPG) | Camera | Photos |
-| Reference photo and the GPS time shown in it | Camera; time written in the field form | Photo clock offset |
+| Reference photo and the GPS time shown in it | Camera; time recorded in the field notes and [portal record](field_portal.md) | Photo clock offset |
 | Water level record (CSV) | Reference tide gauge | Tide correction of depths |
 
 Put all files of one survey in a folder named with the survey ID (e.g. `BZ140327C1bathy`), and keep the [file names](field_resources.md#naming-rules).

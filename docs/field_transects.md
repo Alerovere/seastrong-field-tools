@@ -32,7 +32,7 @@ The sensor deployment is described on the [wave attenuation](wave_attenuation.md
 | ☐ | Bar list prepared: target codes and measured centre-to-centre distance of each scale bar |
 | ☐ | Slates prepared with the field sheet of each habitat |
 | ☐ | Equipment checked and packed |
-| ☐ | Field forms printed (see [Field resources](field_resources.md#field-forms)) |
+| ☐ | Access to the [SEASTRONG Field Data Portal](https://alerovere.github.io/seastrong-field-tools/) checked; required observations reviewed in the [portal guide](field_portal.md) and habitat protocol |
 
 Times of depth readings are written from a watch or phone; note the time zone on the slate, so that depths can be corrected for the tide with the pressure-sensor record.
 
@@ -48,7 +48,7 @@ Record on the slate or field sheet (the **header**, the same for all habitats):
 - tape positions where the habitat visibly changes (e.g. bare sand, patchy or continuous seagrass; open or dense mangrove; change of dominant species);
 - conditions (tide, visibility, waves, cloud).
 
-At the end, **photograph the slate** before wiping it, and copy it into the digital field sheet the same evening.
+At the end, **photograph the slate** before wiping it. Once back online, enter the observations and attach the original files through the [SEASTRONG Field Data Portal](https://alerovere.github.io/seastrong-field-tools/), preferably the same evening; see the [portal guide](field_portal.md).
 
 ### File names
 

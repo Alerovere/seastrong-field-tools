@@ -36,7 +36,7 @@ It hosts field data processing tools developed to support SEASTRONG fieldwork. E
 
 ## Contents
 
-**Offline copy:** [download the whole documentation as PDF](https://seastrong-field-tools.readthedocs.io/_/downloads/en/latest/pdf/) (also in the version menu at the bottom of the sidebar). The field forms are separate PDFs, see [Field resources](field_resources.md).
+**Offline copy:** [download the whole documentation as PDF](https://seastrong-field-tools.readthedocs.io/_/downloads/en/latest/pdf/) (also in the version menu at the bottom of the sidebar). Submit survey records and files through the [SEASTRONG Field Data Portal](https://alerovere.github.io/seastrong-field-tools/); see the [portal guide](field_portal.md).
 
 The documentation has four parts:
 
@@ -65,7 +65,7 @@ The documentation has four parts:
 | [Wave attenuation](wave_attenuation.md) | Pressure sensors: where to place them, how to fix them, download schedule | T1.2, T4.5 |
 | [Pressure sensor calibration](pressure_sensor_calibration.md) | Calibration, barometric reference and checks of the pressure sensors | T1.2, T4.5 |
 
-**Field resources:** [field forms and naming rules](field_resources.md).
+**Field resources:** [Field data portal](field_portal.md) for submission and record editing; [naming rules and field preparation](field_resources.md).
 
 ## Consortium
 

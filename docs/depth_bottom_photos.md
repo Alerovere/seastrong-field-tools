@@ -93,9 +93,8 @@ If only one dataset is collected, skip the steps of the other one (no reference 
 
 ## Field form and post-site report
 
-The set-up checklist, the reference-photo times, the survey times and the post-site report are in one form: {download}`Depth and bottom photos field form, v1.2 (PDF) <_static/forms/depth_photos_field_form_v1.2.pdf>`.
+Submit one record per survey through the [SEASTRONG Field Data Portal](https://alerovere.github.io/seastrong-field-tools/), choosing **Depth & bottom photos**. The online form records the set-up checks, clock-reference photos, survey times and post-site report; see the [portal guide](field_portal.md) for the submission steps.
 
-- **In the field:** print page 1, or copy it onto the slate.
-- **After the survey:** type the data and the post-site report (page 2) into the same PDF, the same day.
-- **Fill it in with Adobe Acrobat Reader** (free, [download it here](https://get.adobe.com/reader/)): the **Survey ID** is then filled in automatically from study area, date and corridor, and the form fields are saved correctly.
-- Save the filled form with the data, named `<surveyID>_field_form.pdf`, and put the data download link in section B of the report.
+- **In the field:** record the observations and times on a slate or field sheet, and photograph it before wiping it.
+- **Back online:** enter the observations, check the clock UTC offset, and attach the depth scan CSV, GPS track GPX, bottom photos and clock-reference photos that were collected.
+- Explain any missing or pending files, then review and submit. The portal saves the survey record, report and originals together in the project Shared Drive.

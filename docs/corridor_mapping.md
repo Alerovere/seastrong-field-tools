@@ -27,6 +27,6 @@ The transect surveys (habitat structure and wave attenuation, see [Field transec
 
 ## Field forms, survey IDs and data
 
-Each survey has its own **field form with a post-site report** (fillable PDF, see [Field resources](field_resources.md#field-forms)). The form is filled in during the survey and completed the same day; it is then **uploaded to the project's data repository together with the data** of that survey, so that every dataset comes with its record of how, when and where it was collected.
+Each survey has its own record and post-site report in the [SEASTRONG Field Data Portal](https://alerovere.github.io/seastrong-field-tools/). Record observations on a slate or field sheet during the survey, then enter them and attach the original files once back online, preferably the same day. The portal saves the record and files together in the project Shared Drive; see the [portal guide](field_portal.md).
 
-Each survey gets an ID made of **area + date (DDMMYY) + corridor + survey type**, with survey type `bathy` for the depth and bottom photos survey and `drone` for the drone survey. For example: `BZ140327C1bathy`, `BZ150327C1drone`. The ID is filled in automatically in the field form, and all files and folders start with it; see [Field resources](field_resources.md#naming-rules).
+Each survey gets an ID made of **area + date (DDMMYY) + corridor + survey type**, with survey type `bathy` for the depth and bottom photos survey and `drone` for the drone survey. For example: `BZ140327C1bathy`, `BZ150327C1drone`. The portal generates the ID automatically, and all files and folders start with it; see [Field resources](field_resources.md#naming-rules).

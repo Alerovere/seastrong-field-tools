@@ -273,12 +273,11 @@ See the [common notes for modelling](field_transects.md#notes-for-modelling-all-
 
 ## Field form and post-site report
 
-The header, the topography sheet, the data sheets of the three methods and the post-site report are in one form: {download}`Mangrove field form, v1.0 (PDF) <_static/forms/mangrove_field_form_v1.0.pdf>`.
+Submit the header, topography, structure measurements and post-site report through the [SEASTRONG Field Data Portal](https://alerovere.github.io/seastrong-field-tools/), choosing **Mangrove**. Select the structure method (**A**, **B** or **C**) to display its measurement tables. See the [portal guide](field_portal.md) for the submission steps.
 
-- **In the field:** print pages 1–2 (header and topography) for every transect, plus the pages of the method used: A (page 3), B (page 4) or C (pages 5–6).
-- **After the survey:** type the data and the post-site report (page 7) into the same PDF, the same day.
-- **Fill it in with Adobe Acrobat Reader** (free, [download it here](https://get.adobe.com/reader/)). In Acrobat Reader the **Transect ID** is filled in automatically from study area, date and corridor, and appears on every page, and the form fields are saved correctly. Other viewers (Mac Preview, browsers, phone apps) may not fill in the Transect ID or may not save the fields.
-- Save the filled form with the data, named `<transectID>_field_form.pdf`, and put the data download link in section B of the report. The topography stations are also typed into the CSV read by the processing notebook.
+- **In the field:** record the header and topographic stations for every transect, together with the measurements and checks required by the selected structure method. Photograph the field sheets.
+- **Back online:** enter the observations, check the clock UTC offset, and attach the structure photos, camera photos where collected, topography files and field-sheet photos.
+- Explain missing or pending files, then review and submit. Keep the topographic stations in the CSV layout required by the processing notebook as well.
 
 ---
 

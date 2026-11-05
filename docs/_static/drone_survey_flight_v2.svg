@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="940" viewBox="0 0 1000 940" role="img" aria-labelledby="title description">
+<title id="title">Drone survey flight planning</title>
+<desc id="description">Mapping flights collect overlapping nadir photos along parallel lines. Spot photos are geotagged nadir images taken while hovering over selected points. Mapping flights use 60 to 100 metres altitude and at least 80 percent overlap in both directions over water. Low sun, calm water and low tide reduce glare and improve bottom visibility. Diagram not to scale.</desc>
+<defs>
+ <marker id="arrow" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6 Z" fill="#175f72"/></marker>
+ <marker id="sun-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#c78317"/></marker>
+ <g id="drone" fill="none" stroke="#173c49" stroke-width="3"><path d="M-14 -10 L14 10 M-14 10 L14 -10"/><circle cx="-16" cy="-12" r="7"/><circle cx="16" cy="-12" r="7"/><circle cx="-16" cy="12" r="7"/><circle cx="16" cy="12" r="7"/><rect x="-5" y="-4" width="10" height="8" rx="2" fill="#173c49"/></g>
+ <g id="spot"><circle r="10" fill="#fff" stroke="#b34736" stroke-width="3"/><circle r="3" fill="#b34736"/></g>
+</defs>
+<rect width="1000" height="940" rx="12" fill="#fff"/>
+<g font-family="Arial, Helvetica, sans-serif" fill="#173c49">
+ <text x="30" y="38" font-size="24" font-weight="bold">Drone survey: flight plan and conditions</text>
+ <text x="30" y="65" font-size="15" fill="#526b73">Mapping flights and spot photos can be combined in one survey. Not to scale.</text>
+ <rect x="25" y="85" width="950" height="340" rx="8" fill="#f4f8f8" stroke="#cedcde"/>
+ <text x="45" y="115" font-size="19" font-weight="bold">A · Plan view</text>
+ <text x="65" y="146" font-size="17" font-weight="bold">1. Mapping flight</text>
+ <text x="590" y="146" font-size="17" font-weight="bold">2. Spot photos</text>
+ <g stroke="#fff" stroke-width="1">
+  <path d="M60 162 H465 V205 H60 Z M580 162 H945 V205 H580 Z" fill="#bad5a8"/>
+  <path d="M60 205 H465 V250 H60 Z M580 205 H945 V250 H580 Z" fill="#c2e2cb"/>
+  <path d="M60 250 H465 V295 H60 Z M580 250 H945 V295 H580 Z" fill="#a9dce0"/>
+  <path d="M60 295 H465 V340 H60 Z M580 295 H945 V340 H580 Z" fill="#87bccf"/>
+ </g>
+ <g font-size="13" fill="#38595f"><text x="480" y="187">mangrove</text><text x="480" y="232">seagrass</text><text x="480" y="277">reef flat</text><text x="480" y="322">deeper water</text></g>
+ <g fill="#fff" fill-opacity=".35" stroke="#175f72" stroke-opacity=".45">
+  <rect x="80" y="173" width="80" height="75"/><rect x="80" y="213" width="80" height="75"/><rect x="80" y="253" width="80" height="75"/>
+  <rect x="135" y="173" width="80" height="75"/><rect x="135" y="213" width="80" height="75"/><rect x="135" y="253" width="80" height="75"/>
+ </g>
+ <path d="M120 325 V179 Q147 160 175 179 V325 Q202 342 230 325 V179 Q257 160 285 179 V325 Q312 342 340 325 V179 Q367 160 395 179 V325" fill="none" stroke="#175f72" stroke-width="3" marker-end="url(#arrow)"/>
+ <use href="#spot" x="630" y="186"/><use href="#spot" x="825" y="220"/><use href="#spot" x="680" y="270"/><use href="#spot" x="900" y="313"/>
+ <path d="M630 186 L825 220 L680 270 L900 313" fill="none" stroke="#b34736" stroke-width="1.5" stroke-dasharray="5 5"/>
+ <text x="65" y="370" font-size="15">Continuous nadir photos along parallel lines</text><text x="65" y="394" font-size="14" fill="#526b73">Overlapping images → orthomosaic</text>
+ <text x="590" y="370" font-size="15">Hover at chosen points; camera facing down</text><text x="590" y="394" font-size="14" fill="#526b73">Geotagged images → habitat observations</text>
+ <rect x="25" y="440" width="950" height="225" rx="8" fill="#f4f8f8" stroke="#cedcde"/>
+ <text x="45" y="471" font-size="19" font-weight="bold">B · Mapping flight: altitude and overlap</text>
+ <g fill="#62adcb" fill-opacity=".13" stroke="#3b89a7" stroke-width="1.5"><path d="M190 510 L70 620 H310 Z"/><path d="M240 510 L120 620 H360 Z"/><path d="M290 510 L170 620 H410 Z"/></g>
+ <use href="#drone" x="190" y="510"/><use href="#drone" x="240" y="510"/><use href="#drone" x="290" y="510"/>
+ <path d="M55 622 H455" stroke="#175f72" stroke-width="2"/>
+ <path d="M440 510 V618" stroke="#175f72" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+ <text x="462" y="557" font-size="16">60–100 m</text><text x="462" y="579" font-size="14">above take-off</text>
+ <text x="610" y="522" font-size="17" font-weight="bold">Over water: ≥80% / ≥80%</text><text x="610" y="548" font-size="15">Overlap along and across the flight track</text>
+ <text x="610" y="586" font-size="15">Camera pointing straight down (nadir)</text><text x="610" y="612" font-size="15">Keep settings consistent during the flight</text>
+ <text x="65" y="647" font-size="13" fill="#526b73">Photo footprints are schematic; flight spacing is set by the mission app.</text>
+ <rect x="25" y="680" width="950" height="230" rx="8" fill="#f4f8f8" stroke="#cedcde"/>
+ <text x="45" y="712" font-size="19" font-weight="bold">C · Sun angle and field conditions</text>
+ <circle cx="82" cy="758" r="14" fill="#e4b85e"/><path d="M100 766 L213 823 L325 766" fill="none" stroke="#c78317" stroke-width="2.5" marker-end="url(#sun-arrow)"/>
+ <use href="#drone" x="213" y="747"/><path d="M213 769 V812" stroke="#175f72" stroke-dasharray="4 4"/>
+ <path d="M60 825 H450" stroke="#175f72" stroke-width="2"/><text x="65" y="852" font-size="15">Low sun: reflection away from the camera</text>
+ <circle cx="683" cy="746" r="14" fill="#e4b85e"/><path d="M688 765 L706 823 L728 765" fill="none" stroke="#c78317" stroke-width="2.5" marker-end="url(#sun-arrow)"/>
+ <use href="#drone" x="735" y="747"/><path d="M565 825 H945" stroke="#175f72" stroke-width="2"/><text x="580" y="852" font-size="15">High sun: glare can enter the images</text>
+ <text x="65" y="887" font-size="15" font-weight="bold">Prefer low tide, calm water and even light; avoid scattered cloud shadows.</text>
+</g>
+</svg>

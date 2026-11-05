@@ -45,7 +45,7 @@ Only the orthomosaic is produced from the mapping flight; no elevation model is 
 | Parameter | Guidance |
 | --- | --- |
 | Points | Chosen before the flight on the satellite image: each habitat type of the corridor, the boundaries between habitats, and areas where the habitat is uncertain |
-| Altitude | Low enough to see the bottom in detail, and the same for all points of a survey (e.g. 20–30 m); note it in the field form |
+| Altitude | Low enough to see the bottom in detail, and the same for all points of a survey (e.g. 20–30 m); record it in the field notes and the portal flight table |
 | Camera | Pointing straight down (nadir); one or two photos per point, with GPS position saved in the photo (check that geotagging is on) |
 | Flight | Fly to each point, hover until the drone is stable, take the photo; note the point number and photo number |
 
@@ -62,9 +62,11 @@ Only the orthomosaic is produced from the mapping flight; no elevation model is 
 
 ## Field form and post-site report
 
-One form per survey (one corridor, one day), with the survey ID (e.g. `BZ150327C1drone`), conditions, one row per flight (type, start and end time, altitude, overlap, number of photos), the list of spot photos and the post-site report: {download}`Drone field form, v1.1 (PDF) <_static/forms/drone_field_form_v1.1.pdf>`.
+Submit one record per survey (one corridor, one day) through the [SEASTRONG Field Data Portal](https://alerovere.github.io/seastrong-field-tools/), choosing **Drone survey**. Record the conditions, one row per flight, spot-photo observations and the post-site report. See the [portal guide](field_portal.md) for access and submission steps.
 
-Fill it in with **Adobe Acrobat Reader** (free, [download it here](https://get.adobe.com/reader/)), so that the survey ID is filled in automatically and the form is saved correctly. Name the photo folders with the survey ID (see [Field resources](field_resources.md#naming-rules)).
+Record flight times and observations in the field. Once back online, enter the data and attach the survey photos and field-sheet photos. Use the flight table notes to distinguish mapping flights from spot-photo flights. Review the record and explain anything not collected before submitting.
+
+The portal generates the survey ID (e.g. `BZ150327C1drone`). Keep the survey photo folders organised by that ID; see the [naming rules](field_resources.md#naming-rules).
 
 ---
 

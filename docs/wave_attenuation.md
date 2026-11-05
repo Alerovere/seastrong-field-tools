@@ -83,15 +83,15 @@ Each corridor should get **2–3 deployments** during the field trip, so that di
 
 ## Field form and post-site report
 
-One form per **corridor and deployment** (all 7 sensors), with survey ID made of area + deployment date + corridor + `waves` (e.g. `BZ140327C1waves`, see [Field resources](field_resources.md#naming-rules)): {download}`Wave sensor field form, v1.0 (PDF) <_static/forms/wave_sensor_field_form_v1.0.pdf>`.
+Submit one record per **corridor and deployment** (all 7 sensors) through the [SEASTRONG Field Data Portal](https://alerovere.github.io/seastrong-field-tools/), choosing **Wave sensors**. The survey ID uses the deployment date and `waves`, e.g. `BZ140327C1waves`; see the [naming rules](field_resources.md#naming-rules).
 
-- **Page 1, deployment:** for each sensor, the serial number, start time (UTC), depth at the sensor and the time it was measured, height of the pressure port above the bottom, fixing method, photo number of the mounted sensor, and water temperature (and salinity where possible).
-- **Page 2, retrieval:** for each sensor, the retrieval date and end time, depth and time, data file name, and whether the sensor was found in place.
-- **Page 3, post-site report:** data downloaded, barometric record, data link, quality checks and notes.
+- **Deployment:** for each sensor, record the serial number, start time (UTC), depth and its observation time, pressure-port height above the bottom, fixing method, deployment photo, and water temperature and salinity where possible.
+- **Retrieval:** record the retrieval date, end time (UTC), depth and its observation time, data filename, and whether the sensor was found in place.
+- **Post-site report:** record the download status, barometric record, quality checks, missing files and notes. Attach the sensor and barometric data, deployment and retrieval photos, and field-sheet photos.
 
-Data files are named with the survey ID, the habitat and the position (`S1`, `S2` or `PC` for post-crest), e.g. `BZ140327C1waves_reef_S1`.
+Choose the appropriate **Record stage**. For a deployment that has already been submitted, open **My records → Edit** when retrieval data become available. Keep the original deployment date and survey ID; the portal saves the update as a new version while retaining the earlier record and originals. See the [portal guide](field_portal.md).
 
-Fill it in with **Adobe Acrobat Reader** (free, [download it here](https://get.adobe.com/reader/)), so that the survey ID is filled in automatically and the form is saved correctly.
+Data files are named with the survey ID, habitat and position (`S1`, `S2` or `PC` for post-crest), e.g. `BZ140327C1waves_reef_S1`.
 
 ---
 

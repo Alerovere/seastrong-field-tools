@@ -119,12 +119,11 @@ Shoot density from photos can differ from density counted by hand. Use the same 
 
 ## Field form and post-site report
 
-The header, the depth and cover sheet, the sheets for the 9 quadrats and the post-site report are in one form: {download}`Seagrass field form, v1.0 (PDF) <_static/forms/seagrass_field_form_v1.0.pdf>`.
+Submit the header, depth and cover observations, quadrat measurements and post-site report through the [SEASTRONG Field Data Portal](https://alerovere.github.io/seastrong-field-tools/), choosing **Seagrass**. See the [portal guide](field_portal.md) for access and submission steps.
 
-- **In the water:** print pages 1–5 on waterproof paper, or copy them onto the slate. Each quadrat has its own block (front, centre and back, each with left, centre and right).
-- **After the survey:** type the data and the post-site report (page 6) into the same PDF, the same day.
-- **Fill it in with Adobe Acrobat Reader** (free, [download it here](https://get.adobe.com/reader/)). In Acrobat Reader the **Transect ID** is filled in automatically from study area, date and corridor, and appears on every page, and the form fields are saved correctly. Other viewers (Mac Preview, browsers, phone apps) may not fill in the Transect ID or may not save the fields.
-- Save the filled form with the data, named `<transectID>_field_form.pdf`, and put the data download link in section B of the report.
+- **In the water:** record the depth profile, cover and the 9 quadrats on a slate or waterproof field sheet: front, centre and back, each with left, centre and right. Keep each quadrat and its shoot measurements identifiable, and photograph the slate.
+- **Back online:** enter the observations in the depth and cover, quadrat and shoot tables. Attach the depth and cover photos, quadrat photos and slate photos.
+- Explain missing or pending files, then review and submit. The portal stores the survey record, measurement tables, generated report and originals together.
 
 ---
 

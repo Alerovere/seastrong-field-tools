@@ -4,7 +4,7 @@ SEASTRONG Field Processing Tools
 .. only:: html
 
    **Offline copy:** `Download the whole documentation as PDF <https://seastrong-field-tools.readthedocs.io/_/downloads/en/latest/pdf/>`_.
-   The field forms are separate PDFs, see :doc:`field_resources`.
+   Submit survey records and files through the `SEASTRONG Field Data Portal <https://alerovere.github.io/seastrong-field-tools/>`_; see :doc:`field_portal`.
 
 .. toctree::
    :maxdepth: 2
@@ -45,4 +45,5 @@ SEASTRONG Field Processing Tools
    :maxdepth: 2
    :caption: Field resources
 
+   field_portal
    field_resources
