@@ -43,6 +43,17 @@ DEFAULTS = {
         TP_BINS=[0, 4, 6, 8, 10, 12, 14, 16, 18, 22, 30],
         WIND_BINS=[0, 2, 4, 6, 8, 10, 12, 15, 20, 40],
     ),
+    'seastate': dict(
+        OVERPASS_UTC=16.33,           # Sentinel-2 overpass time at the site (h UTC; Belize ~16:20, Seychelles ~06:40, Fiji ~22:30)
+        YEARS=[2017, 2026],           # years of the composite (Sentinel-2 since 2017)
+        MONTHS=[2, 4],                # months of the composite (first, last; [11, 4] wraps the year)
+        WAVE_SOURCE='max',            # Hs for the check: 'cmems', 'era5' or 'max' (the larger, cautious)
+        WAVE_WINDOW_H=6,              # max Hs over these hours before the overpass ...
+        WAVE_MAX_HS=1.5,              # ... above this (m) -> date listed
+        WIND_WINDOW_H=3,              # mean ERA5 wind over these hours before the overpass ...
+        WIND_MAX_MS=6.0,              # ... above this (m/s) -> date listed
+        MISSING='list',               # a day without model data: 'list' it (cautious) or 'skip' it
+    ),
     'cases': dict(
         LEVELS={'typical': 50, 'energetic': 90, 'storm': 99},   # Hs percentile of each case, per season
         BAND=0.10,                    # records with Hs within +-10 % of the case Hs give its Tp, direction, wind

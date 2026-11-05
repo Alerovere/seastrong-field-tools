@@ -1,5 +1,11 @@
 # SDB toolkit: satellite-derived bathymetry inputs
 
+```{note}
+The recommended route is now the [Satellite-derived bathymetry workflow](sdb_workflow.md): one Earth Engine
+script plus the lighter Colab tools ([Wave climate](wave_climate.md), [ICESat-2 tool](icesat2_tool.md)). This
+all-in-one Colab toolkit is paused: it uses much more Earth Engine computing time.
+```
+
 ## Overview
 
 The **SDB toolkit** (`SDB_toolkit/`, Python package `seastrong_toolkit`) prepares everything needed for

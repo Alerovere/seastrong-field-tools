@@ -18,6 +18,7 @@ The tools hosted here support field data collection and processing workflows, in
 | [photo_geotagging](./photo_geotagging/) | Geotag time-lapse photos using a GPX track | WP1 |
 | [underwater_photogrammetry](./underwater_photogrammetry/) | Two-camera GoPro rig for SfM photogrammetry surveys | WP1, WP2, WP5 |
 | [Wave_climate](./Wave_climate/) | Wave, wind, tide and storm-surge climate at an offshore point, per month and season, with representative XBeach boundary conditions (Colab + ERA5 + Copernicus Marine + GTSM) | WP4 |
+| [Earth_Engine](./Earth_Engine/) | Earth Engine script for satellite-derived bathymetry inputs: Sentinel-2 composite for Bathymetrix-AI, DEMs, habitats, land / mangrove polygons (see the SDB workflow docs page) | WP1 |
 | [ICESat2_tool](./ICESat2_tool/) | ICESat-2 ATL24 bathymetry with per-rule quality flags and locked training / validation tracks for Bathymetrix-AI; ATL08 ground and canopy heights (Colab + SlideRule) | WP1 |
 | [SDB_toolkit](./SDB_toolkit/) | Inputs for satellite-derived bathymetry (Bathymetrix-AI): Sentinel-2 composites, wave/wind/rain pre-screening of composite months, ICESat-2 training/validation depths, DEMs and habitat layers (Colab + Earth Engine + Copernicus) | WP1 |
 

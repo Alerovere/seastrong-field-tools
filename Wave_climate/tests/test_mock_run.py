@@ -51,6 +51,16 @@ def test_pure_tide_option():
     except ValueError as e:
         assert '2014' in str(e)
 
+def test_seastate_list():
+    ctx = wc.setup(SITE)
+    wc.download.run(ctx, dict(START='2015-01-01'))
+    wc.seastate.run(ctx, dict(YEARS=[2020, 2025], MONTHS=[11, 4], WAVE_MAX_HS=1.4))
+    d = ctx.data['seastate']
+    assert set(pd.to_datetime(d.date).dt.month) == {11, 12, 1, 2, 3, 4}
+    assert 0 < d.listed.sum() < len(d) and (d.loc[d.listed & (d.reason == 'waves'), 'hs_m'] > 1.4).all()
+    line = open(os.path.join(ctx.root, 'tables', 'Test_site_S2_SEA_STATE_EXCLUDE.js.txt')).read().splitlines()[1]
+    assert line.startswith('var SEA_STATE_EXCLUDE = [') and line.endswith('];') and line.count("'") == 2 * d.listed.sum()
+
 def test_misspelt_option():
     ctx = wc.setup(SITE)
     try:
@@ -59,5 +69,5 @@ def test_misspelt_option():
         assert 'SEASONS' in str(e)
 
 if __name__ == '__main__':
-    test_pipeline(); test_rerun_uses_cache(); test_pure_tide_option(); test_misspelt_option()
+    test_pipeline(); test_rerun_uses_cache(); test_pure_tide_option(); test_seastate_list(); test_misspelt_option()
     print('ALL MOCK TESTS PASSED')

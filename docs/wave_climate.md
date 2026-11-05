@@ -51,6 +51,10 @@ log-in details as **Colab Secrets** (key icon in Colab's left sidebar; switch on
    are taken from records with a similar Hs, so they occur together; water level = representative spring (or mean,
    neap) tidal day + surge at the same percentile.
 
+6. **Sentinel-2 sea-state dates**: the days of your composite months when, at the Sentinel-2 overpass, offshore
+   waves or wind were above your limits, printed as `var SEA_STATE_EXCLUDE = [...]` to paste into the Earth Engine
+   script (see [Satellite-derived bathymetry workflow](sdb_workflow.md)).
+
 ## Outputs
 
 | File (`outputs/<NAME>/`) | Content |

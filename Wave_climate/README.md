@@ -23,6 +23,7 @@ Outside Colab, environment variables with the same names.
 | `wc.download.run` | full records at the point; cached | Copernicus Marine waves (Hs, Tp, Tm-1,0, Tm02, direction, wind-sea and swell); ERA5 waves and 10 m wind (CDS point time series) |
 | `wc.climate.run` | statistics per month and season, Hs × direction, wind × direction, Hs × Tp, roses, ERA5 vs Copernicus Marine | — |
 | `wc.tides.run` | harmonic analysis, tidal levels (HAT … LAT), spring / neap ranges, tide type; daily-maximum surge per season | GTSM v3 reanalysis (Deltares), CDS `sis-water-level-change-timeseries-cmip6` |
+| `wc.seastate.run` | days of the composite months with rough seas or strong wind at the Sentinel-2 overpass, as a line to paste into the Earth Engine script (`SEA_STATE_EXCLUDE`) | — |
 | `wc.cases.run` | typical / energetic / storm case per season; XBeach `jonswap.txt`, `wind.txt`, `tide.txt`, params lines; Excel workbook | — |
 
 ```python
