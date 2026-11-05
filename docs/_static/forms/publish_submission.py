@@ -64,7 +64,8 @@ def main():
             except (OSError, ValueError):
                 raise SystemExit("gh-pages contiene gia un sito non riconosciuto. Pubblicazione interrotta per conservarlo.")
         else:
-            git(stage, "init", "-b", "gh-pages")
+            git(stage, "init")
+            git(stage, "symbolic-ref", "HEAD", "refs/heads/gh-pages")
             git(stage, "remote", "add", "origin", origin)
         git(stage, "config", "user.name", name)
         git(stage, "config", "user.email", email)
