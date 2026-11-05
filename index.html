@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="SEASTRONG field survey submission portal">
+  <title>Submit a survey · SEASTRONG</title>
+  <link rel="stylesheet" href="./submission.css">
+  <script src="./pdf-lib.min.js" defer></script>
+  <script type="module" src="./submission.js"></script>
+</head>
+<body>
+<section id="seastrong-login" aria-label="SEASTRONG sign in">
+  <header class="ss-header"><div class="ss-brand"><span class="ss-mark" aria-hidden="true">≋</span>SEASTRONG<span class="ss-product">Field data portal</span></div></header>
+  <div class="ss-login-card"><div class="ss-eyebrow">FIELD DATA · SHARED WITH YOUR TEAM</div><h1>Sign in to SEASTRONG</h1><p class="ss-lead">Connect your Google account to submit a survey or review your records.</p><button type="button" id="seastrong-login-button" class="ss-btn ss-primary">Sign in with Google</button><p id="seastrong-login-feedback" role="status" aria-live="polite"></p><p class="ss-muted">Access requires permission to add files to the SEASTRONG submission folder. Ask your project coordinator if you need access.</p></div>
+</section>
+<main id="seastrong-submission" aria-label="SEASTRONG field data portal" hidden>
+  <header class="ss-header"><div class="ss-brand"><span class="ss-mark" aria-hidden="true">≋</span>SEASTRONG<span class="ss-product">Field data portal</span></div><div class="ss-header-actions"><button type="button" class="ss-btn" data-action="connect">Reconnect Google Drive</button><button type="button" class="ss-btn" data-action="lock">Lock portal</button></div></header>
+  <div class="ss-wrap">
+    <div class="ss-heading"><div><div class="ss-eyebrow">FROM FIELD TO SHARED DRIVE</div><h1>Submit a field survey</h1><p class="ss-lead">The measurements, the context and the files. Together.</p></div><button type="button" class="ss-btn" data-action="save">Save draft</button></div>
+    <div class="ss-connection" aria-live="polite"></div>
+    <nav class="ss-view-tabs" aria-label="Portal sections"><button type="button" class="ss-btn" data-view="form" aria-pressed="true">Submission form</button><button type="button" class="ss-btn" data-view="records" aria-pressed="false">My records</button></nav>
+    <section class="ss-records-view" aria-label="My records" hidden></section>
+    <nav class="ss-steps" aria-label="Submission steps"></nav>
+    <div class="ss-layout"><div class="ss-main"><div class="ss-panels"></div><div class="ss-footer"><div class="ss-status" role="status" aria-live="polite"></div><div class="ss-actions"><button type="button" class="ss-btn" data-action="back">Back</button><button type="button" class="ss-btn ss-primary" data-action="next">Continue →</button></div></div></div>
+    <aside class="ss-side" aria-label="Submission destination"><div class="ss-panel"><div class="ss-side-title"><h3>One survey. One folder.</h3></div><div class="ss-muted" style="margin-bottom:14px">Institutional Shared Drive</div><div class="ss-tree"></div><hr class="ss-line"><h3 style="margin-bottom:12px">Saved together</h3><div class="ss-list"><div>Survey details · JSON</div><div>Measurement tables · CSV</div><div>Survey report · PDF</div><div>Original survey files</div></div></div><div class="ss-panel ss-draft-tools"><h3>Your draft</h3><p class="ss-muted">Saved on this browser. Export a copy to move it to another computer.</p><button type="button" class="ss-small-btn" data-action="export">Download draft</button><label class="ss-small-btn ss-file-button">Import a draft<input type="file" accept="application/json,.json" data-import-draft></label><button type="button" class="ss-small-btn" data-action="new">Start another survey</button><a class="ss-small-btn" href="./SUBMISSION_SETUP.md">Setup guide</a></div><div class="ss-tip">File contents and Google access tokens are never stored in the draft. After reopening a draft, select the original files again to resume.</div></aside>
+    </div>
+  </div>
+</main>
+<noscript>This form needs JavaScript. The printable PDF field sheets are still available in this folder.</noscript>
+</body>
+</html>

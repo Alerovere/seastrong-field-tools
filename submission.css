@@ -1,0 +1,145 @@
+
+    :is(#seastrong-submission,#seastrong-login){--ss-bg:light-dark(#f4f7f7,#101b20);--ss-panel:light-dark(#ffffff,#17262c);--ss-ink:light-dark(#17363c,#e3eeed);--ss-sub:light-dark(#5a7174,#a5bcbe);--ss-line:light-dark(#dce6e5,#34494e);--ss-sea:light-dark(#106d68,#82d7c6);--ss-sea-on:light-dark(#ffffff,#102c29);--ss-wash:light-dark(#eaf5f1,#203c39);--ss-warn:light-dark(#76581c,#e5c981);--ss-warn-bg:light-dark(#fbf5e8,#352f20);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;line-height:1.5;color:var(--ss-ink);background:var(--ss-bg);border:1px solid var(--ss-line);border-radius:16px;overflow:hidden;color-scheme:light dark}
+    :is(#seastrong-submission,#seastrong-login) *{box-sizing:border-box}
+    :is(#seastrong-submission,#seastrong-login) [hidden]{display:none!important}
+    :is(#seastrong-submission,#seastrong-login) h1,:is(#seastrong-submission,#seastrong-login) h2,:is(#seastrong-submission,#seastrong-login) h3,:is(#seastrong-submission,#seastrong-login) p{margin:0}
+    :is(#seastrong-submission,#seastrong-login) h1{font-size:28px;line-height:1.2;font-weight:500;letter-spacing:-.8px}
+    :is(#seastrong-submission,#seastrong-login) h2{font-size:19px;line-height:1.3;font-weight:500;letter-spacing:-.3px}
+    :is(#seastrong-submission,#seastrong-login) h3{font-size:14px;font-weight:500}
+    :is(#seastrong-submission,#seastrong-login) button,:is(#seastrong-submission,#seastrong-login) input,:is(#seastrong-submission,#seastrong-login) select,:is(#seastrong-submission,#seastrong-login) textarea{font:inherit}
+    :is(#seastrong-submission,#seastrong-login) button{color:var(--ss-ink)}
+    :is(#seastrong-submission,#seastrong-login) button:focus-visible,:is(#seastrong-submission,#seastrong-login) input:focus-visible,:is(#seastrong-submission,#seastrong-login) select:focus-visible,:is(#seastrong-submission,#seastrong-login) textarea:focus-visible{outline:3px solid var(--ss-sea);outline-offset:3px}
+    :is(#seastrong-submission,#seastrong-login) .ss-header{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:20px 28px;background:var(--ss-panel);border-bottom:1px solid var(--ss-line)}
+    :is(#seastrong-submission,#seastrong-login) .ss-brand{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:500;letter-spacing:1.5px}
+    :is(#seastrong-submission,#seastrong-login) .ss-mark{background:var(--ss-sea);color:var(--ss-sea-on);border-radius:9px;width:35px;height:35px;display:grid;place-items:center}
+    :is(#seastrong-submission,#seastrong-login) .ss-product{padding-left:16px;border-left:1px solid var(--ss-line);font-size:12px;font-weight:400;letter-spacing:0;color:var(--ss-sub)}
+    :is(#seastrong-submission,#seastrong-login) .ss-demo{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ss-warn);background:var(--ss-warn-bg);padding:5px 11px;border-radius:20px;white-space:nowrap}
+    :is(#seastrong-submission,#seastrong-login) .ss-wrap{padding:28px}
+    :is(#seastrong-submission,#seastrong-login) .ss-heading{display:flex;gap:16px;justify-content:space-between;align-items:center;margin-bottom:23px}
+    :is(#seastrong-submission,#seastrong-login) .ss-eyebrow{font-size:11px;letter-spacing:1.6px;color:var(--ss-sea);font-weight:500;margin-bottom:7px}
+    :is(#seastrong-submission,#seastrong-login) .ss-lead{color:var(--ss-sub);margin-top:8px}
+    :is(#seastrong-submission,#seastrong-login) .ss-btn{display:inline-flex;gap:8px;align-items:center;justify-content:center;background:var(--ss-panel);border:1px solid var(--ss-line);padding:10px 15px;border-radius:8px;font-weight:500;text-decoration:none;min-height:42px}
+    :is(#seastrong-submission,#seastrong-login) .ss-btn:hover{background:var(--ss-wash)}
+    :is(#seastrong-submission,#seastrong-login) .ss-btn.ss-primary{background:var(--ss-sea);border-color:var(--ss-sea);color:var(--ss-sea-on)}
+    :is(#seastrong-submission,#seastrong-login) .ss-btn:disabled{opacity:.5}
+    :is(#seastrong-submission,#seastrong-login) .ss-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:24px;gap:8px}
+    :is(#seastrong-submission,#seastrong-login) .ss-step{background:transparent;border:0;border-bottom:2px solid var(--ss-line);padding:10px 0 14px;display:flex;align-items:center;gap:9px;text-align:left;color:var(--ss-sub)}
+    :is(#seastrong-submission,#seastrong-login) .ss-step[aria-current="step"]{border-color:var(--ss-sea);color:var(--ss-sea)}
+    :is(#seastrong-submission,#seastrong-login) .ss-step-num{width:25px;height:25px;display:grid;place-items:center;border-radius:50%;background:var(--ss-panel);border:1px solid var(--ss-line);font-size:12px;flex-shrink:0}
+    :is(#seastrong-submission,#seastrong-login) .ss-step[aria-current="step"] .ss-step-num{background:var(--ss-sea);border-color:var(--ss-sea);color:var(--ss-sea-on)}
+    :is(#seastrong-submission,#seastrong-login) .ss-layout{display:grid;grid-template-columns:minmax(0,1fr) 252px;gap:20px;align-items:start}
+    :is(#seastrong-submission,#seastrong-login) .ss-main{min-width:0;display:grid;gap:18px}
+    :is(#seastrong-submission,#seastrong-login) .ss-panel{background:var(--ss-panel);border:1px solid var(--ss-line);border-radius:12px;padding:24px;min-width:0}
+    :is(#seastrong-submission,#seastrong-login) .ss-panel-head{margin-bottom:20px}
+    :is(#seastrong-submission,#seastrong-login) .ss-muted{color:var(--ss-sub);font-size:12px}
+    :is(#seastrong-submission,#seastrong-login) .ss-panel-head p{margin-top:5px;color:var(--ss-sub);font-size:13px}
+    :is(#seastrong-submission,#seastrong-login) .ss-types{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:9px 0 23px}
+    :is(#seastrong-submission,#seastrong-login) .ss-type{border:1px solid var(--ss-line);background:var(--ss-panel);border-radius:9px;padding:13px 10px;text-align:left;display:flex;gap:8px;flex-direction:column;font-size:12px;min-height:84px;justify-content:space-between}
+    :is(#seastrong-submission,#seastrong-login) .ss-type[aria-pressed="true"]{background:var(--ss-wash);border-color:var(--ss-sea);box-shadow:inset 0 0 0 1px var(--ss-sea);color:var(--ss-sea)}
+    :is(#seastrong-submission,#seastrong-login) .ss-type svg{width:19px;height:19px}
+    :is(#seastrong-submission,#seastrong-login) .ss-fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    :is(#seastrong-submission,#seastrong-login) .ss-field{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:12px;font-weight:500}
+    :is(#seastrong-submission,#seastrong-login) .ss-field.ss-full{grid-column:1/-1}
+    :is(#seastrong-submission,#seastrong-login) .ss-field input,:is(#seastrong-submission,#seastrong-login) .ss-field select,:is(#seastrong-submission,#seastrong-login) .ss-field textarea{width:100%;min-width:0;padding:10px 11px;background:var(--ss-panel);color:var(--ss-ink);border:1px solid var(--ss-line);border-radius:7px;font-size:14px;font-weight:400;min-height:42px}
+    :is(#seastrong-submission,#seastrong-login) .ss-field textarea{resize:vertical;min-height:80px}
+    :is(#seastrong-submission,#seastrong-login) .ss-id-box{display:flex;align-items:center;gap:12px;justify-content:space-between;background:var(--ss-wash);border-radius:8px;padding:12px 14px;margin-top:20px;font-size:12px;flex-wrap:wrap}
+    :is(#seastrong-submission,#seastrong-login) .ss-code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;overflow-wrap:anywhere}
+    :is(#seastrong-submission,#seastrong-login) .ss-id-box .ss-code{font-size:14px;color:var(--ss-sea)}
+    :is(#seastrong-submission,#seastrong-login) .ss-side{display:grid;gap:14px}
+    :is(#seastrong-submission,#seastrong-login) .ss-side .ss-panel{padding:20px}
+    :is(#seastrong-submission,#seastrong-login) .ss-side-title{display:flex;align-items:center;gap:8px;margin-bottom:15px}
+    :is(#seastrong-submission,#seastrong-login) .ss-side-title i,:is(#seastrong-submission,#seastrong-login) .ss-side-title svg{color:var(--ss-sea)}
+    :is(#seastrong-submission,#seastrong-login) .ss-tree{font-size:12px;color:var(--ss-sub);display:grid;gap:12px}
+    :is(#seastrong-submission,#seastrong-login) .ss-tree div{display:flex;align-items:center;gap:8px;min-width:0}
+    :is(#seastrong-submission,#seastrong-login) .ss-tree div:nth-child(2){padding-left:12px}
+    :is(#seastrong-submission,#seastrong-login) .ss-tree div:nth-child(3){padding-left:24px}
+    :is(#seastrong-submission,#seastrong-login) .ss-tree div:nth-child(4){padding-left:24px;color:var(--ss-sea)}
+    :is(#seastrong-submission,#seastrong-login) .ss-line{border:0;border-top:1px solid var(--ss-line);margin:18px 0}
+    :is(#seastrong-submission,#seastrong-login) .ss-list{display:grid;gap:10px;font-size:12px;color:var(--ss-sub)}
+    :is(#seastrong-submission,#seastrong-login) .ss-list>div{display:flex;align-items:center;gap:8px}
+    :is(#seastrong-submission,#seastrong-login) .ss-tip{display:flex;gap:9px;padding:0 3px;color:var(--ss-sub);font-size:12px}
+    :is(#seastrong-submission,#seastrong-login) .ss-tip svg{flex-shrink:0;margin-top:2px}
+    :is(#seastrong-submission,#seastrong-login) .ss-footer{display:flex;gap:12px;align-items:center;justify-content:space-between;padding-top:4px;flex-wrap:wrap}
+    :is(#seastrong-submission,#seastrong-login) .ss-actions{display:flex;gap:9px;margin-left:auto;flex-wrap:wrap}
+    :is(#seastrong-submission,#seastrong-login) .ss-status{font-size:12px;color:var(--ss-sub);min-height:18px}
+    :is(#seastrong-submission,#seastrong-login) .ss-tablewrap{overflow-x:auto;margin:18px 0 14px}
+    :is(#seastrong-submission,#seastrong-login) table{border-collapse:collapse;width:100%;font-size:12px;text-align:left}
+    :is(#seastrong-submission,#seastrong-login) th{font-weight:500;color:var(--ss-sub);background:var(--ss-bg);padding:9px;white-space:nowrap}
+    :is(#seastrong-submission,#seastrong-login) td{padding:7px 5px;border-bottom:1px solid var(--ss-line)}
+    :is(#seastrong-submission,#seastrong-login) td input{width:100%;min-width:61px;border:1px solid var(--ss-line);border-radius:5px;padding:7px;background:var(--ss-panel);color:var(--ss-ink);font-size:12px}
+    :is(#seastrong-submission,#seastrong-login) .ss-table-actions{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:22px;flex-wrap:wrap}
+    :is(#seastrong-submission,#seastrong-login) .ss-small-btn{background:transparent;border:0;color:var(--ss-sea);font-size:12px;padding:6px 0;display:inline-flex;align-items:center;gap:6px;min-height:32px}
+    :is(#seastrong-submission,#seastrong-login) .ss-check{display:flex;align-items:flex-start;gap:9px;font-size:13px;margin:12px 0;color:var(--ss-ink)}
+    :is(#seastrong-submission,#seastrong-login) .ss-check input{accent-color:var(--ss-sea);margin-top:4px;flex-shrink:0}
+    :is(#seastrong-submission,#seastrong-login) .ss-drop{border:1px dashed var(--ss-sea);border-radius:10px;background:var(--ss-wash);padding:24px 16px;text-align:center;display:grid;justify-items:center;gap:9px;margin-top:18px}
+    :is(#seastrong-submission,#seastrong-login) .ss-drop>svg{color:var(--ss-sea);width:26px;height:26px}
+    :is(#seastrong-submission,#seastrong-login) .ss-drop strong{font-weight:500}
+    :is(#seastrong-submission,#seastrong-login) .ss-file-row{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--ss-line);font-size:12px}
+    :is(#seastrong-submission,#seastrong-login) .ss-file-info{flex:1;min-width:0}
+    :is(#seastrong-submission,#seastrong-login) .ss-file-info>div{overflow-wrap:anywhere}
+    :is(#seastrong-submission,#seastrong-login) .ss-tag{border-radius:20px;background:var(--ss-wash);color:var(--ss-sea);padding:3px 8px;font-size:11px;white-space:nowrap}
+    :is(#seastrong-submission,#seastrong-login) .ss-icon-btn{border:0;background:transparent;padding:7px;display:grid;place-items:center;color:var(--ss-sub)}
+    :is(#seastrong-submission,#seastrong-login) .ss-review-row{display:flex;justify-content:space-between;gap:15px;padding:11px 0;border-bottom:1px solid var(--ss-line);font-size:13px;flex-wrap:wrap}
+    :is(#seastrong-submission,#seastrong-login) .ss-review-row>span:first-child{color:var(--ss-sub)}
+    :is(#seastrong-submission,#seastrong-login) .ss-notice{background:var(--ss-warn-bg);color:var(--ss-warn);padding:12px 14px;border-radius:8px;font-size:12px;margin:17px 0}
+    :is(#seastrong-submission,#seastrong-login) .ss-progress{height:6px;background:var(--ss-line);border-radius:6px;overflow:hidden;margin:16px 0 9px}
+    :is(#seastrong-submission,#seastrong-login) .ss-progress-fill{height:100%;background:var(--ss-sea);width:0;transition:width .18s}
+    :is(#seastrong-submission,#seastrong-login) .ss-success{padding:25px 0;text-align:center;display:grid;justify-items:center;gap:12px}
+    :is(#seastrong-submission,#seastrong-login) .ss-success-mark{display:grid;place-items:center;border-radius:50%;width:58px;height:58px;background:var(--ss-wash);color:var(--ss-sea)}
+    :is(#seastrong-submission,#seastrong-login) .ss-hidden-file{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+    :is(#seastrong-submission,#seastrong-login) svg{width:16px;height:16px;flex-shrink:0}
+    @media(max-width:800px){:is(#seastrong-submission,#seastrong-login) .ss-layout{grid-template-columns:minmax(0,1fr) 215px}:is(#seastrong-submission,#seastrong-login) .ss-wrap{padding:20px}:is(#seastrong-submission,#seastrong-login) .ss-panel{padding:18px}:is(#seastrong-submission,#seastrong-login) .ss-product{display:none}}
+    @media(max-width:620px){:is(#seastrong-submission,#seastrong-login) .ss-layout{grid-template-columns:1fr}:is(#seastrong-submission,#seastrong-login) .ss-heading{align-items:flex-start}:is(#seastrong-submission,#seastrong-login) .ss-side{grid-template-columns:1fr}:is(#seastrong-submission,#seastrong-login) .ss-header{padding:16px}:is(#seastrong-submission,#seastrong-login) .ss-wrap{padding:16px}:is(#seastrong-submission,#seastrong-login) .ss-steps{gap:6px;grid-template-columns:repeat(2,minmax(0,1fr))}:is(#seastrong-submission,#seastrong-login) .ss-step{flex-direction:row;align-items:center;font-size:12px;gap:7px}:is(#seastrong-submission,#seastrong-login) .ss-type{min-height:80px}:is(#seastrong-submission,#seastrong-login) .ss-types{grid-template-columns:repeat(2,minmax(0,1fr))}:is(#seastrong-submission,#seastrong-login) h1{font-size:24px}:is(#seastrong-submission,#seastrong-login) .ss-fields{grid-template-columns:1fr}:is(#seastrong-submission,#seastrong-login) .ss-heading>.ss-btn{padding:8px;font-size:12px}:is(#seastrong-submission,#seastrong-login) .ss-heading>.ss-btn svg{display:none}:is(#seastrong-submission,#seastrong-login) .ss-demo{font-size:11px;padding:5px 8px}:is(#seastrong-submission,#seastrong-login) .ss-brand{font-size:13px;letter-spacing:1px}:is(#seastrong-submission,#seastrong-login) .ss-btn{min-height:44px}:is(#seastrong-submission,#seastrong-login) .ss-step{min-height:44px}:is(#seastrong-submission,#seastrong-login) .ss-field input,:is(#seastrong-submission,#seastrong-login) .ss-field select,:is(#seastrong-submission,#seastrong-login) .ss-field textarea,:is(#seastrong-submission,#seastrong-login) td input{font-size:16px}}
+  
+/* Standalone website styles. */
+html{color-scheme:light dark;background:light-dark(#f4f7f7,#101b20)}
+body{margin:0;padding:24px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+:is(#seastrong-submission,#seastrong-login){max-width:1180px;margin:0 auto}
+:is(#seastrong-submission,#seastrong-login) a{color:var(--ss-sea);overflow-wrap:anywhere}
+:is(#seastrong-submission,#seastrong-login) button,:is(#seastrong-submission,#seastrong-login) summary,:is(#seastrong-submission,#seastrong-login) .ss-file-button{cursor:pointer}
+:is(#seastrong-submission,#seastrong-login) button:disabled{cursor:default;opacity:.55}
+:is(#seastrong-submission,#seastrong-login) .ss-file-button{position:relative;overflow:hidden}
+:is(#seastrong-submission,#seastrong-login) .ss-file-button input{position:absolute;width:1px;height:1px;opacity:0}
+:is(#seastrong-submission,#seastrong-login) .ss-file-button:focus-within{outline:3px solid var(--ss-sea);outline-offset:3px}
+:is(#seastrong-submission,#seastrong-login) .ss-connection{font-size:12px;color:var(--ss-sub);margin:-5px 0 15px;overflow-wrap:anywhere}
+:is(#seastrong-submission,#seastrong-login) .ss-details{padding:12px 0;border-bottom:1px solid var(--ss-line)}
+:is(#seastrong-submission,#seastrong-login) .ss-details summary{font-size:13px;font-weight:500;overflow-wrap:anywhere}
+:is(#seastrong-submission,#seastrong-login) .ss-details[open]>summary{margin-bottom:15px}
+:is(#seastrong-submission,#seastrong-login) .ss-help{font-weight:400}
+:is(#seastrong-submission,#seastrong-login) .ss-draft-tools{display:grid;gap:9px}
+:is(#seastrong-submission,#seastrong-login) .ss-draft-tools a{font-size:12px;text-decoration:none}
+:is(#seastrong-submission,#seastrong-login) .ss-error,:is(#seastrong-submission,#seastrong-login) .ss-review-errors{color:light-dark(#a62c2c,#ffabab);font-size:13px;overflow-wrap:anywhere}
+:is(#seastrong-submission,#seastrong-login) .ss-status{max-width:100%;flex:1 1 160px}
+:is(#seastrong-submission,#seastrong-login) .ss-glyph{font-size:20px;line-height:1}
+:is(#seastrong-submission,#seastrong-login) .ss-panels{min-width:0}
+:is(#seastrong-submission,#seastrong-login) .ss-review-row>span{overflow-wrap:anywhere;max-width:100%}
+:is(#seastrong-submission,#seastrong-login) .ss-tablewrap{max-width:100%}
+:is(#seastrong-submission,#seastrong-login) .ss-btn.ss-primary{color:var(--ss-sea-on)}
+@media(max-width:620px){body{padding:0}:is(#seastrong-submission,#seastrong-login){border-radius:0;border-width:0}:is(#seastrong-submission,#seastrong-login) .ss-header{flex-wrap:wrap}:is(#seastrong-submission,#seastrong-login) .ss-header>.ss-btn{font-size:12px}:is(#seastrong-submission,#seastrong-login) .ss-heading{flex-wrap:wrap}:is(#seastrong-submission,#seastrong-login) .ss-field input[type=date]{max-width:100%}}
+:is(#seastrong-submission,#seastrong-login) .ss-view-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px}
+:is(#seastrong-submission,#seastrong-login) .ss-view-tabs [aria-pressed=true]{background:var(--ss-sea);color:var(--ss-sea-on);border-color:var(--ss-sea)}
+:is(#seastrong-submission,#seastrong-login) .ss-record-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+:is(#seastrong-submission,#seastrong-login) .ss-record-heading p{margin-top:5px}
+:is(#seastrong-submission,#seastrong-login) .ss-record-row{display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(140px,1fr) minmax(100px,.6fr) auto;align-items:center;gap:16px;padding:18px 0}
+:is(#seastrong-submission,#seastrong-login) .ss-record-name{display:grid;gap:5px;min-width:0}
+:is(#seastrong-submission,#seastrong-login) .ss-record-actions{display:flex;gap:8px;flex-wrap:wrap}
+:is(#seastrong-submission,#seastrong-login) .ss-record-group{border-bottom:1px solid var(--ss-line);padding-bottom:8px}
+:is(#seastrong-submission,#seastrong-login) .ss-record-older{padding-left:18px;border-left:2px solid var(--ss-line);margin-left:8px}
+:is(#seastrong-submission,#seastrong-login) .ss-record-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:20px 0}
+:is(#seastrong-submission,#seastrong-login) .ss-record-meta dt{color:var(--ss-sub);font-size:12px;margin-bottom:4px}
+:is(#seastrong-submission,#seastrong-login) .ss-record-meta dd{margin:0;overflow-wrap:anywhere;white-space:pre-wrap}
+:is(#seastrong-submission,#seastrong-login) .ss-record-text{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:6px}
+:is(#seastrong-submission,#seastrong-login) .ss-record-footer{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px}
+:is(#seastrong-submission,#seastrong-login) .ss-record-error{padding:14px 0;color:light-dark(#a62c2c,#ffabab);overflow-wrap:anywhere}
+@media(max-width:800px){:is(#seastrong-submission,#seastrong-login) .ss-record-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}:is(#seastrong-submission,#seastrong-login) .ss-record-actions{justify-content:flex-end}}
+@media(max-width:460px){:is(#seastrong-submission,#seastrong-login) .ss-record-row,:is(#seastrong-submission,#seastrong-login) .ss-record-meta{grid-template-columns:minmax(0,1fr)}:is(#seastrong-submission,#seastrong-login) .ss-record-actions{justify-content:flex-start}}
+
+#seastrong-submission[hidden],#seastrong-login[hidden]{display:none!important}
+#seastrong-login{min-height:70vh}
+#seastrong-login .ss-login-card{max-width:560px;margin:70px auto;padding:32px}
+#seastrong-login .ss-login-card h1{font-size:32px}
+#seastrong-login .ss-login-card .ss-primary{margin:28px 0 16px}
+#seastrong-login #seastrong-login-feedback{margin-bottom:18px;overflow-wrap:anywhere;color:var(--ss-warn)}
+#seastrong-submission .ss-header-actions{display:flex;flex-wrap:wrap;gap:8px}
+#seastrong-submission .ss-corridor-name{display:block;color:var(--ss-sub);overflow-wrap:anywhere}
+@media(max-width:620px){#seastrong-login .ss-login-card{margin:28px auto;padding:24px}#seastrong-submission .ss-header-actions .ss-btn{font-size:12px}}
