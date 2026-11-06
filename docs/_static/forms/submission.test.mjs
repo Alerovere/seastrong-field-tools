@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {surveyId,newDraft,tableCSV,validateDetails,validateDraft,fileIdentity,metadata,VERSION} from './submission-core.js';
+import {surveyId,newDraft,tableCSV,validateDetails,validateDraft,fileIdentity,metadata,VERSION,zipSuggestions,ZIP_SUGGEST_FILES} from './submission-core.js';
 import {DriveClient} from './drive-client.js';
 import {SURVEYS} from './survey-schema.js';
 import {TABLES} from './survey-tables.js';
@@ -149,4 +149,15 @@ test('corridor names survive JSON, CSV and revision editing without changing the
   assert.throws(()=>validateDraft({...f.state,corridorName:{}},SURVEYS));
   const properties=recordProperties({...f.state,corridorName:'🌊'.repeat(100)},f.user,'root','complete');
   assert(Buffer.byteLength('corridorName'+properties.corridorName,'utf8')<=124);
+});
+
+test('more than 100 separate files in a category suggest ZIP archives; archives and earlier originals do not count',()=>{
+  assert.equal(ZIP_SUGGEST_FILES,100);
+  const groups=[['photos','Survey photos'],['targets','Ground target positions']];
+  const many=n=>Array.from({length:n},(_,i)=>({group:'photos',path:`flight1/IMG_${i}.JPG`}));
+  assert.deepEqual(zipSuggestions(many(100),groups),[]);
+  assert.deepEqual(zipSuggestions(many(101),groups),[{key:'photos',label:'Survey photos',count:101}]);
+  const zips=Array.from({length:150},(_,i)=>({group:'photos',path:`flight${i}.zip`}));
+  assert.deepEqual(zipSuggestions(zips,groups),[]);
+  assert.deepEqual(zipSuggestions(many(150).map(f=>({...f,inherited:true})),groups),[]);
 });

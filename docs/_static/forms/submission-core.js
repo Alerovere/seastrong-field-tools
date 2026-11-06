@@ -65,3 +65,12 @@ export function validateDraft(value,surveys) {
   return {...newDraft(value.type),...value,version:VERSION,confirmed:false};
 }
 export async function readDraft(storage,key,surveys) { try{const raw=storage.getItem(key);return raw?validateDraft(JSON.parse(raw),surveys):null;}catch{return null;} }
+
+/* Large photo sets: suggest ZIP archives above this many individual (non-archive) files in one category. */
+export const ZIP_SUGGEST_FILES = 100;
+const ARCHIVE = /\.(zip|7z|tar|tgz|gz)$/i;
+export function zipSuggestions(files, groups, limit = ZIP_SUGGEST_FILES) {
+  return groups.map(([key, label]) => ({key, label,
+    count: files.filter(f => f.group === key && !f.inherited && !ARCHIVE.test(f.path || '')).length}))
+    .filter(g => g.count > limit);
+}

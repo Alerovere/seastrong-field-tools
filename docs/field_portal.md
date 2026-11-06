@@ -49,6 +49,22 @@ Choose a file category, then add files or a folder. Repeat for the other categor
 
 Explain any missing or pending file categories. Selecting files does not upload their contents yet.
 
+**Large photo sets: upload ZIP archives.** When a category holds more than 100 separate files, the form suggests
+using ZIP archives instead. Photos that are processed as a whole (drone flights, photogrammetry series, long
+bottom-photo sequences) are best uploaded as one ZIP per flight, transect or camera:
+
+- name each archive with the survey ID, e.g. `BZ150327C1drone_flight2.zip`;
+- create it on a laptop **without compression** ("store"): photos are already compressed, so this is fast and the
+  file is barely larger;
+- keep each archive under about 20 GB, so an interrupted or damaged upload is quick to repeat.
+
+ZIP archives keep the folder structure and the photo metadata (time, GPS), make interrupted uploads easier to resume
+and keep the shared drive manageable (a shared drive holds at most 400,000 items). Keep as individual files the
+photos people look at one by one, such as field-sheet and spot photos, which Drive can preview.
+
+Each Google account can upload about 750 GB per day; for very large surveys, upload over two days or from two
+accounts, preferably from the institute's network rather than a field connection.
+
 ### 4. Review
 
 Check the survey ID, location, measurements, file list and explanations. Confirm the final review, then choose **Submit to Shared Drive**. Keep the page open until **Your survey package is saved** appears.
