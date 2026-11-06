@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {surveyId,newDraft,tableCSV,validateDetails,validateDraft,fileIdentity,metadata,VERSION,zipSuggestions,ZIP_SUGGEST_FILES} from './submission-core.js';
+import {CORRIDORS,corridorFolder,surveyId,newDraft,tableCSV,validateDetails,validateDraft,fileIdentity,metadata,VERSION,zipSuggestions,ZIP_SUGGEST_FILES} from './submission-core.js';
 import {DriveClient} from './drive-client.js';
 import {SURVEYS} from './survey-schema.js';
 import {TABLES,fileGroupsFor,FILE_GROUPS} from './survey-tables.js';
@@ -214,4 +214,20 @@ test('AOI names already used are suggested, most frequent first, invalid names i
   const f=a=>({appProperties:a?{datasetAoi:a}:{}});
   assert.deepEqual(usedAoiNames([f('South'),f('North'),f('South'),f(''),f('bad name'),f('Cayes')]),['South','Cayes','North']);
   assert.deepEqual(usedAoiNames([]),[]);
+});
+
+test('field surveys: corridor CX outside the corridors and the data category',()=>{
+  const base={...newDraft('drone'),area:'BZ',date:'2027-03-15',corridor:'CX',operators:'A',filledBy:'A',timezone:'UTC-06:00'};
+  assert.equal(surveyId(base),'BZ150327CXdrone');
+  assert.equal(corridorFolder(base),'Other (outside corridors)');assert.equal(corridorFolder({corridor:'C3'}),'C3');
+  assert.equal(CORRIDORS.at(-1)[0],'CX');
+  const issues=validateDetails(base,SURVEYS);
+  assert(issues.some(x=>x.includes('data category')));assert(issues.some(x=>x.includes('site name')));
+  assert(validateDetails({...base,dataCategory:'protocol',corridorName:'Snake Cayes'},SURVEYS).some(x=>x.includes('additional data')));
+  assert.deepEqual(validateDetails({...base,dataCategory:'additional',corridorName:'Snake Cayes'},SURVEYS),[]);
+  assert.deepEqual(validateDetails({...base,corridor:'C2',dataCategory:'protocol'},SURVEYS),[]);
+  assert.equal(surveyId({...base,corridor:'C7'}),'');
+  const m=metadata({...base,dataCategory:'additional'},SURVEYS.drone,'complete');assert.equal(m.dataCategory,'additional');
+  assert.throws(()=>validateDraft({...base,dataCategory:'other'},SURVEYS),/data category/);
+  assert.equal(validateDraft((({dataCategory,...rest})=>rest)(base),SURVEYS).dataCategory,'');   // earlier drafts still load
 });

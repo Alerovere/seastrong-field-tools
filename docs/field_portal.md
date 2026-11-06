@@ -22,6 +22,10 @@ If access is refused, ask the project coordinator to check your account and fold
 
 Choose the survey type and complete the study area, corridor code, date, clock UTC offset, operators and **Filled in by** fields. Add the optional **Corridor name** when the area has a local name, such as Mangrove Bay.
 
+**Data outside the corridors.** For useful data collected away from the six corridors, choose the corridor **Other · outside the corridors**. The survey ID then uses the code `CX` (for example `BZ150327CXdrone`), the package is saved under **Other (outside corridors)** of the study area, and the **Site name** becomes required.
+
+**Data category.** Every field survey states whether it is **Corridor data according to protocols** (collected at a corridor following the SEASTRONG protocol for that survey type) or **Additional data** (extra data that do not follow, or only partly follow, the protocols; describe what was done in the notes). Data outside the corridors are always additional data. Records saved before this option show *Not recorded (earlier record)* and must be given a category when edited.
+
 | Survey protocol | Survey type in the portal |
 | --- | --- |
 | [Depth and bottom photos](depth_bottom_photos.md) | Depth & bottom photos |
