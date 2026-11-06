@@ -1,5 +1,5 @@
-/* Satellite-derived datasets: a submission type for processed products (not field surveys).
-   Records go to <Area>/Satellite datasets/<dataset ID>/ with an explicit ID <area>-<AOI>-<product>-<date>,
+/* Derived datasets: a submission type for processed products (not field surveys).
+   Records go to <Area>/Derived datasets/<dataset ID>/ with an explicit ID <area>-<AOI>-<product>-<date>,
    e.g. BZ-South-S2composite-2026-11-06. */
 
 // Short name of the area of interest, used in the dataset ID: letters and digits, 2-20 characters.
@@ -20,10 +20,10 @@ export const PRODUCTS = [
   ['DEM', 'Elevation (DSM, FABDEM, DeltaDTM)'],
   ['Habitats', 'Habitat layers (corals, seagrass, mangroves)'],
   ['WaveClimate', 'Wave, wind and tide climate / XBeach cases'],
-  ['Other', 'Other satellite-derived dataset'],
+  ['Other', 'Other derived dataset'],
 ];
 export const PRODUCT_CODES = PRODUCTS.map(([code]) => code);
-export const DATASET_FOLDER = 'Satellite datasets';
+export const DATASET_FOLDER = 'Derived datasets';
 
 const common = [['readme', 'README, settings and processing notes'], ['figures', 'Figures']];
 export const DATASET_FILE_GROUPS = {
@@ -60,7 +60,7 @@ export function sortDatasets(groups) {
 }
 
 export const DATASET = {
-  name: 'Satellite-derived dataset',
+  name: 'Derived dataset',
   pdf: null,
   sourceVersion: '1.0',
   fields: [

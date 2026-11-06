@@ -113,7 +113,7 @@ export class DriveClient {
   async readRecord(fileId,{anyAuthor=false}={}){
     if(!this.connected)throw new Error('Connect Google Drive to open your records.');
     const file=await this.getFile(fileId,'id,name,parents,size,mimeType,modifiedTime,createdTime,appProperties,lastModifyingUser(permissionId,emailAddress,displayName,me),trashed,driveId');
-    // Satellite-derived datasets are shared project products: any signed-in member may open them (read-only).
+    // Derived datasets are shared project products: any signed-in member may open them (read-only).
     const shared=anyAuthor&&file.appProperties?.seastrongRecord==='1'&&file.appProperties?.surveyType==='sat';
     if(file.trashed||file.mimeType!=='application/json'||!file.name.endsWith('_submission.json')||!(shared||isMyRecord(file,this.user)))throw new Error('This is not an available record for your Google account.');
     const cache=new Map();
@@ -125,11 +125,11 @@ export class DriveClient {
     const pack=await this.cachedFile(file.parents[0],cache);
     if(record.packageFolderId!==pack.id||!pack.parents?.includes(record.folderId))throw new Error('The saved record does not match its Drive folder.');
     if(!shared&&record.submittedBy?.permissionId&&record.submittedBy.permissionId!==this.user.permissionId)throw new Error('The saved author belongs to another Google account.');
-    if(shared&&record.surveyType!=='sat')throw new Error('This record is not a satellite-derived dataset.');
+    if(shared&&record.surveyType!=='sat')throw new Error('This record is not a derived dataset.');
     return {file,record};
   }
   async datasetRecords(){
-    // All satellite-derived dataset records under the configured root, from every account.
+    // All derived dataset records under the configured root, from every account.
     const q="trashed = false and mimeType = 'application/json'"+
       ` and appProperties has {key='seastrongRecord' and value='1'} and appProperties has {key='surveyType' and value='sat'}`+
       ` and appProperties has {key='rootFolderId' and value='${quote(this.config.rootFolderId)}'}`;
