@@ -80,11 +80,10 @@ They are never written to code, notebooks or outputs.
 
 ## Releasing a new version (maintainer)
 
-1. Raise `version` in `pyproject.toml` and `__version__` in `src/seastrong_toolkit/__init__.py`; commit and push.
-2. On GitHub: *Releases → Draft a new release*, new tag `sdb-toolkit-v<version>` (e.g. `sdb-toolkit-v0.9.0`), *Publish*.
-3. The workflow `.github/workflows/sdb_toolkit_release.yml` builds `SDB_toolkit.zip` (this folder without `tests/`),
-   attaches it to that release and to the rolling release `sdb-toolkit-latest`, which the download link above and the
-   notebook's update cell use. It stops if the tag does not match the version in `pyproject.toml`.
+No manual step is needed: every push to `main` that changes `SDB_toolkit/` runs `.github/workflows/sdb_toolkit_release.yml`, which builds
+`SDB_toolkit.zip` (this folder without `tests/`) and uploads it to the rolling release `sdb-toolkit-latest` (the download link above)
+and, the first time a version appears, to a fixed release `sdb-toolkit-v<version>`. For a new fixed version, raise `version` in
+`pyproject.toml` and `__version__` in `src/seastrong_toolkit/__init__.py` before pushing. To rebuild by hand: *Actions → SDB toolkit zip → Run workflow*.
 
 ## Developing
 

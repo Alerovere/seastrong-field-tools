@@ -1,59 +1,77 @@
-# Builds Wave_climate.zip (only the Wave_climate folder, without tests) when a release with a tag
-# wave-climate-v<version> is published, e.g. wave-climate-v0.1.0, and attaches it:
-#   - to that release (a fixed version), and
+# Builds Wave_climate.zip (only the Wave_climate folder, without tests) and publishes it:
+#   - to the release of its version, wave-climate-v<version> (created if missing; version from Wave_climate/pyproject.toml), and
 #   - to the rolling release 'wave-climate-latest', so this link always gives the newest version:
 #     https://github.com/Alerovere/seastrong-field-tools/releases/download/wave-climate-latest/Wave_climate.zip
-# The tag must match the version in Wave_climate/pyproject.toml.
-name: Wave climate zip
+# Runs by itself on every push to main that changes Wave_climate/ (a fixed version release keeps its first zip:
+# bump the version in pyproject.toml for a new one), when a release wave-climate-v<version> is published,
+# or by hand: Actions > Wave climate tool zip > Run workflow (leave the tag empty for the current main).
+name: Wave climate tool zip
 
 on:
+  push:
+    branches: [main]
+    paths: ['Wave_climate/**', '.github/workflows/wave_climate_release.yml']
   release:
     types: [published]
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Existing release tag to (re)build the zip for, e.g. wave-climate-v0.1.0'
-        required: true
+        description: 'Existing release tag to rebuild, e.g. wave-climate-v0.2.0 (empty = current main)'
+        required: false
+        default: ''
 
 permissions:
   contents: write
 
+concurrency:
+  group: wave-climate-zip
+  cancel-in-progress: false
+
 jobs:
   zip:
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'wave-climate-v')
+    if: github.event_name != 'release' || startsWith(github.event.release.tag_name, 'wave-climate-v')
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
-      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      GIVEN_TAG: ${{ github.event.release.tag_name || inputs.tag }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.release.tag_name || inputs.tag }}
+          ref: ${{ github.event.release.tag_name || inputs.tag || github.sha }}
 
-      - name: Check that the tag matches the package version
+      - name: Version and release tag
         run: |
           v=$(python3 -c "import tomllib; print(tomllib.load(open('Wave_climate/pyproject.toml','rb'))['project']['version'])")
-          if [ "$TAG" != "wave-climate-v$v" ]; then
-            echo "::error::Tag $TAG does not match Wave_climate/pyproject.toml version $v (expected wave-climate-v$v)"; exit 1
+          tag="wave-climate-v$v"
+          if [ -n "$GIVEN_TAG" ] && [ "$GIVEN_TAG" != "$tag" ]; then
+            echo "::error::Tag $GIVEN_TAG does not match Wave_climate/pyproject.toml version $v (expected $tag)"; exit 1
           fi
-          echo "VERSION=$v" >> "$GITHUB_ENV"
+          echo "VERSION=$v" >> "$GITHUB_ENV"; echo "TAG=$tag" >> "$GITHUB_ENV"; echo "SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
 
       - name: Build Wave_climate.zip
         run: |
           zip -r -q Wave_climate.zip Wave_climate \
             -x 'Wave_climate/tests/*' 'Wave_climate/outputs/*' 'Wave_climate/_backup_src_*' \
                '*/__pycache__/*' '*.egg-info/*' '*.DS_Store'
-          unzip -l Wave_climate.zip
+          unzip -l Wave_climate.zip | tail -3
 
-      - name: Attach to this release
-        run: gh release upload "$TAG" Wave_climate.zip --clobber
-
-      - name: Attach to the rolling release wave-climate-latest
+      - name: Release of this version
         run: |
-          notes="Wave climate tool only (the Wave_climate folder of this repository), currently version $VERSION (release $TAG). Download Wave_climate.zip, unzip it into a folder of your Google Drive and open notebooks/wave_climate_colab.ipynb from there."
-          if gh release view wave-climate-latest >/dev/null 2>&1; then
-            gh release edit wave-climate-latest --title "Wave climate (latest: $VERSION)" --notes "$notes" --latest=false
+          notes="Wave climate tool version $VERSION (the Wave_climate folder of this repository). Download Wave_climate.zip, unzip it into a folder of your Google Drive and open notebooks/wave_climate_colab.ipynb from there."
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            if [ -n "$GIVEN_TAG" ]; then gh release upload "$TAG" Wave_climate.zip --clobber
+            else echo "Release $TAG already exists: its zip is kept (bump the version for a new release)."; fi
           else
-            gh release create wave-climate-latest --target "$GITHUB_SHA" --title "Wave climate (latest: $VERSION)" --notes "$notes" --latest=false
+            gh release create "$TAG" Wave_climate.zip --target "$SHA" --title "Wave climate tool $VERSION" --notes "$notes" --latest=false
+          fi
+
+      - name: Rolling release wave-climate-latest
+        run: |
+          notes="Wave climate tool only (the Wave_climate folder of this repository), currently version $VERSION (commit ${SHA:0:7}). Download Wave_climate.zip, unzip it into a folder of your Google Drive and open notebooks/wave_climate_colab.ipynb from there."
+          if gh release view wave-climate-latest >/dev/null 2>&1; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/git/refs/tags/wave-climate-latest" -f sha="$SHA" -F force=true >/dev/null
+            gh release edit wave-climate-latest --title "Wave climate tool (latest: $VERSION)" --notes "$notes" --latest=false
+          else
+            gh release create wave-climate-latest --target "$SHA" --title "Wave climate tool (latest: $VERSION)" --notes "$notes" --latest=false
           fi
           gh release upload wave-climate-latest Wave_climate.zip --clobber

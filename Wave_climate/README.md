@@ -56,9 +56,10 @@ the GTSM model mean sea level (1986–2005), not chart datum.
 
 ## Releasing a new version (maintainer)
 
-Raise `version` in `pyproject.toml` and `__version__` in `src/wave_climate/__init__.py`, push, then publish a GitHub
-release tagged `wave-climate-v<version>`. The workflow `.github/workflows/wave_climate_release.yml` attaches
-`Wave_climate.zip` to it and to the rolling release `wave-climate-latest` (the download link above).
+No manual step is needed: every push to `main` that changes `Wave_climate/` runs `.github/workflows/wave_climate_release.yml`, which builds
+`Wave_climate.zip` (this folder without `tests/`) and uploads it to the rolling release `wave-climate-latest` (the download link above)
+and, the first time a version appears, to a fixed release `wave-climate-v<version>`. For a new fixed version, raise `version` in
+`pyproject.toml` and `__version__` in `src/wave_climate/__init__.py` before pushing. To rebuild by hand: *Actions → Wave climate tool zip → Run workflow*.
 
 ## Tests
 

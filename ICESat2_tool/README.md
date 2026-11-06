@@ -50,9 +50,10 @@ the Sentinel-2 composite and are left to Bathymetrix-AI / your Earth Engine work
 
 ## Releasing a new version (maintainer)
 
-Raise `version` in `pyproject.toml` and `__version__` in `src/icesat2_tool/__init__.py`, push, then publish a GitHub
-release tagged `icesat2-tool-v<version>`. The workflow `.github/workflows/icesat2_tool_release.yml` attaches
-`ICESat2_tool.zip` to it and to the rolling release `icesat2-tool-latest`.
+No manual step is needed: every push to `main` that changes `ICESat2_tool/` runs `.github/workflows/icesat2_tool_release.yml`, which builds
+`ICESat2_tool.zip` (this folder without `tests/`) and uploads it to the rolling release `icesat2-tool-latest` (the download link above)
+and, the first time a version appears, to a fixed release `icesat2-tool-v<version>`. For a new fixed version, raise `version` in
+`pyproject.toml` and `__version__` in `src/icesat2_tool/__init__.py` before pushing. To rebuild by hand: *Actions → ICESat-2 tool zip → Run workflow*.
 
 ## Tests
 
