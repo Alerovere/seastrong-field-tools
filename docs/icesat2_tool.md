@@ -7,7 +7,7 @@ The **ICESat-2 tool** (`ICESat2_tool/`, Python package `icesat2_tool`) downloads
 
 - **ATL24 bathymetry**: seabed photons with one flag column per quality rule, and **training** and **validation**
   files split by whole satellite tracks that are chosen once and **locked**, ready for the
-  [Bathymetrix-AI](https://github.com/Nasef2017/Bathymetrix-AI) QGIS plugin (see [SDB toolkit](sdb_toolkit.md));
+  [Bathymetrix-AI](https://github.com/Nasef2017/Bathymetrix-AI) QGIS plugin (see [Satellite-derived bathymetry workflow](sdb_workflow.md));
 - **ATL08 / PhoREAL** ground elevation and canopy height per 100 m segment, e.g. over mangroves, converted to
   EGM2008 heights with a verified geoid transformation.
 
@@ -78,7 +78,7 @@ written.
 - Thresholds are starting values: look at the flags in QGIS before training.
 - Cross-track agreement can remove real relief or seabed change.
 - Under dense mangrove canopy few photons reach the ground.
-- The SDB depth limit and optically-shallow map of the earlier SDB toolkit are not included (they need the
+- The SDB depth limit and optically-shallow map of the earlier SDB toolkit (now removed) are not included (they need the
   Sentinel-2 composite).
 
 ## Sources

@@ -13,6 +13,13 @@ This page puts together the pieces used in SEASTRONG to map shallow-water depth 
 | 4. Bathymetry | Bathymetrix-AI (QGIS) | the depth map and its errors |
 | 5. Independent check | echosounder surveys ([Corridor mapping](corridor_mapping.md)) | errors against measured depths |
 
+```{important}
+Steps 1 and 3 run in **Google Colab**. Step 2 runs in the **Earth Engine Code Editor**
+([code.earthengine.google.com](https://code.earthengine.google.com)), a web page with its own map and console: it is
+**not** a Colab notebook and is not inside the downloaded tool zips. The only link between them is the list of
+rough-sea days, copied from the Colab output into the script.
+```
+
 All products use the same area of interest, the same map projection (UTM zone of the site) and the same grid, so
 they overlay exactly in QGIS.
 
@@ -47,8 +54,23 @@ no charge for noncommercial Earth Engine use) raises the allowance to 1,000 hour
 
 ## Step 2 — Sentinel-2 composite and context layers (Earth Engine)
 
-Open the Earth Engine Code Editor, create a new script, and paste `Earth_Engine/seastrong_sdb_inputs.js` from this
-repository. Set `AOI_ASSET`, `PREFIX`, `CRS` and `DRIVE_FOLDER` at the top, and paste the `SEA_STATE_EXCLUDE` line.
+**Get the script and the AOI into Earth Engine (once):**
+
+1. Open [seastrong_sdb_inputs.js](https://github.com/Alerovere/seastrong-field-tools/blob/main/Earth_Engine/seastrong_sdb_inputs.js)
+   on GitHub and click *Copy raw file* (or download it). It is always the latest version.
+2. Open the [Earth Engine Code Editor](https://code.earthengine.google.com) and choose your Earth Engine Cloud
+   project (top right).
+3. Upload the AOI: *Assets → New → Shape files* (select the `.shp`, `.shx`, `.dbf` and `.prj` files, or a zip of
+   them), give it a name and wait for the task to finish in the *Tasks* tab. Copy the asset ID
+   (e.g. `projects/<your-project>/assets/AOI`).
+4. *Scripts → New → File*, name it (e.g. `seastrong_sdb_inputs`), paste the script and *Save*.
+
+**Set the options at the top of the script:** `AOI_ASSET` (the asset ID), `PREFIX`, `CRS` and `DRIVE_FOLDER`, and
+paste the `SEA_STATE_EXCLUDE` line from step 1. Then click *Run*; the maps and tables appear in the Code Editor, and
+each file is exported only when you click *Run* next to it in the *Tasks* tab.
+
+When the script is updated in the repository, copy it again and paste it over your saved copy, keeping your option
+lines (`AOI_ASSET`, `PREFIX`, `CRS`, `DRIVE_FOLDER`, the pasted date lists and `FIXED_OFFSETS`).
 
 **The composite takes three runs** (each run takes seconds; the exports then run in the *Tasks* tab):
 
@@ -114,4 +136,3 @@ polygons and, optionally, `DEM_FILES` = the DEMs from step 2. You get `<NAME>_AT
 | `Earth_Engine/seastrong_sdb_inputs.js` | the Earth Engine script (composite, DEMs, habitats, ICESat-2 files) |
 | `Wave_climate/` | wave, wind and tide climate; rough-sea days (Colab) |
 | `ICESat2_tool/` | ICESat-2 bathymetry and ground heights (Colab) |
-| `SDB_toolkit/` | earlier all-in-one Colab version (paused; heavy on Earth Engine computing) |

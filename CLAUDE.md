@@ -33,7 +33,6 @@ seastrong-field-tools.readthedocs.io).
 | `Wave_climate/` | Python package `wave_climate` (`src/` layout) + Colab runner `notebooks/wave_climate_colab.ipynb`: ERA5 + Copernicus Marine waves/wind, GTSM tide/surge, seasonal tables, XBeach cases (no Earth Engine). Released as `Wave_climate.zip` (tag `wave-climate-v*`) | `docs/wave_climate.md` |
 | `Earth_Engine/` | `seastrong_sdb_inputs.js`: one Code Editor script (RUN switches) for the S2 composite (3-run workflow: screening table -> EXCLUDE_DATES, offsets -> FIXED_OFFSETS, export), DEMs, habitats, ICESat-2 land/mangrove polygons; aligned crsTransform grid; `previous_versions/` = the old three scripts | `docs/sdb_workflow.md` |
 | `ICESat2_tool/` | Python package `icesat2_tool` (`src/` layout) + Colab runner `notebooks/icesat2_colab.ipynb`: ATL24 QC + locked RGT hold-out (Bathymetrix-AI train/valid), ATL08/PhoREAL ground & canopy; SlideRule, no Earth Engine; optional shoreline / mangrove / DEM files. Released as `ICESat2_tool.zip` (tag `icesat2-tool-v*`) | `docs/icesat2_tool.md` |
-| `SDB_toolkit/` | Python package `seastrong_toolkit` (pip-installable, `src/` layout) + Colab runner `notebooks/seastrong_toolkit_colab.ipynb`: waves/ERA5, pre-screening of S2 months, S2 composite for Bathymetrix-AI, DEMs, habitats, transport tracers, ICESat-2 | `docs/sdb_toolkit.md` |
 
 **Known gap:** `Mangroves_topography/` and `Wave_data_processing/` aren't yet listed in
 `README.md`'s tools table or `docs/index.rst`'s toctree, and have no readthedocs page.
@@ -144,34 +143,12 @@ in the Claude Project (note: that doc references a Drive-integrated variant,
 `mangrove_transect_topography_drive.ipynb`, for Colab use — check whether the copy in
 this repo's `Mangroves_topography/` is that version or the earlier two-point-only one).
 
-## SDB toolkit (`SDB_toolkit/`)
+## SDB toolkit (removed)
 
-Package `seastrong_toolkit`. All options are set in the Colab notebook (user decision 2026-11-03: no YAML file to
-edit): `ctx = st.setup(PROJECT)`, then per step an options dict passed with `ctx.set(step, {...})` (validated against
-`src/seastrong_toolkit/defaults.yaml`, which only holds defaults), `st.<step>.run(ctx)` and `st.<step>.report(ctx)`
-(`diagnostics.py`: plain-language summary + suggested option changes, never applied automatically). Notebook cells
-are deliberately verbose (explanation / options / run / report per step). `core.bind()` injects options into the
-module namespace. Drive workflow (0.9, user decision): the user downloads the repo into any Drive folder and opens the notebook
-from there; the install cell sets `TOOLKIT_DIR`, pip-installs only the dependencies (constraints file protecting
-Colab's google-* packages), puts `TOOLKIT_DIR/src` on `sys.path` (no clone, no pip install of the package) and
-`DRIVE_ROOT = TOOLKIT_DIR/outputs` (git-ignored). Updating from GitHub is an explicit opt-in (`UPDATE_FROM_GITHUB`). Distribution: publishing a release tagged
-`sdb-toolkit-v<version>` runs `.github/workflows/sdb_toolkit_release.yml`, which zips `SDB_toolkit/` (no tests) and
-attaches `SDB_toolkit.zip` to it and to the rolling release `sdb-toolkit-latest` (the link used in README, docs, notebook).
-Earth Engine finds export folders by name anywhere in Drive: `core.task_files` also looks in `My Drive/<folder>` and
-moves files into the step folder; `setup` warns about same-name folders at the top of My Drive.
-Minimal Earth Engine use (0.9): Sentinel-2 tile metadata is read with `ee.data.computeFeatures` (`core.s2_tile_metadata`,
-`metadata_by_date`, glint angle from mean sun/view angles). S2 `SCREENING='metadata+aoi'` (default): metadata +
-weather (ERA5 rain/wind and waves from the waves step) first, then the Earth Engine image check (water NIR/B5) only
-for surviving dates (+ accepted dates), cached per date in `<FOLDER_ROOT>__cache/s2_screening/aoi_<hash>.csv`.
-Prescreen `SCENES='metadata'` (default) uses tile cloud only, no export; `CHIRPS` off by default.
-S2 extras (0.8): indirect-check test (rain/wind/waves vs B5, tile metadata vs NIR, Mann-Whitney) in run + report;
-'best images' threshold suggestion; `st.s2.checker(ctx)` ipywidgets gallery with Accept/Reject saved to
-`<FOLDER_ROOT>__S2_image_decisions.csv` in `DRIVE_ROOT`, included in the s2 options hash (`core.applicable_decisions`).
-Each step writes to `<FOLDER_ROOT>__<NN>_<Name>__<settings-hash>` in `DRIVE_ROOT` with `manifest.json`.
-Credentials only from Colab Secrets (`EE_PROJECT`, `CDS_KEY`, `CMEMS_USERNAME`, `CMEMS_PASSWORD`, optional
-`EE_SERVICE_ACCOUNT_JSON`).
-Offline tests with fake services: `python SDB_toolkit/tests/test_mock_run.py` and `tests/test_notebook.py` (runs the notebook cells). Full decision log:
-`sdb_bathymetrix_workflow_southern_belize.md` in the Claude Project.
+`SDB_toolkit/` (package `seastrong_toolkit`, all-in-one Colab version running Earth Engine from Colab) was removed
+on 2026-11-06 (user decision); it is in the git history. Replaced by `Wave_climate/` + `Earth_Engine/seastrong_sdb_inputs.js`
+(Code Editor) + `ICESat2_tool/`, described in `docs/sdb_workflow.md`. Decision log: `sdb_bathymetrix_workflow_southern_belize.md`
+in the Claude Project.
 
 ## Project background
 

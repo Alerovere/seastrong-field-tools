@@ -45,7 +45,7 @@ All options, with defaults and comments, are in the notebook (defaults in `src/i
 
 ## Not included
 
-The SDB depth limit (Stumpf-ratio saturation) and the optically-shallow map of the earlier SDB toolkit: they need
+The SDB depth limit (Stumpf-ratio saturation) and the optically-shallow map of the earlier SDB toolkit (removed from the repository; still in the git history): they need
 the Sentinel-2 composite and are left to Bathymetrix-AI / your Earth Engine workflow.
 
 ## Releasing a new version (maintainer)

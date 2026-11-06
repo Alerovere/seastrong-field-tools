@@ -21,7 +21,6 @@ SEASTRONG Field Processing Tools
    drone_survey
    depth_photos_processing
    sdb_workflow
-   sdb_toolkit
    icesat2_tool
 
 .. toctree::
