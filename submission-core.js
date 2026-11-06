@@ -1,18 +1,23 @@
 export const VERSION = '1.1.0';
 export const AREAS = { BZ: 'Belize', SC: 'Seychelles', FJ: 'Fiji' };
 export const DATASET_TYPE = 'sat';
+// Corridors 1-6 follow the field protocols; CX = data collected outside the corridors (always "additional data").
+export const CORRIDORS = [...Array.from({length:6},(_,i)=>['C'+(i+1),'Corridor '+(i+1)]),['CX','Other · outside the corridors']];
+export const OUTSIDE_FOLDER = 'Other (outside corridors)';
+export function corridorFolder(s) { return s.corridor === 'CX' ? OUTSIDE_FOLDER : s.corridor; }
+export const DATA_CATEGORIES = [['protocol','Corridor data according to protocols'],['additional','Additional data']];
 const PRODUCT_CODE = /^[A-Za-z0-9]{2,20}$/;
 export function surveyId(s) {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s.date || '');
   if (s.type === DATASET_TYPE) {
-    // Satellite-derived dataset: explicit ID <area>-<product>-<YYYY-MM-DD><suffix>, e.g. BZ-S2composite-2026-11-06
-    const product = s.values?.product || '';
-    if (!match || !AREAS[s.area] || !PRODUCT_CODE.test(product) || !/^[A-Z]?$/.test(s.suffix)) return '';
+    // Satellite-derived dataset: explicit ID <area>-<AOI>-<product>-<YYYY-MM-DD><suffix>, e.g. BZ-South-S2composite-2026-11-06
+    const product = s.values?.product || '', aoi = s.values?.aoi || '';
+    if (!match || !AREAS[s.area] || !PRODUCT_CODE.test(product) || !PRODUCT_CODE.test(aoi) || !/^[A-Z]?$/.test(s.suffix)) return '';
     const d = new Date(`${s.date}T12:00:00Z`);
     if (Number.isNaN(+d) || d.toISOString().slice(0,10) !== s.date) return '';
-    return `${s.area}-${product}-${s.date}${s.suffix}`;
+    return `${s.area}-${aoi}-${product}-${s.date}${s.suffix}`;
   }
-  if (!match || !AREAS[s.area] || !/^C[1-6]$/.test(s.corridor) || !/^[A-Z]?$/.test(s.suffix)) return '';
+  if (!match || !AREAS[s.area] || !/^C[1-6X]$/.test(s.corridor) || !/^[A-Z]?$/.test(s.suffix)) return '';
   const date = new Date(`${s.date}T12:00:00Z`);
   if (Number.isNaN(+date) || date.toISOString().slice(0,10) !== s.date) return '';
   return `${s.area}${match[3]}${match[2]}${match[1].slice(2)}${s.corridor}${s.type}${s.suffix}`;
@@ -23,12 +28,16 @@ export function validateDetails(s, surveys) {
   if (!surveys[s.type]) issues.push('Choose a survey type.');
   if (s.type === DATASET_TYPE) {
     if (!s.values?.product) issues.push('Choose the product.');
+    if (!PRODUCT_CODE.test(s.values?.aoi || '')) issues.push('Enter the AOI name: 2-20 letters or digits, no spaces (e.g. South).');
     if (!surveyId(s)) issues.push('Choose a valid study area, product and processing date.');
     if (!s.operators?.trim()) issues.push('Enter who processed the dataset.');
     if (!s.filledBy?.trim()) issues.push('Enter the name of the person submitting this record.');
     return issues;
   }
   if (!surveyId(s)) issues.push('Choose a valid study area, corridor and survey date.');
+  if (!DATA_CATEGORIES.some(([k]) => k === s.dataCategory)) issues.push('Choose the data category: corridor data according to protocols, or additional data.');
+  if (s.corridor === 'CX' && s.dataCategory === 'protocol') issues.push('Data collected outside the corridors are additional data.');
+  if (s.corridor === 'CX' && !s.corridorName?.trim()) issues.push('Enter the site name for data collected outside the corridors.');
   if (!s.operators?.trim()) issues.push('Enter the names of the operators.');
   if (!s.filledBy?.trim()) issues.push('Enter the name of the person submitting this record.');
   if (!/^UTC[+-](?:0\d|1[0-4]):[0-5]\d$/.test(s.timezone || '')) issues.push('Choose the UTC offset of the field clock.');
@@ -50,7 +59,7 @@ export function csvCell(value) {
 export function tableCSV(headers,rows,sid,context={}) { const withName=Object.hasOwn(context,'corridorName');return '\ufeff'+[['survey_id',...(withName?['corridor_name']:[]),...headers],...rows.filter(r=>r.some(v=>String(v).trim())).map(r=>[sid,...(withName?[context.corridorName||'']:[]),...r])].map(r=>r.map(csvCell).join(',')).join('\r\n')+'\r\n'; }
 export function metadata(s,schema,status='draft') {
   return {schemaVersion:VERSION,sourcePDFVersion:schema.sourceVersion,submissionId:s.uid,surveyId:surveyId(s),status,
-    studyArea:s.area,studyAreaName:AREAS[s.area],corridor:s.corridor,corridorName:s.corridorName||'',surveyType:s.type,surveyDate:s.date,
+    studyArea:s.area,studyAreaName:AREAS[s.area],corridor:s.corridor,corridorName:s.corridorName||'',dataCategory:s.dataCategory||'',surveyType:s.type,surveyDate:s.date,
     clockUTCOffset:s.timezone,operators:s.operators,filledInBy:s.filledBy,recordStage:s.recordStage,
     surveyComplete:s.surveyComplete,notes:s.notes,missingFilesReason:s.missingFilesReason,qualityReviewed:!!s.qualityReviewed,
     submittedBy:s.submittedBy||null,recordId:s.recordId||s.uid,revisionNumber:s.revisionNumber||1,revisionOf:s.revisionOf||null,
@@ -61,7 +70,7 @@ export function metadata(s,schema,status='draft') {
 }
 export function newDraft(type='reef') {
   const now=new Date();const localDate=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
-  return {version:VERSION,uid:crypto.randomUUID(),step:0,type,area:'BZ',corridor:'C1',corridorName:'',date:localDate,suffix:'',
+  return {version:VERSION,uid:crypto.randomUUID(),step:0,type,area:'BZ',corridor:'C1',corridorName:'',dataCategory:'',date:localDate,suffix:'',
     operators:'',filledBy:'',timezone:'UTC-06:00',recordStage:'Post-site report',surveyComplete:'',
     values:{},tables:{},checks:{},notes:'',files:[],missingFilesReason:'',confirmed:false,upload:{},done:false,
     submittedBy:null,recordId:null,revisionNumber:1,revisionOf:null,sourceMetadataFileId:null};
@@ -71,6 +80,7 @@ export function validateDraft(value,surveys) {
   for(const key of ['values','tables','checks','upload']) if(!value[key]||typeof value[key]!=='object'||Array.isArray(value[key])) throw new Error('The draft is missing '+key+'.');
   for(const key of ['area','corridor','date','suffix','operators','filledBy','timezone','recordStage','surveyComplete','notes','missingFilesReason']) if(typeof value[key]!=='string')throw new Error('The draft has an invalid '+key+' field.');
   if(value.corridorName!==undefined&&typeof value.corridorName!=='string')throw new Error('The draft has an invalid corridor name.');
+  if(value.dataCategory!==undefined&&!['',...DATA_CATEGORIES.map(([k])=>k)].includes(value.dataCategory))throw new Error('The draft has an invalid data category.');
   if(Object.values(value.values).some(v=>typeof v!=='string'))throw new Error('The draft contains an invalid field value.');
   if(Object.values(value.checks).some(v=>typeof v!=='boolean'))throw new Error('The draft contains an invalid checklist.');
   if(value.submittedBy!=null&&(typeof value.submittedBy.permissionId!=='string'||!value.submittedBy.permissionId))throw new Error('The draft contains an invalid Google account.');
