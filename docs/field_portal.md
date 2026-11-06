@@ -82,10 +82,10 @@ Use **Open submission folder** to check the result. The package contains:
 
 The portal organises submissions by study area, corridor and survey ID, with a separate folder for each record version. The saved confirmation means that the upload package was verified; missing field observations remain recorded as missing.
 
-## Satellite-derived datasets
+## Derived datasets
 
-Processed products of the project are submitted with the same form: choose **Satellite-derived dataset** as the
-type. They are stored under **<Study area> / Satellite datasets / <dataset ID>** on the shared drive.
+Processed products of the project (from satellite or model data, e.g. the wave climate) are submitted with the same form: choose **Derived dataset** as the
+type. They are stored under **<Study area> / Derived datasets / <dataset ID>** on the shared drive.
 
 | Product | Typical files |
 | --- | --- |
@@ -103,7 +103,7 @@ type. They are stored under **<Study area> / Satellite datasets / <dataset ID>**
 - **Description**: what the dataset covers (area, period, months, projection, resolution, vertical reference), how it
   was made (tool and version, key settings, the inputs used, e.g. other dataset IDs) and its quality (checks, known
   issues). Attach the README written by the tool.
-- **Review**: every new dataset, and every new version, starts as **Draft**. In **Satellite datasets** (tab at the
+- **Review**: every new dataset, and every new version, starts as **Draft**. In **Derived datasets** (tab at the
   top) anyone can open a dataset; someone **other than its producer** can mark it **Checked**, and only the dataset
   approver (Alessio Rovere) can mark it **Approved** or set it back to Draft. Each review is saved on the record and as
   a small `_review_…json` file in its folder. Use the approved version for analyses and reports.

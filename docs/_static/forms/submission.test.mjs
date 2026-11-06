@@ -163,7 +163,7 @@ test('more than 100 separate files in a category suggest ZIP archives; archives 
   assert.deepEqual(zipSuggestions(many(150).map(f=>({...f,inherited:true})),groups),[]);
 });
 
-test('satellite-derived datasets: explicit ID, own validation, product file categories',()=>{
+test('derived datasets: explicit ID, own validation, product file categories',()=>{
   const d={...newDraft('sat'),area:'BZ',date:'2026-11-06',values:{product:'S2composite',aoi:'South'},operators:'A. Rovere',filledBy:'A. Rovere'};
   assert.equal(surveyId(d),'BZ-South-S2composite-2026-11-06');
   assert.equal(surveyId({...d,suffix:'B'}),'BZ-South-S2composite-2026-11-06B');
@@ -180,9 +180,9 @@ test('satellite-derived datasets: explicit ID, own validation, product file cate
   assert.equal(fileGroupsFor({...d,values:{product:'AOI',aoi:'South'}}),DATASET_FILE_GROUPS.AOI);
   assert.equal(fileGroupsFor(newDraft('reef')),FILE_GROUPS.reef);
   for(const code of PRODUCT_CODES){assert(DATASET_FILE_GROUPS[code],code);assert(surveyId({...d,values:{product:code,aoi:'South'}}).includes('-'+code+'-'));}
-  assert.deepEqual(TABLES.sat,[]);assert.equal(SURVEYS.sat.name,'Satellite-derived dataset');
+  assert.deepEqual(TABLES.sat,[]);assert.equal(SURVEYS.sat.name,'Derived dataset');
 });
-test('satellite-derived dataset records restore, carry the product and start as draft',()=>{
+test('derived dataset records restore, carry the product and start as draft',()=>{
   const user={permissionId:'producer',emailAddress:'p@unive.it',displayName:'P'};
   const state={...newDraft('sat'),area:'BZ',date:'2026-11-06',suffix:'B',values:{product:'SDBmap',aoi:'PuntaGorda',aoi_description:'south'},operators:'P',filledBy:'P',
     submittedBy:user,upload:{surveyFolderId:'ds',packageFolderId:'pack'}};

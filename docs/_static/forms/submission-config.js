@@ -5,6 +5,6 @@ export const CONFIG = Object.freeze({
   googleProjectNumber: '780800900296',
   rootFolderId: '1BVpxYWr_kshcnevmHoHyaZ_HvQuco02g',
   destinationName: 'SEASTRONG / Survey submissions',
-  // Google accounts that may approve satellite-derived datasets (checked by the form, see field_portal.md).
+  // Google accounts that may approve derived datasets (checked by the form, see field_portal.md).
   approvers: ['alessio.rovere@unive.it'],
 });

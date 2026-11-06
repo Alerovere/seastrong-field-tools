@@ -10,7 +10,7 @@ const PRODUCT_CODE = /^[A-Za-z0-9]{2,20}$/;
 export function surveyId(s) {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s.date || '');
   if (s.type === DATASET_TYPE) {
-    // Satellite-derived dataset: explicit ID <area>-<AOI>-<product>-<YYYY-MM-DD><suffix>, e.g. BZ-South-S2composite-2026-11-06
+    // Derived dataset: explicit ID <area>-<AOI>-<product>-<YYYY-MM-DD><suffix>, e.g. BZ-South-S2composite-2026-11-06
     const product = s.values?.product || '', aoi = s.values?.aoi || '';
     if (!match || !AREAS[s.area] || !PRODUCT_CODE.test(product) || !PRODUCT_CODE.test(aoi) || !/^[A-Z]?$/.test(s.suffix)) return '';
     const d = new Date(`${s.date}T12:00:00Z`);

@@ -38,6 +38,6 @@ export const FILE_GROUPS={
   waves:[['sensors','Sensor data'],['barometric','Barometric data'],['deployment','Deployment / retrieval photos'],['field_sheets','Field-sheet photos']],
 };
 TABLES.sat=[];
-/* File categories of a draft: per survey type, or per product for satellite-derived datasets. */
+/* File categories of a draft: per survey type, or per product for derived datasets. */
 export function fileGroupsFor(state){return state.type==='sat'?(DATASET_FILE_GROUPS[state.values?.product]||DATASET_FILE_GROUPS.Other):FILE_GROUPS[state.type];}
 export function visibleTables(type,values){return TABLES[type].filter(t=>!t.method||String(values.structure_method||'').includes(t.method));}

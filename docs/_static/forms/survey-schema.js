@@ -1260,5 +1260,5 @@ export const SURVEYS = {
   }
 };
 
-// Satellite-derived datasets (processed products, not field surveys): see dataset-schema.js
+// Derived datasets (processed products, not field surveys): see dataset-schema.js
 SURVEYS.sat = DATASET;
