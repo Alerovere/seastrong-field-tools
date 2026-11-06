@@ -78,6 +78,33 @@ Use **Open submission folder** to check the result. The package contains:
 
 The portal organises submissions by study area, corridor and survey ID, with a separate folder for each record version. The saved confirmation means that the upload package was verified; missing field observations remain recorded as missing.
 
+## Satellite-derived datasets
+
+Processed products of the project are submitted with the same form: choose **Satellite-derived dataset** as the
+type. They are stored under **<Study area> / Satellite datasets / <dataset ID>** on the shared drive.
+
+| Product | Typical files |
+| --- | --- |
+| Sentinel-2 composite | 12-band GeoTIFF, QA raster and blue temporal std, date-screening tables, README |
+| ICESat-2 depths | ATL24 training / validation / all-flags GeoPackages, hold-out lock file, ATL08, coverage tables |
+| SDB bathymetry map | depth map, error rasters, validation tables, Bathymetrix-AI settings |
+| Elevation, habitats, wave climate | rasters, polygons, tables and XBeach cases from the Earth Engine script and the Colab tools |
+
+- **Dataset ID**: `<area>-<product>-<processing date>`, e.g. `BZ-S2composite-2026-11-06` (a letter is added for a
+  second dataset of the same product on the same day: `BZ-S2composite-2026-11-06B`).
+- **Description**: what the dataset covers (area, period, months, projection, resolution, vertical reference), how it
+  was made (tool and version, key settings, the inputs used, e.g. other dataset IDs) and its quality (checks, known
+  issues). Attach the README written by the tool.
+- **Review**: every new dataset, and every new version, starts as **Draft**. In **Satellite datasets** (tab at the
+  top) anyone can open a dataset; someone **other than its producer** can mark it **Checked**, and only the dataset
+  approver (Alessio Rovere) can mark it **Approved** or set it back to Draft. Each review is saved on the record and as
+  a small `_review_…json` file in its folder. Use the approved version for analyses and reports.
+
+```{note}
+The review rules are applied by the form. The files themselves are protected by the shared-drive permissions, so
+keep editing rights on the shared drive limited to the project team.
+```
+
 ## View and correct records
 
 Open **My records** after signing in. **View** shows a saved record and its file links. **Edit** loads it into the form; make the corrections and submit to save a new version. The earlier record and original files remain available, and earlier originals are linked without uploading them again. Add only new or replacement files as needed.

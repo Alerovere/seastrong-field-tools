@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import {surveyId,newDraft,tableCSV,validateDetails,validateDraft,fileIdentity,metadata,VERSION,zipSuggestions,ZIP_SUGGEST_FILES} from './submission-core.js';
 import {DriveClient} from './drive-client.js';
 import {SURVEYS} from './survey-schema.js';
-import {TABLES} from './survey-tables.js';
+import {TABLES,fileGroupsFor,FILE_GROUPS} from './survey-tables.js';
+import {reviewDenied,sortDatasets,DATASET_FILE_GROUPS,PRODUCT_CODES} from './dataset-schema.js';
 import {editAsRevision,recordProperties,groupRecords,isMyRecord,restoreRecord} from './submission-records.js';
 
 test('survey IDs preserve project dates, region, type and duplicate suffix',()=>{
@@ -160,4 +161,46 @@ test('more than 100 separate files in a category suggest ZIP archives; archives 
   const zips=Array.from({length:150},(_,i)=>({group:'photos',path:`flight${i}.zip`}));
   assert.deepEqual(zipSuggestions(zips,groups),[]);
   assert.deepEqual(zipSuggestions(many(150).map(f=>({...f,inherited:true})),groups),[]);
+});
+
+test('satellite-derived datasets: explicit ID, own validation, product file categories',()=>{
+  const d={...newDraft('sat'),area:'BZ',date:'2026-11-06',values:{product:'S2composite'},operators:'A. Rovere',filledBy:'A. Rovere'};
+  assert.equal(surveyId(d),'BZ-S2composite-2026-11-06');
+  assert.equal(surveyId({...d,suffix:'B'}),'BZ-S2composite-2026-11-06B');
+  assert.equal(surveyId({...d,values:{}}),'');
+  assert.equal(surveyId({...d,date:'2026-02-30'}),'');
+  assert.deepEqual(validateDetails(d,SURVEYS),[]);                         // no corridor or clock offset needed
+  assert(validateDetails({...d,values:{}},SURVEYS).some(x=>x.includes('product')));
+  assert.equal(fileGroupsFor(d),DATASET_FILE_GROUPS.S2composite);
+  assert.equal(fileGroupsFor({...d,values:{product:'ICESat2'}}),DATASET_FILE_GROUPS.ICESat2);
+  assert.equal(fileGroupsFor(newDraft('reef')),FILE_GROUPS.reef);
+  for(const code of PRODUCT_CODES){assert(DATASET_FILE_GROUPS[code],code);assert(surveyId({...d,values:{product:code}}).includes('-'+code+'-'));}
+  assert.deepEqual(TABLES.sat,[]);assert.equal(SURVEYS.sat.name,'Satellite-derived dataset');
+});
+test('satellite-derived dataset records restore, carry the product and start as draft',()=>{
+  const user={permissionId:'producer',emailAddress:'p@unive.it',displayName:'P'};
+  const state={...newDraft('sat'),area:'BZ',date:'2026-11-06',suffix:'B',values:{product:'SDBmap',aoi_name:'south'},operators:'P',filledBy:'P',
+    submittedBy:user,upload:{surveyFolderId:'ds',packageFolderId:'pack'}};
+  const props=recordProperties(state,user,'root','complete');
+  assert.equal(props.surveyId,'BZ-SDBmap-2026-11-06B');assert.equal(props.datasetProduct,'SDBmap');assert.equal(props.reviewStatus,'draft');
+  for(const [k,v] of Object.entries(props))assert(Buffer.byteLength(k+v)<=124,'app property too long: '+k);
+  const record=metadata(state,SURVEYS.sat,'complete');
+  const back=restoreRecord(record,{id:'meta'},SURVEYS);
+  assert.equal(surveyId(back),'BZ-SDBmap-2026-11-06B');assert.equal(back.values.aoi_name,'south');
+  assert(!('datasetProduct' in recordProperties(newDraft('reef'),user,'root','complete')));
+});
+test('dataset review: producer cannot check own dataset; only the approver approves or withdraws',()=>{
+  const approvers=['Alessio.Rovere@unive.it'];
+  const producer={permissionId:'p1',emailAddress:'tech@unive.it'},other={permissionId:'o1',emailAddress:'student@unive.it'},boss={permissionId:'a1',emailAddress:'alessio.rovere@unive.it'};
+  assert.match(reviewDenied('checked',producer,'p1',approvers),/someone other/);
+  assert.equal(reviewDenied('checked',other,'p1',approvers),'');
+  assert.match(reviewDenied('approved',other,'p1',approvers),/approver/);
+  assert.equal(reviewDenied('approved',boss,'p1',approvers),'');
+  assert.equal(reviewDenied('approved',boss,'a1',approvers),'');          // the approver may approve own datasets
+  assert.match(reviewDenied('draft',other,'p1',approvers),/approver/);
+  assert.match(reviewDenied('final',boss,'p1',approvers),/Unknown/);
+  const g=(st,t)=>[{appProperties:st?{reviewStatus:st}:{},modifiedTime:t}];
+  const sorted=sortDatasets([g('',  '2026-11-09'),g('approved','2026-11-01'),g('checked','2026-11-08'),g('approved','2026-11-05')]);
+  assert.deepEqual(sorted.map(x=>(x[0].appProperties.reviewStatus||'draft')+x[0].modifiedTime),
+    ['approved2026-11-05','approved2026-11-01','checked2026-11-08','draft2026-11-09']);
 });

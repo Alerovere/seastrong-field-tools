@@ -1,4 +1,5 @@
 /* Survey fields transcribed from the existing Python PDF generators. */
+import {DATASET} from './dataset-schema.js';
 export const SURVEYS = {
   "reef": {
     "name": "Reef photogrammetry",
@@ -1258,3 +1259,6 @@ export const SURVEYS = {
     "tables": []
   }
 };
+
+// Satellite-derived datasets (processed products, not field surveys): see dataset-schema.js
+SURVEYS.sat = DATASET;
