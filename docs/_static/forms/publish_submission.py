@@ -9,7 +9,7 @@ import tempfile
 ASSETS = [
     "index.html", "submission.css", "submission.js", "submission-config.js",
     "submission-core.js", "submission-report.js", "submission-records.js", "drive-client.js",
-    "survey-schema.js", "survey-tables.js", "pdf-lib.min.js", "pdf-lib.LICENSE.md",
+    "survey-schema.js", "survey-tables.js", "dataset-schema.js", "pdf-lib.min.js", "pdf-lib.LICENSE.md",
     "SUBMISSION_SETUP.md",
 ]
 MARKER = "seastrong-submission-site.json"
