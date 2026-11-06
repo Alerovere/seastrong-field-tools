@@ -1,8 +1,19 @@
 /* Satellite-derived datasets: a submission type for processed products (not field surveys).
-   Records go to <Area>/Satellite datasets/<dataset ID>/ with an explicit ID, e.g. BZ-S2composite-2026-11-06. */
+   Records go to <Area>/Satellite datasets/<dataset ID>/ with an explicit ID <area>-<AOI>-<product>-<date>,
+   e.g. BZ-South-S2composite-2026-11-06. */
+
+// Short name of the area of interest, used in the dataset ID: letters and digits, 2-20 characters.
+export const AOI_NAME = /^[A-Za-z0-9]{2,20}$/;
+/* AOI names already used in dataset records (Drive app property datasetAoi), most frequent first. */
+export function usedAoiNames(files) {
+  const n = new Map();
+  for (const f of files || []) { const a = f.appProperties?.datasetAoi; if (a && AOI_NAME.test(a)) n.set(a, (n.get(a) || 0) + 1); }
+  return [...n.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([a]) => a);
+}
 
 // Product codes appear in the dataset ID; keep them short, letters and digits only.
 export const PRODUCTS = [
+  ['AOI', 'Area of interest (polygon of the study area)'],
   ['S2composite', 'Sentinel-2 composite (Bathymetrix-AI input)'],
   ['ICESat2', 'ICESat-2 depths and ground heights'],
   ['SDBmap', 'Satellite-derived bathymetry map (Bathymetrix-AI output)'],
@@ -16,6 +27,7 @@ export const DATASET_FOLDER = 'Satellite datasets';
 
 const common = [['readme', 'README, settings and processing notes'], ['figures', 'Figures']];
 export const DATASET_FILE_GROUPS = {
+  AOI: [['polygons', 'AOI polygons (GeoJSON, KML, shapefile, GeoPackage)'], ['maps', 'Maps and overview images'], ['readme', 'README: how the boundary was drawn, sources']],
   S2composite: [['main', 'Composite GeoTIFF (12-band)'], ['qa', 'QA raster and blue temporal std'], ['screening', 'Date screening and EXCLUDE_DATES tables'], ...common],
   ICESat2: [['train_valid', 'ATL24 training and validation GeoPackages'], ['all_flags', 'ATL24 all photons with QC flags'], ['lock', 'Hold-out lock file (JSON)'], ['atl08', 'ATL08 ground and canopy'], ['coverage', 'Download and coverage tables'], ...common],
   SDBmap: [['main', 'Depth map GeoTIFF'], ['uncertainty', 'Uncertainty / error rasters'], ['validation', 'Validation tables and statistics'], ['project', 'Bathymetrix-AI project and settings'], ...common],
@@ -52,7 +64,7 @@ export const DATASET = {
   pdf: null,
   sourceVersion: '1.0',
   fields: [
-    {id: 'aoi_name', label: 'Area of interest (name or file)', section: '1. What the dataset covers', help: 'e.g. Belize south AOI (aoi_belize_south.geojson)', options: [], kind: 'text'},
+    {id: 'aoi_description', label: 'Area of interest (description)', section: '1. What the dataset covers', help: 'What the AOI includes, its file and Earth Engine asset, area, e.g. coast from Punta Gorda to Monkey River out to the barrier reef; aoi_belize_south.geojson; 1,038 km2', options: [], kind: 'long'},
     {id: 'period', label: 'Data period', section: '1. What the dataset covers', help: 'First and last date of the data used, e.g. 2020-02-01 to 2026-04-30', options: [], kind: 'text'},
     {id: 'months', label: 'Months used', section: '1. What the dataset covers', help: 'e.g. Feb-Apr (dry season); all months', options: [], kind: 'text'},
     {id: 'crs', label: 'Map projection (CRS)', section: '1. What the dataset covers', help: 'e.g. EPSG:32616 (UTM 16N)', options: [], kind: 'text'},

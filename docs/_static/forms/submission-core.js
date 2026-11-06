@@ -5,12 +5,12 @@ const PRODUCT_CODE = /^[A-Za-z0-9]{2,20}$/;
 export function surveyId(s) {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s.date || '');
   if (s.type === DATASET_TYPE) {
-    // Satellite-derived dataset: explicit ID <area>-<product>-<YYYY-MM-DD><suffix>, e.g. BZ-S2composite-2026-11-06
-    const product = s.values?.product || '';
-    if (!match || !AREAS[s.area] || !PRODUCT_CODE.test(product) || !/^[A-Z]?$/.test(s.suffix)) return '';
+    // Satellite-derived dataset: explicit ID <area>-<AOI>-<product>-<YYYY-MM-DD><suffix>, e.g. BZ-South-S2composite-2026-11-06
+    const product = s.values?.product || '', aoi = s.values?.aoi || '';
+    if (!match || !AREAS[s.area] || !PRODUCT_CODE.test(product) || !PRODUCT_CODE.test(aoi) || !/^[A-Z]?$/.test(s.suffix)) return '';
     const d = new Date(`${s.date}T12:00:00Z`);
     if (Number.isNaN(+d) || d.toISOString().slice(0,10) !== s.date) return '';
-    return `${s.area}-${product}-${s.date}${s.suffix}`;
+    return `${s.area}-${aoi}-${product}-${s.date}${s.suffix}`;
   }
   if (!match || !AREAS[s.area] || !/^C[1-6]$/.test(s.corridor) || !/^[A-Z]?$/.test(s.suffix)) return '';
   const date = new Date(`${s.date}T12:00:00Z`);
@@ -23,6 +23,7 @@ export function validateDetails(s, surveys) {
   if (!surveys[s.type]) issues.push('Choose a survey type.');
   if (s.type === DATASET_TYPE) {
     if (!s.values?.product) issues.push('Choose the product.');
+    if (!PRODUCT_CODE.test(s.values?.aoi || '')) issues.push('Enter the AOI name: 2-20 letters or digits, no spaces (e.g. South).');
     if (!surveyId(s)) issues.push('Choose a valid study area, product and processing date.');
     if (!s.operators?.trim()) issues.push('Enter who processed the dataset.');
     if (!s.filledBy?.trim()) issues.push('Enter the name of the person submitting this record.');

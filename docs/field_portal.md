@@ -85,13 +85,17 @@ type. They are stored under **<Study area> / Satellite datasets / <dataset ID>**
 
 | Product | Typical files |
 | --- | --- |
+| Area of interest | the AOI polygon (GeoJSON, KML, shapefile, GeoPackage), overview map, README |
 | Sentinel-2 composite | 12-band GeoTIFF, QA raster and blue temporal std, date-screening tables, README |
 | ICESat-2 depths | ATL24 training / validation / all-flags GeoPackages, hold-out lock file, ATL08, coverage tables |
 | SDB bathymetry map | depth map, error rasters, validation tables, Bathymetrix-AI settings |
 | Elevation, habitats, wave climate | rasters, polygons, tables and XBeach cases from the Earth Engine script and the Colab tools |
 
-- **Dataset ID**: `<area>-<product>-<processing date>`, e.g. `BZ-S2composite-2026-11-06` (a letter is added for a
-  second dataset of the same product on the same day: `BZ-S2composite-2026-11-06B`).
+- **AOI name**: a short name of the area of interest (letters and digits, e.g. `South`), part of the dataset ID.
+  The form suggests the names already used, so that all datasets of one area share the same name. Submit the AOI
+  polygon itself as a dataset of product **Area of interest**.
+- **Dataset ID**: `<study area>-<AOI name>-<product>-<processing date>`, e.g. `BZ-South-S2composite-2026-11-06`
+  (a letter is added for a second dataset of the same AOI and product on the same day: `…-2026-11-06B`).
 - **Description**: what the dataset covers (area, period, months, projection, resolution, vertical reference), how it
   was made (tool and version, key settings, the inputs used, e.g. other dataset IDs) and its quality (checks, known
   issues). Attach the README written by the tool.

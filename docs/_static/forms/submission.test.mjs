@@ -4,7 +4,7 @@ import {surveyId,newDraft,tableCSV,validateDetails,validateDraft,fileIdentity,me
 import {DriveClient} from './drive-client.js';
 import {SURVEYS} from './survey-schema.js';
 import {TABLES,fileGroupsFor,FILE_GROUPS} from './survey-tables.js';
-import {reviewDenied,sortDatasets,DATASET_FILE_GROUPS,PRODUCT_CODES} from './dataset-schema.js';
+import {reviewDenied,sortDatasets,DATASET_FILE_GROUPS,PRODUCT_CODES,usedAoiNames} from './dataset-schema.js';
 import {editAsRevision,recordProperties,groupRecords,isMyRecord,restoreRecord} from './submission-records.js';
 
 test('survey IDs preserve project dates, region, type and duplicate suffix',()=>{
@@ -164,29 +164,34 @@ test('more than 100 separate files in a category suggest ZIP archives; archives 
 });
 
 test('satellite-derived datasets: explicit ID, own validation, product file categories',()=>{
-  const d={...newDraft('sat'),area:'BZ',date:'2026-11-06',values:{product:'S2composite'},operators:'A. Rovere',filledBy:'A. Rovere'};
-  assert.equal(surveyId(d),'BZ-S2composite-2026-11-06');
-  assert.equal(surveyId({...d,suffix:'B'}),'BZ-S2composite-2026-11-06B');
+  const d={...newDraft('sat'),area:'BZ',date:'2026-11-06',values:{product:'S2composite',aoi:'South'},operators:'A. Rovere',filledBy:'A. Rovere'};
+  assert.equal(surveyId(d),'BZ-South-S2composite-2026-11-06');
+  assert.equal(surveyId({...d,suffix:'B'}),'BZ-South-S2composite-2026-11-06B');
+  assert.equal(surveyId({...d,values:{product:'S2composite'}}),'');
+  assert.equal(surveyId({...d,values:{product:'AOI',aoi:'South'}}),'BZ-South-AOI-2026-11-06');
+  assert.equal(surveyId({...d,values:{product:'S2composite',aoi:'South bay'}}),'');
+  assert(validateDetails({...d,values:{product:'S2composite'}},SURVEYS).some(x=>x.includes('AOI name')));
   assert.equal(surveyId({...d,values:{}}),'');
   assert.equal(surveyId({...d,date:'2026-02-30'}),'');
   assert.deepEqual(validateDetails(d,SURVEYS),[]);                         // no corridor or clock offset needed
   assert(validateDetails({...d,values:{}},SURVEYS).some(x=>x.includes('product')));
   assert.equal(fileGroupsFor(d),DATASET_FILE_GROUPS.S2composite);
-  assert.equal(fileGroupsFor({...d,values:{product:'ICESat2'}}),DATASET_FILE_GROUPS.ICESat2);
+  assert.equal(fileGroupsFor({...d,values:{product:'ICESat2',aoi:'South'}}),DATASET_FILE_GROUPS.ICESat2);
+  assert.equal(fileGroupsFor({...d,values:{product:'AOI',aoi:'South'}}),DATASET_FILE_GROUPS.AOI);
   assert.equal(fileGroupsFor(newDraft('reef')),FILE_GROUPS.reef);
-  for(const code of PRODUCT_CODES){assert(DATASET_FILE_GROUPS[code],code);assert(surveyId({...d,values:{product:code}}).includes('-'+code+'-'));}
+  for(const code of PRODUCT_CODES){assert(DATASET_FILE_GROUPS[code],code);assert(surveyId({...d,values:{product:code,aoi:'South'}}).includes('-'+code+'-'));}
   assert.deepEqual(TABLES.sat,[]);assert.equal(SURVEYS.sat.name,'Satellite-derived dataset');
 });
 test('satellite-derived dataset records restore, carry the product and start as draft',()=>{
   const user={permissionId:'producer',emailAddress:'p@unive.it',displayName:'P'};
-  const state={...newDraft('sat'),area:'BZ',date:'2026-11-06',suffix:'B',values:{product:'SDBmap',aoi_name:'south'},operators:'P',filledBy:'P',
+  const state={...newDraft('sat'),area:'BZ',date:'2026-11-06',suffix:'B',values:{product:'SDBmap',aoi:'PuntaGorda',aoi_description:'south'},operators:'P',filledBy:'P',
     submittedBy:user,upload:{surveyFolderId:'ds',packageFolderId:'pack'}};
   const props=recordProperties(state,user,'root','complete');
-  assert.equal(props.surveyId,'BZ-SDBmap-2026-11-06B');assert.equal(props.datasetProduct,'SDBmap');assert.equal(props.reviewStatus,'draft');
+  assert.equal(props.surveyId,'BZ-PuntaGorda-SDBmap-2026-11-06B');assert.equal(props.datasetProduct,'SDBmap');assert.equal(props.datasetAoi,'PuntaGorda');assert.equal(props.reviewStatus,'draft');
   for(const [k,v] of Object.entries(props))assert(Buffer.byteLength(k+v)<=124,'app property too long: '+k);
   const record=metadata(state,SURVEYS.sat,'complete');
   const back=restoreRecord(record,{id:'meta'},SURVEYS);
-  assert.equal(surveyId(back),'BZ-SDBmap-2026-11-06B');assert.equal(back.values.aoi_name,'south');
+  assert.equal(surveyId(back),'BZ-PuntaGorda-SDBmap-2026-11-06B');assert.equal(back.values.aoi_description,'south');
   assert(!('datasetProduct' in recordProperties(newDraft('reef'),user,'root','complete')));
 });
 test('dataset review: producer cannot check own dataset; only the approver approves or withdraws',()=>{
@@ -203,4 +208,10 @@ test('dataset review: producer cannot check own dataset; only the approver appro
   const sorted=sortDatasets([g('',  '2026-11-09'),g('approved','2026-11-01'),g('checked','2026-11-08'),g('approved','2026-11-05')]);
   assert.deepEqual(sorted.map(x=>(x[0].appProperties.reviewStatus||'draft')+x[0].modifiedTime),
     ['approved2026-11-05','approved2026-11-01','checked2026-11-08','draft2026-11-09']);
+});
+
+test('AOI names already used are suggested, most frequent first, invalid names ignored',()=>{
+  const f=a=>({appProperties:a?{datasetAoi:a}:{}});
+  assert.deepEqual(usedAoiNames([f('South'),f('North'),f('South'),f(''),f('bad name'),f('Cayes')]),['South','Cayes','North']);
+  assert.deepEqual(usedAoiNames([]),[]);
 });
