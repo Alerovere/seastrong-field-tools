@@ -1,3 +1,4 @@
+import {DATASET_FILE_GROUPS} from './dataset-schema.js';
 export const TABLES={
   reef:[
     {id:'targets',name:'Scale-bar targets',help:'Three depth readings at the centre of each target; record the time for tide correction.',columns:['Target code','Tape position (m)','Side (L/R)','Depth 1 (m)','Depth 2 (m)','Depth 3 (m)','Time'],seed:[['T01','','','','','','']]},
@@ -36,4 +37,7 @@ export const FILE_GROUPS={
   drone:[['photos','Survey photos'],['targets','Ground target positions'],['field_sheets','Field-sheet photos']],
   waves:[['sensors','Sensor data'],['barometric','Barometric data'],['deployment','Deployment / retrieval photos'],['field_sheets','Field-sheet photos']],
 };
+TABLES.sat=[];
+/* File categories of a draft: per survey type, or per product for satellite-derived datasets. */
+export function fileGroupsFor(state){return state.type==='sat'?(DATASET_FILE_GROUPS[state.values?.product]||DATASET_FILE_GROUPS.Other):FILE_GROUPS[state.type];}
 export function visibleTables(type,values){return TABLES[type].filter(t=>!t.method||String(values.structure_method||'').includes(t.method));}

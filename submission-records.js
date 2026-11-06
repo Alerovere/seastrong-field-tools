@@ -18,7 +18,8 @@ export function recordProperties(state,user,rootFolderId,status) {
   return {seastrongRecord:'1',submittedBy:actor.permissionId,rootFolderId,surveyId:surveyId(state),
     surveyType:state.type,surveyDate:state.date,recordId:state.recordId||state.uid,
     submissionId:state.uid,revisionNumber:String(state.revisionNumber||1),
-    recordStatus:status,recordStage:state.recordStage,corridorName:Array.from(state.corridorName||'').slice(0,24).join('')};
+    recordStatus:status,recordStage:state.recordStage,corridorName:Array.from(state.corridorName||'').slice(0,24).join(''),
+    ...(state.type==='sat'?{datasetProduct:state.values?.product||'',reviewStatus:'draft'}:{})};
 }
 
 export function groupRecords(files) {
