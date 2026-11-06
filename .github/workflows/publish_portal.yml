@@ -1,0 +1,44 @@
+# Publishes the field data portal (docs/_static/forms) to the gh-pages branch, which GitHub Pages serves at
+# https://alerovere.github.io/seastrong-field-tools/
+# - automatically, when portal files change on main;
+# - by hand: GitHub -> Actions -> "Publish field portal" -> Run workflow.
+# It runs the same script as on a computer: docs/_static/forms/publish_submission.py --publish
+name: Publish field portal
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/_static/forms/**'
+      - '.github/workflows/publish_portal.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-portal
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Test the portal code before publishing
+        run: node --test docs/_static/forms/submission.test.mjs
+
+      - name: Publish to gh-pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # the script clones and pushes gh-pages with the repository URL: authenticate it with the workflow token
+          git config --global url."https://x-access-token:${GH_TOKEN}@github.com/".insteadOf "https://github.com/"
+          python3 docs/_static/forms/publish_submission.py --publish
